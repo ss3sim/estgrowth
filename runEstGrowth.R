@@ -26,8 +26,8 @@ dir.results <- file.path(dir.main, "results")
 my.spp <- c("cod")
 my.totnum <- 1:5
 my.bias <- FALSE
-my.D <- c(0)
-my.E <- c(0)
+my.D <- c(0, 1, 2)
+my.E <- c(0, 1)
 my.F <- c(0)
 my.R <- c(0)
 my.casefiles <- list(F = "F", 
