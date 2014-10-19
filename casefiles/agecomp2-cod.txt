@@ -1,6 +1,0 @@
-fleets; NULL
-Nsamp; NULL
-years; NULL
-agebin_vector; NULL
-cpar; 1
-write_file; TRUE
