@@ -18,7 +18,7 @@
 ## Variable inputs
 ###############################################################################
 ## Set the working directory
-dir.main <- "c:/ss/estgrowth"
+dir.main <- "C:/Users/Christine/Documents/GitHub/estgrowth"
 
 my.spp <- c("cod")
 # Number of ss3sim iterations
@@ -66,14 +66,16 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
-#devtools::load_all("c:/ss/ss3sim")
+devtools::load_all("C:/Users/Christine/Documents/GitHub/ss3sim")
 #Run a single iteration of a given scenario
-run_ss3sim(iterations = 1, scenarios = "A0-B0-E2-F0-I0-L0-R0-cod",
+run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F0-I0-L0-R0-cod",
            case_folder = dir.cases, case_files = my.casefiles, 
            om_dir = file.path(d, "cod-om"), 
            em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
            ignore.stdout = TRUE)
-unlink("A0-B0-E2-F0-I0-L0-R0-cod", recursive = TRUE)
+get_caseargs(folder = dir.cases, scenario = "A0-B0-E2-F0-I0-L0-R0-cod",
+             case_files = my.casefiles)
+unlink("A0-B2-E2-F0-I0-L0-R0-cod", recursive = TRUE)
 
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
