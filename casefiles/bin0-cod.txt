@@ -1,0 +1,2 @@
+bin_vector; list("mla" = NA)
+type; c("mla")
