@@ -1,2 +1,2 @@
-bin_vector; list("mla" = NA)
-type; c("mla")
+bin_vector; list("age" = 0:15)
+type; c("age")
