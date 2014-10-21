@@ -18,16 +18,16 @@
 ## Variable inputs
 ###############################################################################
 ## Set the working directory
-dir.main <- "C:/Users/Christine/Documents/GitHub/estgrowth"
+dir.main <- "c:/ss/estgrowth"
 
 my.spp <- c("cod")
 # Number of ss3sim iterations
-my.totnum <- 1:5
+my.totnum <- 1:50
 # Logical whether or not to run ss3sim bias adjustment for log normal recdevs
 my.bias <- FALSE
 
 #How to install the package
-ss3sim.install <- "local" #Can be "github", "local", "NULL"
+ss3sim.install <- "github" #Can be "github", "local", "NULL"
 ss3sim.branch <- "feature/data"
 
 
@@ -52,30 +52,35 @@ dir.results <- file.path(dir.main, "results")
 ## Step 03
 ## Model locations
 ###############################################################################
+source(file.path(dir.main, "lib", "createcasefiles.r"))
+
 #Specify where the model files are
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(d, apply(spp.grid, 1, paste, collapse = "-"))
   my.casefiles <- list(A = "agecomp", B = "bin", E = "E", F = "F", 
                      I = "index", L = "lcomp", R = "R")
-  #If you add a casefile (in folder estgrowth\casefile) add the number to the
-  #appropriate letter here. Mainly you will be adding letters to E
-  scenarios <- expand_scenarios(
-    cases = list(A = c(0, 1), B = c(0), E = c(0, 1, 2), F = c(0), I = c(0),
-                 L = c(0, 1, 2), R = c(0)), species = my.spp)
+
+  internal <- expand_scenarios(cases = 
+    list(A = c(0, 1, 2), B = c(0), E = c(0, 1), F = c(0), I = c(0),
+         L = c(0, 1), R = c(0)), species = my.spp)
+
+  external <- expand_scenarios(cases = 
+    list(A = c(0, 1, 2), B = c(2), E = c(2, 3, 4), F = c(0), I = c(0),
+         L = c(0, 1), R = c(0)), species = my.spp)
+
+
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
-devtools::load_all("C:/Users/Christine/Documents/GitHub/ss3sim")
+#devtools::load_all("c:/ss/ss3sim")
 #Run a single iteration of a given scenario
-run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F0-I0-L0-R0-cod",
-           case_folder = dir.cases, case_files = my.casefiles, 
-           om_dir = file.path(d, "cod-om"), 
-           em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
-           ignore.stdout = TRUE)
-get_caseargs(folder = dir.cases, scenario = "A0-B0-E2-F0-I0-L0-R0-cod",
-             case_files = my.casefiles)
-unlink("A0-B2-E2-F0-I0-L0-R0-cod", recursive = TRUE)
+# run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F0-I0-L0-R0-cod",
+#            case_folder = dir.cases, case_files = my.casefiles, 
+#            om_dir = file.path(d, "cod-om"), 
+#            em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
+#            ignore.stdout = TRUE)
+# unlink("A0-B2-E2-F0-I0-L0-R0-cod", recursive = TRUE)
 
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
@@ -83,7 +88,7 @@ for(s in seq_along(my.spp)){
 	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
 	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
 	#run scenarios that include the given species
-    use.scen <- scenarios[grep(my.spp[s], scenarios)]
+  use.scen <- c(internal, external)
 
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles, 
@@ -91,11 +96,10 @@ for(s in seq_along(my.spp)){
                ignore.stdout = TRUE)
 }
 
-
 ###############################################################################
 ## Step 
 ## Get results
 ###############################################################################
-get_results_all(overwrite_files = TRUE, user_scenarios = scenarios)
+get_results_all(overwrite_files = TRUE)
 scalars <- read.csv(dir(pattern = "r.csv", full.names = TRUE))
 ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
