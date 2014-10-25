@@ -97,7 +97,7 @@ for(s in seq_along(my.spp)){
 	#run scenarios that include the given species
   use.scen <- c(internal, external)
 
-	run_ss3sim(iterations = 1, scenarios = use.scen,
+	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles, 
                om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
                ignore.stdout = TRUE, parallel = TRUE)
