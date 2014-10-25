@@ -28,7 +28,7 @@ my.totnum <- 1:50
 my.bias <- FALSE
 
 #How to install the package
-ss3sim.install <- "NULL" #Can be "github", "local", "NULL"
+ss3sim.install <- "github" #Can be "github", "local", "NULL"
 ss3sim.branch <- "feature/data"
 
 
