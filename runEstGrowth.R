@@ -83,6 +83,12 @@ setwd(dir.sub)
 #            ignore.stdout = TRUE)
 # unlink("A0-B2-E2-F0-I0-L0-R0-cod", recursive = TRUE)
 
+# Set up running in parallel
+library(doParallel)
+library(foreach)
+registerDoParallel(cores = 2)
+getDoParWorkers() # check
+
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
     #finds the appropriate folder for each species
@@ -94,7 +100,8 @@ for(s in seq_along(my.spp)){
 	run_ss3sim(iterations = 1, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles, 
                om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
-               ignore.stdout = TRUE)
+               ignore.stdout = TRUE, parallel = TRUE)
+  # Should also maybe set ss_mode = "optimized"
 }
 
 ###############################################################################
