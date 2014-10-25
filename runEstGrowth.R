@@ -28,7 +28,7 @@ my.totnum <- 1:50
 my.bias <- FALSE
 
 #How to install the package
-ss3sim.install <- "github" #Can be "github", "local", "NULL"
+ss3sim.install <- "NULL" #Can be "github", "local", "NULL"
 ss3sim.branch <- "feature/data"
 
 
@@ -74,8 +74,8 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
-#devtools::load_all("c:/ss/ss3sim")
-#Run a single iteration of a given scenario
+# devtools::load_all("c:/ss/ss3sim")
+# # Run a single iteration of a given scenario
 # run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F0-I0-L0-R0-cod",
 #            case_folder = dir.cases, case_files = my.casefiles, 
 #            om_dir = file.path(d, "cod-om"), 
