@@ -43,6 +43,13 @@ f0 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
         paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
                           rep(0.08, end - start.fishery + 1)), collapse = ","), ")"))
 writeLines(f0, paste0("F0-", spp.case, ".txt"))
+f1 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
+        paste0("years_alter; c(", paste(start:end, collapse = ","), ")"),
+        paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
+                                  seq(0, 0.16, length.out = 60),
+                                  seq(0.16, 0.08, length.out = 15)), 
+                                  collapse = ","),")"))
+writeLines(f1, paste0("F1-", spp.case, ".txt"))
 ###############################################################################
 ## Step 
 ## Case files that change

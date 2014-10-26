@@ -63,11 +63,11 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
                      I = "index", L = "lcomp", R = "R")
 
   internal <- expand_scenarios(cases = 
-    list(A = c(0, 1, 2), B = c(0), E = c(0, 1), F = c(0), I = c(0),
+    list(A = c(0, 1, 2), B = c(0), E = c(0, 1), F = c(0, 1), I = c(0),
          L = c(0, 1), R = c(0)), species = my.spp)
 
   external <- expand_scenarios(cases = 
-    list(A = c(0, 1, 2), B = c(2), E = c(2, 3, 4), F = c(0), I = c(0),
+    list(A = c(0, 1, 2), B = c(2), E = c(2, 3, 4), F = c(0, 1), I = c(0),
          L = c(0, 1), R = c(0)), species = my.spp)
 
 
@@ -76,12 +76,12 @@ dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 # devtools::load_all("c:/ss/ss3sim")
 # # Run a single iteration of a given scenario
-# run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F0-I0-L0-R0-cod",
+# run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F1-I0-L0-R0-cod",
 #            case_folder = dir.cases, case_files = my.casefiles, 
 #            om_dir = file.path(d, "cod-om"), 
 #            em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
 #            ignore.stdout = TRUE)
-# unlink("A0-B2-E2-F0-I0-L0-R0-cod", recursive = TRUE)
+# unlink("A0-B2-E2-F1-I0-L0-R0-cod", recursive = TRUE)
 
 # Set up running in parallel
 library(doParallel)
@@ -108,6 +108,13 @@ for(s in seq_along(my.spp)){
 ## Step 
 ## Get results
 ###############################################################################
-get_results_all(overwrite_files = TRUE)
+get_results_all(overwrite_files = FALSE)
 scalars <- read.csv(dir(pattern = "r.csv", full.names = TRUE))
 ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
+
+file.copy(dir(pattern = "r.csv", full.names = TRUE),
+          file.path(dir.dropbox, "scalars.csv"), 
+          overwrite = TRUE, copy.mode = TRUE)
+file.copy(dir(pattern = "s.csv", full.names = TRUE),
+          file.path(dir.dropbox, "ts.csv"), 
+          overwrite = TRUE, copy.mode = TRUE)
