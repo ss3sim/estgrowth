@@ -101,6 +101,9 @@ justfish <- "c(1)"
 allsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)), rep(100, 13))"
 fishsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)))"
 
+allsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)), rep(25, 13))"
+fishsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)))"
+
 allyears <- paste0("list(c(seq(", start.fishery, ", ", start.fishery + 10, ", by = 10), seq(", 
                     start.fishery + 20, ", ", start.fishery + 45, ", by = 5), seq(", 
                     start.fishery + 46, ", ", end, ")), seq(", start.survey,",", 
@@ -134,5 +137,9 @@ writeA(fleets = bothfleets, Nsamp = allsamples, years = allyears, case = 0)
 writeA(fleets = "NULL", Nsamp = "NULL", years = "NULL", case = 1)
 writeA(fleets = justfish, Nsamp = fishsamples, years = fishyears, case = 2)
 
+writeL(fleets = bothfleets, Nsamp = allsamples.4, years = allyears, case = 2)
+writeL(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 3)
+writeA(fleets = bothfleets, Nsamp = allsamples.4, years = allyears, case = 3)
+writeA(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 4)
 
 setwd(wd.curr)
