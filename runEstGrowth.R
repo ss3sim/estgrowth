@@ -21,14 +21,14 @@
 dir.main <- "c:/ss/estgrowth"
 dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 
-my.spp <- c("cod")
+my.spp <- c("cod", "coa")
 # Number of ss3sim iterations
-my.totnum <- 1:50
+my.totnum <- 1:25
 # Logical whether or not to run ss3sim bias adjustment for log normal recdevs
 my.bias <- FALSE
 
 #How to install the package
-ss3sim.install <- "github" #Can be "github", "local", "NULL"
+ss3sim.install <- "local" #Can be "github", "local", "NULL"
 ss3sim.branch <- "feature/data"
 
 
@@ -63,40 +63,39 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
                      I = "index", L = "lcomp", R = "R")
 
   internal <- expand_scenarios(cases = 
-    list(A = c(0, 1, 2), B = c(0), E = c(0, 1), F = c(0, 1), I = c(0),
-         L = c(0, 1), R = c(0)), species = my.spp)
+    list(A = 0:4, B = c(0), E = c(0, 1), F = c(0), I = c(0),
+         L = 0:3, R = c(0)), species = my.spp)
 
   external <- expand_scenarios(cases = 
-    list(A = c(0, 1, 2), B = c(2), E = c(2, 3, 4), F = c(0, 1), I = c(0),
-         L = c(0, 1), R = c(0)), species = my.spp)
-
+    list(A = 0:4, B = c(2), E = 2:4, F = c(0), I = c(0),
+         L = 0:3, R = c(0)), species = my.spp)
 
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 # devtools::load_all("c:/ss/ss3sim")
 # # Run a single iteration of a given scenario
-# run_ss3sim(iterations = 1, scenarios = "A0-B2-E2-F1-I0-L0-R0-cod",
+# run_ss3sim(iterations = 1, scenarios = "A0-B0-E0-F0-I0-L0-R0-coa",
 #            case_folder = dir.cases, case_files = my.casefiles, 
 #            om_dir = file.path(d, "cod-om"), 
 #            em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
 #            ignore.stdout = TRUE)
-# unlink("A0-B2-E2-F1-I0-L0-R0-cod", recursive = TRUE)
+# unlink("A0-B0-E0-F0-I0-L0-R0-coa", recursive = TRUE)
 
 # Set up running in parallel
 library(doParallel)
 library(foreach)
-registerDoParallel(cores = 2)
+registerDoParallel(cores = 3)
 getDoParWorkers() # check
 
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
-    #finds the appropriate folder for each species
+  #finds the appropriate folder for each species
 	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
 	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
 	#run scenarios that include the given species
   use.scen <- c(internal, external)
-
+  use.scen <- use.scen[sapply(my.spp[s], grepl, use.scen)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles, 
                om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
