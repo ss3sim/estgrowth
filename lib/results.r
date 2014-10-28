@@ -39,10 +39,8 @@ results_re <- calculate_re(scalars, FALSE)
 #### Name cases
 ###############################################################################
 ###############################################################################
-levels(results_re$E) <- c("fix", "int", "ext", "ext_CVs", "ext_L&K")
-levels(results_re$A) <- c("A_all", "A_none", "A_fish", "A_all_few", "A_fish_few")
-levels(results_re$L) <- c("L_all", "L_fish", "L_all_few", "L_fish_few")
-levels(results_re$species) <- c("dome_fish", "asymptotic")
+levels(results_re$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
+levels(results_re$species) <- c("dome", "asymp")
 
 ###############################################################################
 ###############################################################################
@@ -54,7 +52,7 @@ axis.val <- TRUE
 
 png("cvold.png")
 plot_scalar_boxplot(results_re, x = "L", y = "CV_old_Fem_GP_1_re", 
-                    vert="A", horiz="E", vert2 = "F", 
+                    vert="A", horiz="E", vert2 = "species", 
                     rel = FALSE, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv old")
@@ -62,7 +60,7 @@ dev.off()
 
 png("cvyoung.png")
 plot_scalar_boxplot(results_re, x = "L", y = "CV_young_Fem_GP_1_re", 
-                    vert="A", horiz="E", vert2 = "F", 
+                    vert="A", horiz="E", vert2 = "species", 
                     rel = FALSE, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv young")
@@ -70,7 +68,7 @@ dev.off()
 
 png("latamin.png")
 plot_scalar_boxplot(results_re, x = "L", y = "L_at_Amin_Fem_GP_1_re", 
-                    vert="A", horiz="E", vert2 = "F", 
+                    vert="A", horiz="E", vert2 = "species", 
                     rel = FALSE, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A min")
@@ -78,7 +76,7 @@ dev.off()
 
 png("latamax.png")
 plot_scalar_boxplot(results_re, x = "L", y = "L_at_Amax_Fem_GP_1_re", 
-                    vert="A", horiz="E", vert2 = "F", 
+                    vert="A", horiz="E", vert2 = "species", 
                     rel = FALSE, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A max")
@@ -86,7 +84,7 @@ dev.off()
 
 png("vonbk.png")
 plot_scalar_boxplot(results_re, x = "L", y = "VonBert_K_Fem_GP_1_re", 
-                    vert="A", horiz="E", vert2 = "F", 
+                    vert="A", horiz="E", vert2 = "species", 
                     rel = FALSE, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: Vonb K")
