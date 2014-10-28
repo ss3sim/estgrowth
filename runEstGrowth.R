@@ -58,7 +58,8 @@ source(file.path(dir.main, "lib", "createcasefiles.r"))
 #Specify where the model files are
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
-  models <- file.path(d, apply(spp.grid, 1, paste, collapse = "-"))
+  models <- file.path(dir.main, models, 
+                      apply(spp.grid, 1, paste, collapse = "-"))
   my.casefiles <- list(A = "agecomp", B = "bin", E = "E", F = "F", 
                      I = "index", L = "lcomp", R = "R")
 
