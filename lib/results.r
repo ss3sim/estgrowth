@@ -43,6 +43,11 @@ levels(results_re$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
 levels(results_re$species) <- c("dome", "asymp")
 results_re$species <- relevel(results_re$species, ref = "asymp")
 results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A1"))
+
+levels(ts$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
+levels(ts$species) <- c("dome", "asymp")
+ts$species <- relevel(ts$species, ref = "asymp")
+ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 ###############################################################################
 ###############################################################################
 #### Step
@@ -57,7 +62,18 @@ my.vert <- "A"
 my.vert2 <- "species"
 my.x <- "L"
 data.plot <- subset(results_re, E != "fix")
+ts <- subset(ts, E != "fix")
 
+termSSB <- with(subset(ts, year == max(year)), 
+                ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
+termSSB <- cbind(termSSB, subset(ts, year == max(year)))
+
+###############################################################################
+###############################################################################
+#### Step
+#### 
+###############################################################################
+###############################################################################
 png("cvold.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "CV_old_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
@@ -113,6 +129,15 @@ plot_scalar_boxplot(data.plot, x = my.x, y = "SSB_MSY_re",
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: SSB at MSY")
 dev.off()
+
+png("termssb.png")
+plot_scalar_boxplot(termSSB, x = my.x, y = "termSSB", 
+                    vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    rel = axis.rel, axes.free = axis.val) + 
+xlab("Length comps for fishery and survey vs. just fishery") + 
+ylab("relative error: terminal SSB")
+dev.off()
+
 ###############################################################################
 ###############################################################################
 #### Step
