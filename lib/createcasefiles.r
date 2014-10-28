@@ -20,7 +20,7 @@
 
 wd.curr <- getwd()
 setwd(dir.cases)
-spp.case <- "cod"
+spp.case <- c("cod", "coa")
 start.survey <- 1988
 start.fishery <- 1938
 start <- 1913
@@ -30,26 +30,27 @@ end <- 2012
 ## Step 
 ## Standard case files
 ###############################################################################
+for(spp in seq_along(spp.case)) {
 r0 <- "retro_yr; 0"
-writeLines(r0, paste0("R0-", spp.case, ".txt"))
+writeLines(r0, paste0("R0-", spp.case[spp], ".txt"))
 
 index0 <- c("fleets; 2", 
-            paste0("years; list(seq(start.survey, end, by = 2))"),
-            "sds_obs; list(0.2)")
-writeLines(index0, paste0("index0-", spp.case, ".txt"))
+            paste0("years; list(c(", paste(seq(start.survey, end, by = 2), collapse = ","), "))"),
+            paste0("sds_obs; list(0.2)"))
+writeLines(index0, paste0("index0-", spp.case[spp], ".txt"))
 
 f0 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
         paste0("years_alter; c(", paste(start:end, collapse = ","), ")"),
         paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
                           rep(0.08, end - start.fishery + 1)), collapse = ","), ")"))
-writeLines(f0, paste0("F0-", spp.case, ".txt"))
+writeLines(f0, paste0("F0-", spp.case[spp], ".txt"))
 f1 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
         paste0("years_alter; c(", paste(start:end, collapse = ","), ")"),
         paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
                                   seq(0, 0.16, length.out = 60),
                                   seq(0.16, 0.08, length.out = 15)), 
                                   collapse = ","),")"))
-writeLines(f1, paste0("F1-", spp.case, ".txt"))
+writeLines(f1, paste0("F1-", spp.case[spp], ".txt"))
 ###############################################################################
 ## Step 
 ## Case files that change
@@ -61,7 +62,7 @@ growthint <- rep(NA, length(allgrowth))
 growthphase <- rep(-1, length(allgrowth))
 
 writeE <- function(growthname, growthint, growthphase, case) {
-    sink(paste0("E", case, "-", spp.case, ".txt"))
+    sink(paste0("E", case, "-", spp.case[spp], ".txt"))
       cat("natM_type; 1Parm \nnatM_n_breakpoints; NULL \n",
            "natM_lorenzen; NULL \nnatM_val; c(NA, NA) \n", sep = "")
       if(is.null(growthname)) {cat("par_name; NULL \n")} else{
@@ -84,7 +85,7 @@ writeB <- function(bin_vector, type, case) {
 	b <- c(paste("bin_vector;", bin_vector),
 	       paste("type;", type))
 	if(is.null(bin_vector)) {b <- b[2]}
-	writeLines(b, paste0("bin", case, "-", spp.case, ".txt"))
+	writeLines(b, paste0("bin", case, "-", spp.case[spp], ".txt"))
 }
 
 writeB("list(\"age\" = 0:15)", "c(\"age\")", 0)
@@ -98,11 +99,11 @@ writeB(NULL, "c(\"cal\", \"mla\")", 3)
 bothfleets <- "c(1, 2)"
 justfish <- "c(1)"
 
-allsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)), rep(100, 13))"
+allsamples <-  "list(c(20, 20, seq(40, 80, 10), rep(100, 30)), rep(100, 13))"
 fishsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)))"
 
-allsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)), rep(25, 13))"
-fishsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)))"
+allsamples.4 <-  "list(c(5, 5, seq(10, 24, 3), rep(25, 30)), rep(25, 13))"
+fishsamples.4 <- "list(c(5, 5, seq(10, 24, 3), rep(25, 30)))"
 
 allyears <- paste0("list(c(seq(", start.fishery, ", ", start.fishery + 10, ", by = 10), seq(", 
                     start.fishery + 20, ", ", start.fishery + 45, ", by = 5), seq(", 
@@ -119,7 +120,7 @@ writeL <- function(fleets, Nsamp, years, case) {
 	       "cpar; 1",
 	       "lengthbin_vector; NULL",
 	       "write_file; TRUE")
-	writeLines(l, paste0("lcomp", case, "-", spp.case, ".txt"))
+	writeLines(l, paste0("lcomp", case, "-", spp.case[spp], ".txt"))
 }
 writeA <- function(fleets, Nsamp, years, case) {
 	a <- c(paste("fleets;", fleets),
@@ -128,7 +129,7 @@ writeA <- function(fleets, Nsamp, years, case) {
 	       "cpar; 1",
 	       "agebin_vector; NULL",
 	       "write_file; TRUE")
-	writeLines(a, paste0("agecomp", case, "-", spp.case, ".txt"))
+	writeLines(a, paste0("agecomp", case, "-", spp.case[spp], ".txt"))
 }
 
 writeL(fleets = bothfleets, Nsamp = allsamples, years = allyears, case = 0)
@@ -141,5 +142,6 @@ writeL(fleets = bothfleets, Nsamp = allsamples.4, years = allyears, case = 2)
 writeL(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 3)
 writeA(fleets = bothfleets, Nsamp = allsamples.4, years = allyears, case = 3)
 writeA(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 4)
+}
 
 setwd(wd.curr)
