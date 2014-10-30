@@ -20,11 +20,11 @@
 
 wd.curr <- getwd()
 setwd(dir.cases)
-spp.case <- c("cod", "coa")
-start.survey <- 1988
-start.fishery <- 1938
-start <- 1913
-end <- 2012
+spp.case <- "cod"
+start.survey <- 76
+start.fishery <- 26
+start <- 1
+end <- 100
 
 ###############################################################################
 ## Step 
