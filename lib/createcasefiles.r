@@ -68,7 +68,7 @@ writeLines(f0, paste0("F0-", spp.case, ".txt"))
 ## down to 0.9*Fmsy (left limb value) for 35years
 f1 <- c(f.info, paste0("fvals; c(", paste(
         #F vals for each year
-          c(rep(0, start.fishery - start), seq(0, 0.175, length.out = 40),
+          c(rep(0, start.fishery - start - 1), seq(0, 0.175, length.out = 41),
             seq(0.175, 0.07, length.out = 35)), 
         collapse = ","),")"))
 writeLines(f1, paste0("F1-", spp.case, ".txt"))
@@ -76,7 +76,7 @@ writeLines(f1, paste0("F1-", spp.case, ".txt"))
 ## Burn in of 0 for 25 years, up to 0.9*Fmsy (left limb) for 75 years,
 f2 <- c(f.info, paste0("fvals; c(", paste(
         #F vals for each year
-          c(rep(0, start.fishery - start), seq(0, 0.175, length.out = 75)),
+          c(rep(0, start.fishery - start - 1), seq(0, 0.175, length.out = 76)),
         collapse = ","),")"))
 writeLines(f2, paste0("F2-", spp.case, ".txt"))
 
@@ -140,10 +140,11 @@ allyears <- paste0("list(c(", paste(c(
                    #Fishery
                      seq(start.fishery, start.fishery + 10, by = 10), 
                      seq(start.fishery + 20, start.fishery + 45, by = 5),
-                     seq(start.fishery + 46, end),
+                     seq(start.fishery + 46, end)), 
+                   collapse = ","), "), c(", paste( c(
                    #Survey
                      seq(start.survey, end, by = 2)),
-                   collapse = ","))
+                   collapse = ","), "))")
 fishyears <- paste0("list(c(", paste(c(
                    #Fishery
                      seq(start.fishery, start.fishery + 10, by = 10), 
