@@ -21,7 +21,7 @@
 dir.main <- "c:/ss/estgrowth"
 dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 
-my.spp <- c("cod", "coa")
+my.spp <- c("col")
 # Number of ss3sim iterations
 my.totnum <- 1:25
 # Logical whether or not to run ss3sim bias adjustment for log normal recdevs
