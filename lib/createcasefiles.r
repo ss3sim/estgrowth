@@ -178,6 +178,7 @@ writeX <- function(fleets, years, case) {
   writeLines(a, paste0("mlacomp", case, "-", spp.case[spp], ".txt"))
 }
 
-writeX(fleets = justfish, years = list(c(26)), case = 1)
+writeX(fleets = justfish, years = "list(c(26))", case = 1)
+writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), case = 2)
 
 setwd(wd.curr)
