@@ -19,6 +19,8 @@
 ###############################################################################
 ## Set the working directory
 dir.main <- "c:/ss/estgrowth"
+#The following directory needs to be cloned prior to running.
+dir.models <- "c:/ss/growth_models"
 dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 
 my.spp <- c("col")
@@ -46,6 +48,10 @@ if(!is.null(ss3sim.install)){
 	}
 }
 library(r4ss); library(ss3sim)
+setwd(dir.models)
+system("git fetch")
+system("git rebase origin/master")
+setwd(dir.main)
 dir.sub <- file.path(dir.main, "test")
 dir.cases <- file.path(dir.main, "casefiles")
 dir.results <- file.path(dir.main, "results")
