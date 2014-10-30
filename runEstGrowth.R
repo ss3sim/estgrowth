@@ -58,9 +58,8 @@ source(file.path(dir.main, "lib", "createcasefiles.r"))
 #Specify where the model files are
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
-  models <- file.path(dir.main, models, 
-                      apply(spp.grid, 1, paste, collapse = "-"))
-  my.casefiles <- list(A = "agecomp", B = "bin", E = "E", F = "F", 
+  models <- file.path(dir.main, "models", apply(spp.grid, 1, paste, collapse = "-"))
+  my.casefiles <- list(A = "agecomp", E = "E", F = "F", 
                      I = "index", L = "lcomp", R = "R")
 
   internal <- expand_scenarios(cases = 
@@ -75,13 +74,13 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 # devtools::load_all("c:/ss/ss3sim")
-# # Run a single iteration of a given scenario
-# run_ss3sim(iterations = 1, scenarios = "A0-B0-E0-F0-I0-L0-R0-coa",
+# # # Run a single iteration of a given scenario
+# unlink("A0-E1-F1-I0-L0-R0-col", recursive = TRUE)
+# run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-col",
 #            case_folder = dir.cases, case_files = my.casefiles, 
-#            om_dir = file.path(d, "cod-om"), 
-#            em_dir = file.path(d, "cod-em"), bias_adjust = FALSE,
+#            om_dir = models[1], 
+#            em_dir = models[2], bias_adjust = FALSE,
 #            ignore.stdout = TRUE)
-# unlink("A0-B0-E0-F0-I0-L0-R0-coa", recursive = TRUE)
 
 # Set up running in parallel
 library(doParallel)
