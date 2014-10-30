@@ -81,8 +81,8 @@ dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 # devtools::load_all("c:/ss/ss3sim")
 # # # Run a single iteration of a given scenario
-# unlink("A0-E1-F1-I0-L0-R0-col", recursive = TRUE)
-# run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-col",
+# unlink("A0-E1-F1-I0-L0-R0-X1-col", recursive = TRUE)
+# run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-X1-col",
 #            case_folder = dir.cases, case_files = my.casefiles, 
 #            om_dir = models[1], 
 #            em_dir = models[2], bias_adjust = FALSE,
