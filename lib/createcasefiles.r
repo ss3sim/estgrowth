@@ -170,4 +170,14 @@ writeA(fleets = bothfleets, Nsamp = allsamples.4, years = allyears, case = 3)
 writeA(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 4)
 }
 
+
+writeX <- function(fleets, years, case) {
+  a <- c(paste("fleets;", fleets),
+         paste("years;", years),
+         "write_file; TRUE")
+  writeLines(a, paste0("mlacomp", case, "-", spp.case[spp], ".txt"))
+}
+
+writeX(fleets = justfish, years = list(c(26)), case = 1)
+
 setwd(wd.curr)

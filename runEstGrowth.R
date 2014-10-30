@@ -59,7 +59,7 @@ source(file.path(dir.main, "lib", "createcasefiles.r"))
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.main, "models", apply(spp.grid, 1, paste, collapse = "-"))
-  my.casefiles <- list(A = "agecomp", E = "E", F = "F", 
+  my.casefiles <- list(A = "agecomp", E = "E", F = "F", X = "mlacomp"
                      I = "index", L = "lcomp", R = "R")
 
   internal <- expand_scenarios(cases = 
