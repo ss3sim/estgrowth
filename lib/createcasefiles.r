@@ -171,14 +171,24 @@ writeA(fleets = justfish, Nsamp = fishsamples.4, years = fishyears, case = 4)
 }
 
 
-writeX <- function(fleets, years, case) {
+writeX <- function(fleets, years, Nsamp, case) {
   a <- c(paste("fleets;", fleets),
          paste("years;", years),
+         paste("Nsamp;", Nsamp),
          "write_file; TRUE")
   writeLines(a, paste0("mlacomp", case, "-", spp.case[spp], ".txt"))
 }
 
-writeX(fleets = justfish, years = "list(c(26))", case = 1)
-writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), case = 2)
+writeX(fleets = justfish, years = "list(c(26:27))", Nsamp = "list(10:11)", case = 1)
+writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), Nsamp = "list(50)", case = 2)
+
+writeC <- function(fleets, years, case) {
+  a <- c(paste("fleets;", fleets),
+         paste("years;", years),
+         "write_file; TRUE")
+  writeLines(a, paste0("calcomp", case, "-", spp.case[spp], ".txt"))
+}
+
+writeC(fleets = bothfleets, years = "list(c(26:27), c(95:100))", case = 1)
 
 setwd(wd.curr)
