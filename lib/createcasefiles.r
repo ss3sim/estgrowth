@@ -29,32 +29,56 @@ end <- 100
 ###############################################################################
 ## Step 
 ## Standard case files
+## These case files do not change per scenario
 ###############################################################################
 for(spp in seq_along(spp.case)) {
 r0 <- "retro_yr; 0"
 writeLines(r0, paste0("R0-", spp.case[spp], ".txt"))
 
 index0 <- c("fleets; 2", 
-            paste0("years; list(c(", paste(seq(start.survey, end, by = 2), collapse = ","), "))"),
-            paste0("sds_obs; list(0.2)"))
-writeLines(index0, paste0("index0-", spp.case[spp], ".txt"))
+            paste0("years; list(c(", paste(
+            #Years of survey index of abundance
+              seq(start.survey, end, by = 2), 
+            collapse = ","),
+                   "))"),
+            "sds_obs; list(0.2)")
+writeLines(index0, paste0("index0-", spp.case, ".txt"))
 
-f0 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
-        paste0("years_alter; c(", paste(start:end, collapse = ","), ")"),
-        paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
-                          rep(0.08, end - start.fishery + 1)), collapse = ","), ")"))
-writeLines(f0, paste0("F0-", spp.case[spp], ".txt"))
-f1 <- c(paste0("years; c(", paste(start:end, collapse = ","), ")"),
-        paste0("years_alter; c(", paste(start:end, collapse = ","), ")"),
-        paste0("fvals; c(", paste(c(rep(0, start.fishery - start), 
-                                  seq(0, 0.16, length.out = 60),
-                                  seq(0.16, 0.08, length.out = 15)), 
-                                  collapse = ","),")"))
-writeLines(f1, paste0("F1-", spp.case[spp], ".txt"))
 ###############################################################################
 ## Step 
 ## Case files that change
 ###############################################################################
+#change_f: case "F"
+## Constant F for 75 years
+f.info <- c(paste0("years; c(", paste(
+        #All years in the simulation
+          start:end, 
+        collapse = ","), ")"),
+        paste0("years_alter; c(", paste(
+        #Years to alter F
+          start:end, 
+        collapse = ","), ")"))
+f0 <- c(f.info, paste0("fvals; c(", paste(
+        #F vals for each year
+          c(rep(0, start.fishery - start), rep(0.07, end - start.fishery + 1)
+        ), collapse = ","), ")"))
+writeLines(f0, paste0("F0-", spp.case, ".txt"))
+
+## Burn in of 0 for 25 years, up to 0.9*Fmsy (right limb) for 40 years,
+## down to 0.9*Fmsy (left limb value) for 35years
+f1 <- c(f.info, paste0("fvals; c(", paste(
+        #F vals for each year
+          c(rep(0, start.fishery - start), seq(0, 0.175, length.out = 40),
+            seq(0.175, 0.07, length.out = 35)), 
+        collapse = ","),")"))
+writeLines(f1, paste0("F1-", spp.case, ".txt"))
+
+## Burn in of 0 for 25 years, up to 0.9*Fmsy (left limb) for 75 years,
+f2 <- c(f.info, paste0("fvals; c(", paste(
+        #F vals for each year
+          c(rep(0, start.fishery - start), seq(0, 0.175, length.out = 75)),
+        collapse = ","),")"))
+writeLines(f2, paste0("F2-", spp.case, ".txt"))
 
 #change_e: case "E"
 allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
@@ -99,19 +123,33 @@ writeB(NULL, "c(\"cal\", \"mla\")", 3)
 bothfleets <- "c(1, 2)"
 justfish <- "c(1)"
 
-allsamples <-  "list(c(20, 20, seq(40, 80, 10), rep(100, 30)), rep(100, 13))"
-fishsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)))"
+# allsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)), rep(100, 13))"
+# fishsamples <- "list(c(20, 20, seq(40, 80, 10), rep(100, 30)))"
 
-allsamples.4 <-  "list(c(5, 5, seq(10, 24, 3), rep(25, 30)), rep(25, 13))"
-fishsamples.4 <- "list(c(5, 5, seq(10, 24, 3), rep(25, 30)))"
+# allsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)), rep(25, 13))"
+# fishsamples.4 <- "list(c(5, 5, seq(10, 20, 2), rep(25, 30)))"
 
-allyears <- paste0("list(c(seq(", start.fishery, ", ", start.fishery + 10, ", by = 10), seq(", 
-                    start.fishery + 20, ", ", start.fishery + 45, ", by = 5), seq(", 
-                    start.fishery + 46, ", ", end, ")), seq(", start.survey,",", 
-                    end,", by = 2))")
-fishyears <- paste0("list(c(seq(", start.fishery, ", ", start.fishery + 10, ", by = 10), seq(", 
-                    start.fishery + 20, ", ", start.fishery + 45, ", by = 5), seq(", 
-                    start.fishery + 46, ", ", end, ")))")
+allsamples <- "list(rep(40, 37), rep(40, 13))"
+fishsamples <- "list(rep(40, 37))"
+
+allsamples.4 <- "list(rep(10, 37), rep(10, 13))"
+fishsamples.4 <- "list(rep(10, 37))"
+
+
+allyears <- paste0("list(c(", paste(c(
+                   #Fishery
+                     seq(start.fishery, start.fishery + 10, by = 10), 
+                     seq(start.fishery + 20, start.fishery + 45, by = 5),
+                     seq(start.fishery + 46, end),
+                   #Survey
+                     seq(start.survey, end, by = 2)),
+                   collapse = ","))
+fishyears <- paste0("list(c(", paste(c(
+                   #Fishery
+                     seq(start.fishery, start.fishery + 10, by = 10), 
+                     seq(start.fishery + 20, start.fishery + 45, by = 5),
+                     seq(start.fishery + 46, end)),
+                   collapse = ","))
 
 writeL <- function(fleets, Nsamp, years, case) {
 	l <- c(paste("fleets;", fleets),
