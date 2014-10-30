@@ -104,19 +104,6 @@ writeE(allgrowth, "rep(\"change_e_vbgf\", 5)", "rep(-1, 5)", 2)
 writeE(allgrowth, "c(NA, NA, NA, rep(\"change_e_vbgf\", 2))", "c(2, 2, 2, rep(-1, 2))", 3)
 writeE(allgrowth, "c(rep(\"change_e_vbgf\", 3), NA, NA)", "c(rep(-1, 3), 2, 2)", 4)
 
-#change_bin: case "bin"
-writeB <- function(bin_vector, type, case) {
-	b <- c(paste("bin_vector;", bin_vector),
-	       paste("type;", type))
-	if(is.null(bin_vector)) {b <- b[2]}
-	writeLines(b, paste0("bin", case, "-", spp.case[spp], ".txt"))
-}
-
-writeB("list(\"age\" = 0:15)", "c(\"age\")", 0)
-writeB(NULL, "c(\"cal\")", 1)
-writeB("list(\"age\" = 0:15)", "c(\"age\", \"mla\")", 2)
-writeB(NULL, "c(\"cal\", \"mla\")", 3)
-
 #change_lcomp: case "L"
 #change_agecomp: case "A"
 
