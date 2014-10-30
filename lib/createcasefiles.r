@@ -20,7 +20,7 @@
 
 wd.curr <- getwd()
 setwd(dir.cases)
-spp.case <- "cod"
+spp.case <- "col"
 start.survey <- 76
 start.fishery <- 26
 start <- 1
