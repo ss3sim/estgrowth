@@ -44,7 +44,7 @@ levels(results_re$S) <- c("asymp", "dome")
 results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 
 levels(ts$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
-levels(ts$S) <- c("dome", "asymp")
+levels(ts$S) <- c("asymp", "dome")
 ts$S <- relevel(ts$S, ref = "asymp")
 ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 ###############################################################################
@@ -151,18 +151,18 @@ dev.off()
 #### Plot data availability
 ###############################################################################
 ###############################################################################
-
+png("samples.png")
 fulldata <- lapply(do.call("rbind", 
-                    strsplit(readLines("../casefiles/lcomp0-cod.txt")[1:3], 
+                    strsplit(readLines("../casefiles/lcomp0-col.txt")[1:3], 
                              ";"))[, 2],
               function(x) eval(parse(text = x)))
 plot(1:100, 1:100, ylim = c(0, 110), las = 1, 
-     ylab = "n samples", xlab = "years")
+     ylab = "n samples", xlab = "years", type = "n")
 points(fulldata[[3]][[1]], fulldata[[2]][[1]], pch = 1, cex = 3)
 points(fulldata[[3]][[2]], fulldata[[2]][[2]], pch = 18, cex = 3)
 legend("topleft", pch = c(1,18), legend = c("Fishery", "Survey"), 
        bty = "n", cex = 4)
-
+dev.off()
 ###############################################################################
 ###############################################################################
 #### Step
