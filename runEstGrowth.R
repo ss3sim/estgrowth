@@ -66,15 +66,15 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
   my.casefiles <- list(A = "agecomp", E = "E", F = "F", X = "mlacomp",
-                     I = "index", L = "lcomp", R = "R")
+    I = "index", L = "lcomp", R = "R", S = c(toupper(letters[10:15])))
 
   internal <- expand_scenarios(cases = 
-    list(A = 0:4, B = c(0), E = c(0, 1), F = c(0), I = c(0),
-         L = 0:3, R = c(0), X = c(1)), species = my.spp)
+    list(A = 0:4, L = 0:3, X = c(0), E = c(0, 1), S = 0:1, 
+         F = c(0), I = c(0), R = c(0)), species = my.spp)
 
   external <- expand_scenarios(cases = 
-    list(A = 0:4, B = c(2), E = 2:4, F = c(0), I = c(0),
-         L = 0:3, R = c(0), X = 1), species = my.spp)
+    list(A = 0:4, L = 0:3, X = 1:2, E = 2:4, S = 0:1,
+         F = c(0), I = c(0), R = c(0)), species = my.spp)
 
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
