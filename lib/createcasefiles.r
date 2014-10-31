@@ -137,7 +137,7 @@ fishyears <- paste0("list(c(", paste(c(
                      seq(start.fishery, start.fishery + 10, by = 10), 
                      seq(start.fishery + 20, start.fishery + 45, by = 5),
                      seq(start.fishery + 46, end)),
-                   collapse = ","))
+                   collapse = ","), "))")
 
 writeL <- function(fleets, Nsamp, years, case) {
 	l <- c(paste("fleets;", fleets),
@@ -179,7 +179,8 @@ writeX <- function(fleets, years, Nsamp, case) {
   writeLines(a, paste0("mlacomp", case, "-", spp.case[spp], ".txt"))
 }
 
-writeX(fleets = justfish, years = "list(c(26:27))", Nsamp = "list(10:11)", case = 1)
+writeX(fleets = "NULL", years = "NULL", Nsamp = "NULL", case = 0)
+writeX(fleets = justfish, years = "list(c(26))", Nsamp = "list(50)", case = 1)
 writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), Nsamp = "list(50)", case = 2)
 
 writeC <- function(fleets, years, case) {
@@ -190,5 +191,22 @@ writeC <- function(fleets, years, case) {
 }
 
 writeC(fleets = bothfleets, years = "list(c(26:27), c(95:100))", case = 1)
+
+writeS <- function(vals, case) {
+  parnames <- paste0("SizeSel_1P_", 1:6, "_Fishery")
+  beg <- paste("function_type; change_tv")
+  sec <- "param;"
+  mid <- "dev; rep("
+  end <- ", 100)"
+  let <- toupper(letters[10:15])
+  
+  lapply(seq_along(parnames), function(x) {
+    info <- c(beg, paste(sec, parnames[x]), paste0(mid, vals[x], end))
+    writeLines(info, paste0(let[x], case, "-", spp.case[spp], ".txt"))
+  })
+}
+
+writeS(vals = rep(0, 6), case = 0)
+writeS(vals = c(51.5 - 50.8, -4 - -3 , 5.2 - 5.1, 8 - 15, 0, 0), case = 1)
 
 setwd(wd.curr)
