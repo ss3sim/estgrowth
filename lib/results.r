@@ -45,7 +45,6 @@ results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 
 levels(ts$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
 levels(ts$S) <- c("asymp", "dome")
-ts$S <- relevel(ts$S, ref = "asymp")
 ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 ###############################################################################
 ###############################################################################
