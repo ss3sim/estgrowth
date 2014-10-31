@@ -40,13 +40,12 @@ results_re <- calculate_re(scalars, FALSE)
 ###############################################################################
 ###############################################################################
 levels(results_re$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
-levels(results_re$species) <- c("dome", "asymp")
-results_re$species <- relevel(results_re$species, ref = "asymp")
+levels(results_re$S) <- c("asymp", "dome")
 results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 
 levels(ts$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
-levels(ts$species) <- c("dome", "asymp")
-ts$species <- relevel(ts$species, ref = "asymp")
+levels(ts$S) <- c("dome", "asymp")
+ts$S <- relevel(ts$S, ref = "asymp")
 ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 ###############################################################################
 ###############################################################################
@@ -57,9 +56,9 @@ ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
 axis.val <- TRUE
 axis.rel <- TRUE
 my.horiz <- "E"
-my.horiz2 <- ""
+my.horiz2 <- "X"
 my.vert <- "A"
-my.vert2 <- "species"
+my.vert2 <- "S"
 my.x <- "L"
 data.plot <- subset(results_re, E != "fix")
 ts <- subset(ts, E != "fix")
@@ -76,7 +75,8 @@ termSSB <- cbind(termSSB, subset(ts, year == max(year)))
 ###############################################################################
 png("cvold.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "CV_old_Fem_GP_1_re", 
-                    vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv old")
@@ -85,6 +85,7 @@ dev.off()
 png("cvyoung.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "CV_young_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv young")
@@ -93,6 +94,7 @@ dev.off()
 png("latamin.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "L_at_Amin_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A min")
@@ -101,6 +103,7 @@ dev.off()
 png("latamax.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "L_at_Amax_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A max")
@@ -108,7 +111,8 @@ dev.off()
 
 png("vonbk.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "VonBert_K_Fem_GP_1_re", 
-                    vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
+                    horiz2 = my.horiz2, 
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: Vonb K")
@@ -117,6 +121,7 @@ dev.off()
 png("depletion.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "depletion_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: depletion")
@@ -125,6 +130,7 @@ dev.off()
 png("ssbmsy.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "SSB_MSY_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: SSB at MSY")
@@ -133,6 +139,7 @@ dev.off()
 png("termssb.png")
 plot_scalar_boxplot(termSSB, x = my.x, y = "termSSB", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
+                    horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: terminal SSB")
@@ -149,9 +156,8 @@ fulldata <- lapply(do.call("rbind",
                     strsplit(readLines("../casefiles/lcomp0-cod.txt")[1:3], 
                              ";"))[, 2],
               function(x) eval(parse(text = x)))
-plot(1913:2012, 1913:2012, ylim = c(0, 110), xaxt = "n", las = 1, 
+plot(1:100, 1:100, ylim = c(0, 110), las = 1, 
      ylab = "n samples", xlab = "years")
-axis(1, seq(1912, 2012, by = 5), labels = seq(0, 100, by = 5))
 points(fulldata[[3]][[1]], fulldata[[2]][[1]], pch = 1, cex = 3)
 points(fulldata[[3]][[2]], fulldata[[2]][[2]], pch = 18, cex = 3)
 legend("topleft", pch = c(1,18), legend = c("Fishery", "Survey"), 
