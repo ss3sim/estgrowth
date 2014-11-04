@@ -155,13 +155,33 @@ fulldata <- lapply(do.call("rbind",
                     strsplit(readLines("../casefiles/lcomp0-col.txt")[1:3], 
                              ";"))[, 2],
               function(x) eval(parse(text = x)))
-plot(1:100, 1:100, ylim = c(0, 110), las = 1, 
-     ylab = "n samples", xlab = "years", type = "n")
-points(fulldata[[3]][[1]], fulldata[[2]][[1]], pch = 1, cex = 3)
-points(fulldata[[3]][[2]], fulldata[[2]][[2]], pch = 18, cex = 3)
-legend("topleft", pch = c(1,18), legend = c("Fishery", "Survey"), 
-       bty = "n", cex = 4)
+lessdata <- lapply(do.call("rbind", 
+                    strsplit(readLines("../casefiles/lcomp2-col.txt")[1:3], 
+                             ";"))[, 2],
+              function(x) eval(parse(text = x)))
+mindata <- lapply(do.call("rbind", 
+                    strsplit(readLines("../casefiles/lcomp4-col.txt")[1:3], 
+                             ";"))[, 2],
+              function(x) eval(parse(text = x)))
+plot(1:100, 1:100, ylim = c(5, 42), las = 1, yaxt = "n",
+     ylab = "Length and age comp sample size", xlab = "year", type = "n")
+axis(2, at = c(10, 40), las = 1)
+points(fulldata[[3]][[1]], fulldata[[2]][[1]] + 1, pch = 1, cex = 1)
+points(fulldata[[3]][[1]], fulldata[[2]][[1]] - 2, pch = 1, cex = 1)
+points(fulldata[[3]][[2]], fulldata[[2]][[2]] - 0, pch = 19, cex = 1)
+points(lessdata[[3]][[1]], lessdata[[2]][[1]] - 1, pch = 1, cex = 1)
+points(lessdata[[3]][[1]], lessdata[[2]][[1]] + 3, pch = 1, cex = 1)
+points(lessdata[[3]][[2]], lessdata[[2]][[2]] + 2, pch = 19, cex = 1)
+points(mindata[[3]][[1]], mindata[[2]][[1]] - 4, pch = 1, cex = 1)
+legend(80, 25, pch = c(1,19), legend = c("Fishery", "Survey"), 
+       bty = "n", cex = 1.2, ncol = 1)
+text(x = 10, y = 41, labels = "L0, A0")
+text(x = 10, y = 38, labels = "L1, A2")
+text(x = 10, y = 13, labels = "L2, A3")
+text(x = 10, y = 9, labels = "L3, A4")
+text(x = 10, y = 6, labels = "L4, A5")
 dev.off()
+
 ###############################################################################
 ###############################################################################
 #### Step
