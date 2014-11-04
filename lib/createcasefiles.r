@@ -201,6 +201,9 @@ all.fish <- c(seq(start.fishery, start.fishery + 10, by = 10),
               seq(start.fishery + 46, end))
 all.surv <- seq(start.survey, end, by = 2)
 
+less.fish <- all.fish[seq(1, length(all.fish), by = 4)]
+less.surv <- all.surv[seq(1, length(all.surv), by = 4)]
+
 writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = rep(high, length(all.surv)), 
        years.fish = all.fish, years.survey = all.surv, 
        type = "lcomp", case = 0, spp = spp.case[spp])
@@ -213,6 +216,9 @@ writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = rep(low, length(a
 writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = NULL, 
        years.fish = all.fish, years.survey = NULL, 
        type = "lcomp", case = 3, spp = spp.case[spp])
+writeL(Nsamp.fish = rep(low, length(less.fish)), Nsamp.survey = NULL,
+       years.fish = less.fish, years.survey = NULL,
+       type = "lcomp", case = 4, spp = spp.case[spp])
 
 writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = rep(high, length(all.surv)), 
        years.fish = all.fish, years.survey = all.surv, 
@@ -228,6 +234,9 @@ writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = rep(low, length(a
 writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = NULL, 
        years.fish = all.fish, years.survey = NULL, 
        type = "agecomp", case = 4, spp = spp.case[spp])
+writeL(Nsamp.fish = rep(low, length(less.fish)), Nsamp.survey = NULL,
+       years.fish = less.fish, years.survey = NULL,
+       type = "agecomp", case = 5, spp = spp.case[spp])
 
 ###############################################################################
 ###############################################################################
