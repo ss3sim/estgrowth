@@ -216,18 +216,18 @@ writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = NULL,
 
 writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = rep(high, length(all.surv)), 
        years.fish = all.fish, years.survey = all.surv, 
-       type = "acomp", case = 0, spp = spp.case[spp])
+       type = "agecomp", case = 0, spp = spp.case[spp])
 writeL(Nsamp.fish = NULL, Nsamp.survey = NULL, years.fish = NULL, years.survey = NULL, 
-       type = "acomp", case = 1, spp = spp.case[spp])
+       type = "agecomp", case = 1, spp = spp.case[spp])
 writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = NULL, 
        years.fish = all.fish, years.survey = NULL, 
-       type = "acomp", case = 2, spp = spp.case[spp])
+       type = "agecomp", case = 2, spp = spp.case[spp])
 writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = rep(low, length(all.surv)), 
        years.fish = all.fish, years.survey = all.surv, 
-       type = "acomp", case = 3, spp = spp.case[spp])
+       type = "agecomp", case = 3, spp = spp.case[spp])
 writeL(Nsamp.fish = rep(low, length(all.fish)), Nsamp.survey = NULL, 
        years.fish = all.fish, years.survey = NULL, 
-       type = "acomp", case = 4, spp = spp.case[spp])
+       type = "agecomp", case = 4, spp = spp.case[spp])
 
 ###############################################################################
 ###############################################################################
