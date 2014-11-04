@@ -69,11 +69,11 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
     I = "index", L = "lcomp", R = "R", S = c(toupper(letters[10:15])))
 
   internal <- expand_scenarios(cases = 
-    list(A = 0:4, L = 0:3, X = c(0), E = c(0, 1), S = 0:1, 
+    list(A = 0:5, L = 0:3, X = c(0), E = c(0, 1), S = 0:1, 
          F = c(0), I = c(0), R = c(0)), species = my.spp)
 
   external <- expand_scenarios(cases = 
-    list(A = 0:4, L = 0:3, X = 1:2, E = 2:4, S = 0:1,
+    list(A = 0:5, L = 0:3, X = 1:2, E = 2:4, S = 0:1,
          F = c(0), I = c(0), R = c(0)), species = my.spp)
 
 #set working directory
