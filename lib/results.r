@@ -30,8 +30,8 @@ resultfiles <- dir(dir.dropbox, pattern = ".csv", full.names = TRUE)
 scalars <- do.call("rbind", lapply(grep("scalar", resultfiles, value = TRUE), 
                    read.csv))
 ts <- do.call("rbind", lapply(grep("ts", resultfiles, value = TRUE), read.csv))
+# Calculate the relative error for scalars
 results_re <- calculate_re(scalars, FALSE)
-
 
 ###############################################################################
 ###############################################################################
@@ -39,17 +39,23 @@ results_re <- calculate_re(scalars, FALSE)
 #### Name cases
 ###############################################################################
 ###############################################################################
+# Change E0:5 to the following short names
 levels(results_re$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
-levels(results_re$S) <- c("asymp", "dome")
-results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A1"))
-
 levels(ts$E) <- c("fix", "int", "ext", "ext_CV", "ext_LK")
+
+# Change S0:1 to the following short names
+levels(results_re$S) <- c("asymp", "dome")
 levels(ts$S) <- c("asymp", "dome")
-ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A1"))
+
+# Change how A is plotted, with A1 being last because it is the case with 
+# no age data
+results_re$A <- factor(results_re$A, levels = c("A0", "A2", "A3", "A4", "A5", "A1"))
+ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A5", "A1"))
+
 ###############################################################################
 ###############################################################################
 #### Step
-#### 
+#### Set up plots and subset data
 ###############################################################################
 ###############################################################################
 axis.val <- TRUE
@@ -59,8 +65,10 @@ my.horiz2 <- "X"
 my.vert <- "A"
 my.vert2 <- "S"
 my.x <- "L"
-data.plot <- subset(results_re, E != "fix")
-ts <- subset(ts, E != "fix")
+data.plot <- subset(results_re, E != "fix" & A %in% c("A0", "A1", "A2", "A5") & 
+                    L %in% c("L0", "L1", "L4") & X %in% c("X0", "X1"))
+ts <- subset(ts, E != "fix" & A %in% c("A0", "A1", "A2", "A5") & 
+             L %in% c("L0", "L1", "L4") & X %in% c("X0", "X1"))
 
 termSSB <- with(subset(ts, year == max(year)), 
                 ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
@@ -69,79 +77,79 @@ termSSB <- cbind(termSSB, subset(ts, year == max(year)))
 ###############################################################################
 ###############################################################################
 #### Step
-#### 
+#### Plots
 ###############################################################################
 ###############################################################################
-png("cvold.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "CV_old_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv old")
+ggsave("cvold.png", dpi = 300)
 dev.off()
 
-png("cvyoung.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "CV_young_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: cv young")
+ggsave("cvyoung.png", dpi = 300)
 dev.off()
 
-png("latamin.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "L_at_Amin_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A min")
+ggsave("latamin.png", dpi = 300)
 dev.off()
 
-png("latamax.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "L_at_Amax_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: length at A max")
+ggsave("latamax.png", dpi = 300)
 dev.off()
 
-png("vonbk.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "VonBert_K_Fem_GP_1_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
                     horiz2 = my.horiz2, 
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: Vonb K")
+ggsave("vonbk.png", dpi = 300)
 dev.off()
 
-png("depletion.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "depletion_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: depletion")
+ggsave("depletion.png", dpi = 300)
 dev.off()
 
-png("ssbmsy.png")
 plot_scalar_boxplot(data.plot, x = my.x, y = "SSB_MSY_re", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: SSB at MSY")
+ggsave("ssbmsy.png", dpi = 300)
 dev.off()
 
-png("termssb.png")
 plot_scalar_boxplot(termSSB, x = my.x, y = "termSSB", 
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2, 
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) + 
 xlab("Length comps for fishery and survey vs. just fishery") + 
 ylab("relative error: terminal SSB")
+ggsave("termssb.png", dpi = 300)
 dev.off()
 
 ###############################################################################
