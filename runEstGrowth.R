@@ -29,9 +29,14 @@ my.totnum <- 1:25
 # Logical whether or not to run ss3sim bias adjustment for log normal recdevs
 my.bias <- FALSE
 
-#How to install the package
-ss3sim.install <- "local" #Can be "github", "local", "NULL"
-ss3sim.branch <- "feature/data"
+## How to install the package
+
+# Can be "github", "local", "NULL"
+ss3sim.install <- "github"
+# ss3sim.install <- "local" 
+
+ss3sim.branch <- "master"
+# ss3sim.branch <- "feature/data"
 
 
 ###############################################################################
@@ -40,8 +45,7 @@ ss3sim.branch <- "feature/data"
 ###############################################################################
 if(!is.null(ss3sim.install)){
 	if(ss3sim.install == "github"){
-		devtools::install_github("ss3sim", username = "ss3sim",
-		                         ref = ss3sim.branch)
+		devtools::install_github("ss3sim/ss3sim", ref = ss3sim.branch)
 	}
 	if(ss3sim.install == "local"){
 		devtools::install("c:/ss/ss3sim")
@@ -79,14 +83,14 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
-# devtools::load_all("c:/ss/ss3sim")
+devtools::load_all("c:/ss/ss3sim")
 # # # Run a single iteration of a given scenario
-# unlink("A0-E1-F1-I0-L0-R0-X1-col", recursive = TRUE)
-# run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-X1-col",
-#            case_folder = dir.cases, case_files = my.casefiles, 
-#            om_dir = models[1], 
-#            em_dir = models[2], bias_adjust = FALSE,
-#            ignore.stdout = TRUE)
+unlink("A0-E1-F1-I0-L0-R0-X1-S0-col", recursive = TRUE)
+run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-X1-S0-col",
+           case_folder = dir.cases, case_files = my.casefiles, 
+           om_dir = models[1], 
+           em_dir = models[2], bias_adjust = FALSE,
+           ignore.stdout = TRUE)
 
 # Set up running in parallel
 library(doParallel)
@@ -123,3 +127,5 @@ file.copy(dir(pattern = "r.csv", full.names = TRUE),
 file.copy(dir(pattern = "s.csv", full.names = TRUE),
           file.path(dir.dropbox, "ts.csv"), 
           overwrite = TRUE, copy.mode = TRUE)
+
+source(file.path(dir.main, "lib", "results.r"))
