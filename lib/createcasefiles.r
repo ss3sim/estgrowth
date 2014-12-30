@@ -97,16 +97,14 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
   l <- c(paste0("fleets; ", fleets),
          paste("Nsamp;", Nsamp),
          paste("years;", years),
-         "cpar; 1",
-         "write_file; TRUE")
+         "cpar; 1")
   writeLines(l, paste0(type, case, "-", spp, ".txt"))
 }
 
 writeX <- function(fleets, years, Nsamp, species, case) {
   a <- c(paste("fleets;", fleets),
          paste("years;", years),
-         paste("Nsamp;", Nsamp),
-         "write_file; TRUE")
+         paste("Nsamp;", Nsamp))
   writeLines(a, paste0("mlacomp", case, "-", species, ".txt"))
 }
 
