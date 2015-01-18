@@ -6,7 +6,8 @@
 ####Lastupdate :
 ####Purpose    :
 ####Packages   :
-####Inputs     :
+####Inputs     : This script assumes you have cloned ss3sim/growth_models to
+####             your local machine.
 ####Outputs    :
 ####Remarks    : Character width = 80
 #-----------------------------------------------------------------------------#
@@ -32,11 +33,10 @@ my.bias <- FALSE
 ## How to install the package
 
 # Can be "github", "local", "NULL"
-ss3sim.install <- "github"
-# ss3sim.install <- "local" 
+# ss3sim.install <- "github"
+ss3sim.install <- "local" 
 
 ss3sim.branch <- "master"
-
 
 ###############################################################################
 ## Step 02
@@ -84,12 +84,12 @@ dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 devtools::load_all("c:/ss/ss3sim")
 # # # Run a single iteration of a given scenario
-unlink("A0-E1-F1-I0-L0-R0-X1-S0-col", recursive = TRUE)
-run_ss3sim(iterations = 1, scenarios = "A0-E1-F1-I0-L0-R0-X1-S0-col",
+unlink("A0-E2-F1-I0-L0-R0-X1-S0-col", recursive = TRUE)
+run_ss3sim(iterations = 1, scenarios = "A0-E2-F1-I0-L0-R0-X1-S0-col",
            case_folder = dir.cases, case_files = my.casefiles, 
            om_dir = models[1], 
            em_dir = models[2], bias_adjust = FALSE,
-           ignore.stdout = TRUE)
+           ignore.stdout = TRUE, show.output.on.console = FALSE)
 
 # Set up running in parallel
 library(doParallel)
