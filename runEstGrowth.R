@@ -36,7 +36,6 @@ ss3sim.install <- "github"
 # ss3sim.install <- "local" 
 
 ss3sim.branch <- "master"
-# ss3sim.branch <- "feature/data"
 
 
 ###############################################################################
