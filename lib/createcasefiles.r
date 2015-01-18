@@ -245,11 +245,16 @@ writeL(Nsamp.fish = rep(low, length(less.fish)), Nsamp.survey = NULL,
 #### sample_mlacomp data: X
 ###############################################################################
 ###############################################################################
-writeX(fleets = "NULL", years = "NULL", Nsamp = "NULL", spp.case[spp], case = 0)
-writeX(fleets = "c(1)", years = "list(c(26))", 
-       Nsamp = "list(50)", spp.case[spp], case = 1)
-writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), 
-       Nsamp = "list(50)", spp.case[spp], case = 2)
+counter <- 0
+for(q in c("NULL", "vbgf_keep", "vbgf_remove")) {
+  writeX(fleets = "NULL", years = "NULL", 
+         Nsamp = "NULL", spp.case[spp], case = counter, mean_outfile = q)
+  writeX(fleets = "c(1)", years = "list(c(26))", 
+         Nsamp = "list(50)", spp.case[spp], case = counter + 1, mean_outfile = q)
+  writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), 
+       Nsamp = "list(50)", spp.case[spp], case = counter + 1, mean_outfile = q)
+  counter <- counter + 3
+}
 
 ###############################################################################
 ###############################################################################
