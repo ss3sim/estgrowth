@@ -101,7 +101,7 @@ writeX <- function(fleets, years, Nsamp, species, case,
   a <- c(paste("fleets;", fleets),
          paste("years;", years),
          paste("Nsamp;", Nsamp),
-         paste("mean_outfile;" outfile))
+         paste("mean_outfile;", mean_outfile))
   writeLines(a, paste0("mlacomp", case, "-", species, ".txt"))
 }
 
@@ -246,13 +246,13 @@ writeL(Nsamp.fish = rep(low, length(less.fish)), Nsamp.survey = NULL,
 ###############################################################################
 ###############################################################################
 counter <- 0
-for(q in c("NULL", "vbgf_keep", "vbgf_remove")) {
+for(q in c("vbgf_keep", "vbgf_remove")) {
   writeX(fleets = "NULL", years = "NULL", 
          Nsamp = "NULL", spp.case[spp], case = counter, mean_outfile = q)
   writeX(fleets = "c(1)", years = "list(c(26))", 
          Nsamp = "list(50)", spp.case[spp], case = counter + 1, mean_outfile = q)
   writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), 
-       Nsamp = "list(50)", spp.case[spp], case = counter + 1, mean_outfile = q)
+       Nsamp = "list(50)", spp.case[spp], case = counter + 2, mean_outfile = q)
   counter <- counter + 3
 }
 
