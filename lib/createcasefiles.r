@@ -17,14 +17,13 @@
 ## Step 
 ## Set working directories 
 ###############################################################################
-
 wd.curr <- getwd()
 setwd(dir.cases)
 spp.case <- "col"
-start.survey <- 76
+start.survey  <- 76
 start.fishery <- 26
 start <- 1
-end <- 100
+end   <- 100
 
 ###############################################################################
 ###############################################################################
@@ -61,37 +60,33 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
   years <- "NULL"
   Nsamp <- "NULL"
   fleets <- "NULL"
-  if(all(fish, survey)) {
+  if (all(fish, survey)) {
       years <- paste0("list(c(", paste(years.fish, collapse = ","),
                       "), c(", paste(years.survey, collapse = ","), "))")
   } else {
-    if(fish) {
-    years <- paste0("list(c(", paste(years.fish, collapse = ","),
-                      "))")      
+    if (fish) {
+      years <- paste0("list(c(", paste(years.fish, collapse = ","), "))")      
     }
-    if(survey) {
-      years <- paste0("list(c(", paste(years.survey, collapse = ","),
-                      "))")
+    if (survey) {
+      years <- paste0("list(c(", paste(years.survey, collapse = ","), "))")
     }
   }
-  if(all(fish, survey)) {
+  if (all(fish, survey)) {
     Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","),
                     "), c(", paste(Nsamp.survey, collapse = ","), "))")
   } else {
-    if(fish) {
-    Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","),
-                    "))")
+    if (fish) {
+      Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","), "))")
     }
-    if(survey) {
-    Nsamp <- paste0("list(c(", paste(Nsamp.survey, collapse = ","),
-                    "))")
+    if (survey) {
+      Nsamp <- paste0("list(c(", paste(Nsamp.survey, collapse = ","), "))")
     }
   }
-  if(all(fish, survey)) {
+  if (all(fish, survey)) {
     fleets <- "c(1, 2)"
   } else {
-    if(fish) fleets <- "c(1)"
-    if(survey) fleets <- "c(2)"
+    if (fish) fleets   <- "c(1)"
+    if (survey) fleets <- "c(2)"
   }
 
   l <- c(paste0("fleets; ", fleets),
@@ -101,10 +96,12 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
   writeLines(l, paste0(type, case, "-", spp, ".txt"))
 }
 
-writeX <- function(fleets, years, Nsamp, species, case) {
+writeX <- function(fleets, years, Nsamp, species, case, 
+                   mean_outfile = NULL) {
   a <- c(paste("fleets;", fleets),
          paste("years;", years),
-         paste("Nsamp;", Nsamp))
+         paste("Nsamp;", Nsamp),
+         paste("mean_outfile;" outfile))
   writeLines(a, paste0("mlacomp", case, "-", species, ".txt"))
 }
 
@@ -121,6 +118,13 @@ writeS <- function(vals, species, case) {
     writeLines(info, paste0(let[x], case, "-", species, ".txt"))
   })
 }
+  # End of functions for creating case files
+
+###############################################################################
+## Step 
+## Sequence along all species listed in spp.case
+###############################################################################
+  for (spp in seq_along(spp.case)) {
 
 ###############################################################################
 ## Step 
@@ -128,7 +132,6 @@ writeS <- function(vals, species, case) {
 ## These case files do not change per scenario
 ## Retro and index
 ###############################################################################
-for(spp in seq_along(spp.case)) {
 writeLines("retro_yr; 0", paste0("R0-", spp.case[spp], ".txt"))
 
 index0 <- c("fleets; 2", 
@@ -258,9 +261,14 @@ writeS(vals = rep(0, 6), spp.case[spp], case = 0)
 writeS(vals = c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0), 
        spp.case[spp], case = 1)
 
-
-
+###############################################################################
+###############################################################################
+#### Step
+#### Close the loop for all species
+###############################################################################
+###############################################################################
 }
+
 ###############################################################################
 ###############################################################################
 #### Step
