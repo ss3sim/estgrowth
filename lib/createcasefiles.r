@@ -123,6 +123,17 @@ writeS <- function(vals, species, case) {
     writeLines(info, paste0(let[x], case, "-", species, ".txt"))
   })
 }
+
+writeM <- function(deviates, species, case) {
+  beg <- paste("function_type; change_tv")
+  sec <- "param;"
+  mid <- "dev; "
+  
+  info <- c(beg, paste(sec, "NatM_p_1_Fem_GP_1"), 
+            paste0(mid, paste0(deviates)))
+  writeLines(info, paste0("M", case, "-", species, ".txt"))
+}
+
   # End of functions for creating case files
 
 ###############################################################################
@@ -269,6 +280,15 @@ for(q in c("vbgf_keep", "vbgf_remove")) {
 ###############################################################################
 writeS(vals = rep(0, 6), spp.case[spp], case = 0)
 writeS(vals = c(0.01, rep(0, 5)), spp.case[spp], case = 1)
+
+###############################################################################
+###############################################################################
+#### Step
+#### Time varying natural mortality
+###############################################################################
+###############################################################################
+writeM(deviates = "rep(0, 100)", spp.case[spp], case = 0)
+writeM(deviates = "rnorm(100, 0, 0.01)", spp.case[spp], case = 1)
 
 ###############################################################################
 ###############################################################################
