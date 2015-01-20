@@ -25,6 +25,15 @@ start.fishery <- 26
 start <- 1
 end   <- 100
 
+# survey samples
+high <- 40
+low <- 10
+
+# TODO: the true values for natural mortality will need to be placed here
+morttr <- c(0.2)
+mortup <- morttr + 0.1
+mortdn <- morttr - 0.1
+
 ###############################################################################
 ###############################################################################
 #### Step
@@ -47,7 +56,7 @@ writeE <- function(growthname, growthint, growthphase, species, case,
         cat("natM_type; 1Parm \nnatM_n_breakpoints; NULL \n",
             "natM_lorenzen; NULL \nnatM_val; c(NA, NA) \n", sep = "")
       } else {
-        cat("natm_type; 1Parm \nnatM_n_breakpoints; NULL \n",
+        cat("natM_type; 1Parm \nnatM_n_breakpoints; NULL \n",
             "natM_lorenzen; NULL \nnatM_val; c(", 
             changeM, ", ", phaseM, ")\n", sep = "")
       }
@@ -103,7 +112,7 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
   writeLines(l, paste0(type, case, "-", spp, ".txt"))
 }
 
-writeX <- function(fleets, years, Nsamp, species, case, 
+writeD <- function(fleets, years, Nsamp, species, case, 
                    mean_outfile = NULL) {
   a <- c(paste("fleets;", fleets),
          paste("years;", years),
@@ -112,18 +121,20 @@ writeX <- function(fleets, years, Nsamp, species, case,
   writeLines(a, paste0("mlacomp", case, "-", species, ".txt"))
 }
 
-writeS <- function(vals, species, case) {
+writeS <- function(vals, species, case, 
+                   type = c("random", "deviates")) {
+  type <- match.arg(type, several.ok = FALSE)
   parnames <- paste0("SizeSel_1P_", 1:6, "_Fishery")
   beg <- paste("function_type; change_tv")
   sec <- "param;"
   mid <- "dev; rnorm(n = 100, mean = 0, sd = "
   end <- ")"
-  let <- toupper(letters[10:15])
+  let <- toupper(rev(letters)[1:6])
   
   lapply(seq_along(parnames), function(x) {
-    if(vals[x] == 0) {
+    if(type == "deviates") {
       info <- c(beg, paste(sec, parnames[x]),
-                paste0("dev; rep(0, 100)"))
+                paste0("dev; rep(", vals[x], ", 100)"))
     } else {
       info <- c(beg, paste(sec, parnames[x]), paste0(mid, vals[x], end))
     }
@@ -203,10 +214,7 @@ writeLines(f2, paste0("F2-", spp.case[spp], ".txt"))
 allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
 growthint <- rep(NA, length(allgrowth))
 growthphase <- rep(-1, length(allgrowth))
-# TODO: the true values for natural mortality will need to be placed here
-morttr <- c(0.2)
-mortup <- morttr + 0.1
-mortdn <- morttr - 0.1
+
 
 counter <- 10
 for (natm in 1:3) {
@@ -240,8 +248,6 @@ for (natm in 1:3) {
 #### change "type" to create length or age casefiles
 ###############################################################################
 ###############################################################################
-high <- 40
-low <- 10
 all.fish <- c(seq(start.fishery, start.fishery + 10, by = 10), 
               seq(start.fishery + 20, start.fishery + 45, by = 5),
               seq(start.fishery + 46, end))
@@ -287,16 +293,16 @@ writeL(Nsamp.fish = rep(low, length(less.fish)), Nsamp.survey = NULL,
 ###############################################################################
 ###############################################################################
 #### Step
-#### sample_mlacomp data: X
+#### sample_mlacomp data: D
 ###############################################################################
 ###############################################################################
 counter <- 0
 for(q in c("vbgf_keep", "vbgf_remove")) {
-  writeX(fleets = "NULL", years = "NULL", 
+  writeD(fleets = "NULL", years = "NULL", 
          Nsamp = "NULL", spp.case[spp], case = counter, mean_outfile = q)
-  writeX(fleets = "c(1)", years = "list(c(26))", 
+  writeD(fleets = "c(1)", years = "list(c(26))", 
          Nsamp = "list(50)", spp.case[spp], case = counter + 1, mean_outfile = q)
-  writeX(fleets = "c(2)", years = paste0("list(",start.survey,")"), 
+  writeD(fleets = "c(2)", years = paste0("list(",start.survey,")"), 
        Nsamp = "list(50)", spp.case[spp], case = counter + 2, mean_outfile = q)
   counter <- counter + 3
 }
@@ -307,8 +313,11 @@ for(q in c("vbgf_keep", "vbgf_remove")) {
 #### Time varying selectivity case files
 ###############################################################################
 ###############################################################################
-writeS(vals = rep(0, 6), spp.case[spp], case = 0)
-writeS(vals = c(0.01, rep(0, 5)), spp.case[spp], case = 1)
+writeS(vals = rep(0, 6), spp.case[spp], case = 0, type = "deviates")
+# TODO: make the change to dome-shaped selectivity spp specific
+writeS(vals = c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0),
+       spp.case[spp], case = 1, type = "deviates")
+writeS(vals = c(0.01, rep(0, 5)), spp.case[spp], case = 2, type = "random")
 
 ###############################################################################
 ###############################################################################
