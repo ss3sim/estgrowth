@@ -109,12 +109,17 @@ writeS <- function(vals, species, case) {
   parnames <- paste0("SizeSel_1P_", 1:6, "_Fishery")
   beg <- paste("function_type; change_tv")
   sec <- "param;"
-  mid <- "dev; rep("
-  end <- ", 100)"
+  mid <- "dev; rnorm(n = 100, mean = 0, sd = "
+  end <- ")"
   let <- toupper(letters[10:15])
   
   lapply(seq_along(parnames), function(x) {
-    info <- c(beg, paste(sec, parnames[x]), paste0(mid, vals[x], end))
+    if(vals[x] == 0) {
+      info <- c(beg, paste(sec, parnames[x]),
+                paste0("dev; rep(0, 100)"))
+    } else {
+      info <- c(beg, paste(sec, parnames[x]), paste0(mid, vals[x], end))
+    }
     writeLines(info, paste0(let[x], case, "-", species, ".txt"))
   })
 }
@@ -263,8 +268,7 @@ for(q in c("vbgf_keep", "vbgf_remove")) {
 ###############################################################################
 ###############################################################################
 writeS(vals = rep(0, 6), spp.case[spp], case = 0)
-writeS(vals = c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0), 
-       spp.case[spp], case = 1)
+writeS(vals = c(0.01, rep(0, 5)), spp.case[spp], case = 1)
 
 ###############################################################################
 ###############################################################################
