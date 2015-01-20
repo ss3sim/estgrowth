@@ -40,11 +40,18 @@ f.info <- c(paste0("years; c(", paste(
           start:end, 
         collapse = ","), ")"))
 
-writeE <- function(growthname, growthint, growthphase, species, case) {
+writeE <- function(growthname, growthint, growthphase, species, case,
+                   changeM = NULL, phaseM = NULL) {
     sink(paste0("E", case, "-", species, ".txt"))
-      cat("natM_type; 1Parm \nnatM_n_breakpoints; NULL \n",
-           "natM_lorenzen; NULL \nnatM_val; c(NA, NA) \n", sep = "")
-      if(is.null(growthname)) {cat("par_name; NULL \n")} else{
+      if (is.null(changeM)) {
+        cat("natM_type; 1Parm \nnatM_n_breakpoints; NULL \n",
+            "natM_lorenzen; NULL \nnatM_val; c(NA, NA) \n", sep = "")
+      } else {
+        cat("natm_type; 1Parm \nnatM_n_breakpoints; NULL \n",
+            "natM_lorenzen; NULL \nnatM_val; c(", 
+            changeM, ", ", phaseM, ")\n", sep = "")
+      }
+      if (is.null(growthname)) {cat("par_name; NULL \n")} else{
         cat("par_name; c(\"", paste0(growthname, collapse = "\", \""), "\") \n", sep = "")
       }
       cat(paste("par_int;", growthint), "\n")
@@ -196,12 +203,34 @@ writeLines(f2, paste0("F2-", spp.case[spp], ".txt"))
 allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
 growthint <- rep(NA, length(allgrowth))
 growthphase <- rep(-1, length(allgrowth))
+# TODO: the true values for natural mortality will need to be placed here
+morttr <- c(0.2)
+mortup <- morttr + 0.1
+mortdn <- morttr - 0.1
 
-writeE(allgrowth, "rep(NA, 5)", "rep(-1, 5)", spp.case[spp], 0)
-writeE(NULL, "NA", "NA", spp.case[spp], 1)
-writeE(allgrowth, "rep(\"change_e_vbgf\", 5)", "rep(-1, 5)", spp.case[spp], 2)
-writeE(allgrowth, "c(NA, NA, NA, rep(\"change_e_vbgf\", 2))", "c(2, 2, 2, rep(-1, 2))", spp.case[spp], 3)
-writeE(allgrowth, "c(rep(\"change_e_vbgf\", 3), NA, NA)", "c(rep(-1, 3), 2, 2)", spp.case[spp], 4)
+counter <- 10
+for (natm in 1:3) {
+  if(natm == 1) change2 <- mortdn[spp]
+  if(natm == 2) change2 <- NULL
+  if(natm == 3) change2 <- mortdn[spp]
+  writeE(allgrowth, "rep(NA, 5)", "rep(-1, 5)", spp.case[spp], counter, 
+         changeM = change2, phase = -6)
+  counter <- counter + 1
+  writeE(NULL, "NA", "NA", spp.case[spp], counter, 
+         changeM = change2, phase = -6)
+  counter <- counter + 1
+  writeE(allgrowth, "rep(\"change_e_vbgf\", 5)", "rep(-1, 5)", 
+         spp.case[spp], counter, changeM = change2, phase = -6)
+  counter <- counter + 1
+  writeE(allgrowth, "c(NA, NA, NA, rep(\"change_e_vbgf\", 2))", 
+         "c(2, 2, 2, rep(-1, 2))", spp.case[spp], counter, 
+         changeM = change2, phase = -6)
+  counter <- counter + 1
+  writeE(allgrowth, "c(rep(\"change_e_vbgf\", 3), NA, NA)", 
+         "c(rep(-1, 3), 2, 2)", spp.case[spp], counter, 
+         changeM = change2, phase = -6)
+  counter <- natm * 10
+}
 
 ###############################################################################
 ###############################################################################
