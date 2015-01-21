@@ -24,7 +24,7 @@ dir.main <- "c:/ss/estgrowth"
 dir.models <- "c:/ss/growth_models"
 dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 
-my.spp <- c("col")
+my.spp <- c("cos", "fll")
 # Number of ss3sim iterations
 my.totnum <- 1:25
 # Logical whether or not to run ss3sim bias adjustment for log normal recdevs
@@ -68,30 +68,32 @@ source(file.path(dir.main, "lib", "createcasefiles.r"))
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
-  my.casefiles <- list(A = "agecomp", E = "E", F = "F", X = "mlacomp",
-    I = "index", L = "lcomp", R = "R", S = c(toupper(letters[14:19])),
-    M = "M")
+  my.casefiles <- list(A = "agecomp", E = "E", F = "F", D = "mlacomp",
+    I = "index", L = "lcomp", R = "R") #, 
+#    S = c(toupper(rev(letters)[1:6])), M = "M")
 
   internal <- expand_scenarios(cases = 
-    list(A = 0:5, L = 0:4, X = c(0), E = c(0, 1), S = 0:1, 
-         F = c(0), I = c(0), R = c(0)), species = my.spp)
+    list(E = 0:1, L = 0:2, A = 0:3, D = 0:2, 
+         F = 1, I = 0, R = 0), species = my.spp)
 
   external <- expand_scenarios(cases = 
-    list(A = 0:5, L = 0:4, X = 1:2, E = 2:4, S = 0:1,
-         F = c(0), I = c(0), R = c(0)), species = my.spp)
+    list(E = 2, L = 0:2, A = 0:3, D = 1:4, 
+         F = 1, I = 0, R = 0), species = my.spp)
 
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
 devtools::load_all("c:/ss/ss3sim")
-# # # Run a single iteration of a given scenario
-test <- "A0-E2-F1-I0-L0-R0-X1-S0-col" 
+
+# # # Run a single iteration of a test scenario
+test <- "E2-L0-A0-D1-I0-F1-R0-cos" 
 unlink(test, recursive = TRUE)
 run_ss3sim(iterations = 1, scenarios = test,
            case_folder = dir.cases, case_files = my.casefiles, 
            om_dir = models[1], 
            em_dir = models[2], bias_adjust = FALSE,
            ignore.stdout = TRUE, show.output.on.console = FALSE)
+unlink(test, recursive = TRUE)
 
 # Set up running in parallel
 library(doParallel)
