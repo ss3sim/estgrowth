@@ -16,89 +16,120 @@
 
 ###############################################################################
 ## Step 01
-## Variable inputs
+## Variable inputs: objects in Step 01 may need alteration prior to running
 ###############################################################################
 ## Set the working directory
 dir.main <- "c:/ss/estgrowth"
 #The following directory needs to be cloned prior to running.
 dir.models <- "c:/ss/growth_models"
+dir.ss3sim <- "c:/ss/ss3sim"
 dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 
-my.spp <- c("cos", "fll")
+# Which species do you want to use?
+my.spp <- c("cos")#, "fll")
 # Number of ss3sim iterations
 my.totnum <- 1:25
-# Logical whether or not to run ss3sim bias adjustment for log normal recdevs
+# Logical whether or not to run ss3sim bias adjustment to gain information
+# about recruitment from years with more information
 my.bias <- FALSE
+# Register the number of cores you want to use
+my.corenum <- 1
 
 ## How to install the package
-
 # Can be "github", "local", "NULL"
 # ss3sim.install <- "github"
-ss3sim.install <- "local"
-
+ss3sim.install <- "github"
 ss3sim.branch <- "master"
 
 ###############################################################################
 ## Step 02
 ## Load packages
 ###############################################################################
-if(!is.null(ss3sim.install)){
+# perform checks to make sure computer is set up prior to running model
+if (!is.null(ss3sim.install)){
 	if(ss3sim.install == "github"){
+    if (as.logical(system("ping www.github.com"))) {
+      stop(paste("A valid internet connection does not exist, please change",
+                 "ss3sim.install to 'local'"))
+    }
 		devtools::install_github("ss3sim/ss3sim", ref = ss3sim.branch)
 	}
-	if(ss3sim.install == "local"){
-		devtools::install("c:/ss/ss3sim")
+	if (ss3sim.install == "local"){
+    if (!file.exists(dir.ss3sim)) {
+      stop(paste("The ss3sim directory", dir.ss3sim, "does not exist on this",
+                 "computer, please clone the remote repository."))
+    }
+		devtools::install(dir.ss3sim)
 	}
 }
-library(r4ss); library(ss3sim)
-setwd(dir.models)
-system("git fetch")
-system("git rebase origin/master")
-setwd(dir.main)
+
+library(doParallel); library(foreach); library(r4ss); library(ss3sim);
+
+if (file.exists(dir.models)) {
+  setwd(dir.models)
+  system("git fetch")
+  system("git rebase origin/master")
+} else {
+  stop(paste("The ss3sim directory", dir.models, "does not exist on this",
+             "computer, please clone the remote repository."))
+}
 dir.sub <- file.path(dir.main, "test")
 dir.cases <- file.path(dir.main, "casefiles")
 dir.results <- file.path(dir.main, "results")
+
 ###############################################################################
 ## Step 03
 ## Model locations
 ###############################################################################
+setwd(dir.main)
 source(file.path(dir.main, "lib", "createcasefiles.r"))
 
 #Specify where the model files are
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
-  my.casefiles <- list(A = "agecomp", E = "E", F = "F", D = "mlacomp",
-    I = "index", L = "lcomp", R = "R") #,
+  my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
+                       E = "E", F = "F",
+                       I = "index", L = "lcomp", R = "R") #,
 #    S = c(toupper(rev(letters)[1:6])), M = "M")
 
-  internal <- expand_scenarios(cases =
-    list(E = 0:1, L = 0:2, A = 0:3, D = 0,
-         F = 1, I = 0, R = 0), species = my.spp)
+  internal <- c(expand_scenarios(cases = list(
+    A = c(0, 10, 30:31), C = 0, D = 0, L = c(10, 30, 31),
+    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
+                expand_scenarios(cases = list(
+    A = c(10, 30, 31), C = 0, D = 10, L = c(10, 30, 31),
+    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
+                expand_scenarios(cases = list(
+    A = c(30:31), C = 0, D = 20, L = c(30, 31),
+    E = 0:1, F = 1, I = 0, R = 0), species = my.spp))
 
-  external <- expand_scenarios(cases =
-    list(E = 2, L = 0:2, A = 0:2, D = 1:2,
-         F = 1, I = 0, R = 0), species = my.spp)
+  external <- c(expand_scenarios(cases = list(
+    A = c(10, 30, 31), C = c(0, 10), D = 10, L = c(10, 30, 31),
+    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
+                expand_scenarios(cases = list(
+    A = 30:31, C = c(0, 20), D = 20, L = 30:31,
+    E = 0:1, F = 1, I = 0, R = 0), species = my.spp))
 
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
-devtools::load_all("c:/ss/ss3sim")
+if (testingmode) {
+  devtools::load_all("c:/ss/ss3sim")
+  # # # Run a single iteration of a test scenario
+  test <- "A10-C0-D10-L10-E2-F1-I0-R0-cos"
+  unlink(test, recursive = TRUE)
+  run_ss3sim(iterations = 1, scenarios = test,
+             case_folder = dir.cases, case_files = my.casefiles,
+             om_dir = models[1],
+             em_dir = models[2], bias_adjust = FALSE,
+             ignore.stdout = TRUE, show.output.on.console = FALSE)
+  unlink(test, recursive = TRUE)
+}
 
-# # # Run a single iteration of a test scenario
-test <- "A0-D1-E2-F1-I0-L0-R0-cos"
-unlink(test, recursive = TRUE)
-run_ss3sim(iterations = 1, scenarios = test,
-           case_folder = dir.cases, case_files = my.casefiles,
-           om_dir = models[1],
-           em_dir = models[2], bias_adjust = FALSE,
-           ignore.stdout = TRUE, show.output.on.console = FALSE)
-unlink(test, recursive = TRUE)
 
 # Set up running in parallel
-library(doParallel)
-library(foreach)
-registerDoParallel(cores = 3)
+
+registerDoParallel(cores = my.corenum)
 getDoParWorkers() # check
 
 #Use the following to run all combinations
@@ -113,7 +144,7 @@ for(s in seq_along(my.spp)){
                case_folder = dir.cases, case_files = my.casefiles,
                om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
                ignore.stdout = TRUE, show.output.on.console = FALSE,
-               parallel = FALSE)
+               parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE))
   # Should also maybe set ss_mode = "optimized"
 }
 
