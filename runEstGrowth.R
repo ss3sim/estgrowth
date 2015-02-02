@@ -34,7 +34,7 @@ my.bias <- FALSE
 
 # Can be "github", "local", "NULL"
 # ss3sim.install <- "github"
-ss3sim.install <- "local" 
+ss3sim.install <- "local"
 
 ss3sim.branch <- "master"
 
@@ -69,15 +69,15 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
   my.casefiles <- list(A = "agecomp", E = "E", F = "F", D = "mlacomp",
-    I = "index", L = "lcomp", R = "R") #, 
+    I = "index", L = "lcomp", R = "R") #,
 #    S = c(toupper(rev(letters)[1:6])), M = "M")
 
-  internal <- expand_scenarios(cases = 
-    list(E = 0:1, L = 0:2, A = 0:3, D = 0:2, 
+  internal <- expand_scenarios(cases =
+    list(E = 0:1, L = 0:2, A = 0:3, D = 0,
          F = 1, I = 0, R = 0), species = my.spp)
 
-  external <- expand_scenarios(cases = 
-    list(E = 2, L = 0:2, A = 0:3, D = 1:4, 
+  external <- expand_scenarios(cases =
+    list(E = 2, L = 0:2, A = 0:2, D = 1:2,
          F = 1, I = 0, R = 0), species = my.spp)
 
 #set working directory
@@ -86,11 +86,11 @@ setwd(dir.sub)
 devtools::load_all("c:/ss/ss3sim")
 
 # # # Run a single iteration of a test scenario
-test <- "E2-L0-A0-D1-I0-F1-R0-cos" 
+test <- "A0-D1-E2-F1-I0-L0-R0-cos"
 unlink(test, recursive = TRUE)
 run_ss3sim(iterations = 1, scenarios = test,
-           case_folder = dir.cases, case_files = my.casefiles, 
-           om_dir = models[1], 
+           case_folder = dir.cases, case_files = my.casefiles,
+           om_dir = models[1],
            em_dir = models[2], bias_adjust = FALSE,
            ignore.stdout = TRUE, show.output.on.console = FALSE)
 unlink(test, recursive = TRUE)
@@ -110,14 +110,15 @@ for(s in seq_along(my.spp)){
   use.scen <- c(internal, external)
   use.scen <- use.scen[sapply(my.spp[s], grepl, use.scen)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
-               case_folder = dir.cases, case_files = my.casefiles, 
+               case_folder = dir.cases, case_files = my.casefiles,
                om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
-               ignore.stdout = TRUE, parallel = TRUE)
+               ignore.stdout = TRUE, show.output.on.console = FALSE,
+               parallel = FALSE)
   # Should also maybe set ss_mode = "optimized"
 }
 
 ###############################################################################
-## Step 
+## Step
 ## Get results
 ###############################################################################
 get_results_all(overwrite_files = FALSE)
@@ -125,10 +126,10 @@ scalars <- read.csv(dir(pattern = "r.csv", full.names = TRUE))
 ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
 
 file.copy(dir(pattern = "r.csv", full.names = TRUE),
-          file.path(dir.dropbox, "scalars.csv"), 
+          file.path(dir.dropbox, "scalars.csv"),
           overwrite = TRUE, copy.mode = TRUE)
 file.copy(dir(pattern = "s.csv", full.names = TRUE),
-          file.path(dir.dropbox, "ts.csv"), 
+          file.path(dir.dropbox, "ts.csv"),
           overwrite = TRUE, copy.mode = TRUE)
 
 source(file.path(dir.main, "lib", "results.r"))

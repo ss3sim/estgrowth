@@ -11,11 +11,11 @@
 ####Remarks    : Character width = 80
 #-----------------------------------------------------------------------------#
 ###############################################################################
-###############################################################################	
+###############################################################################
 
 ###############################################################################
-## Step 
-## Set working directories 
+## Step
+## Set working directories
 ###############################################################################
 wd.curr <- getwd()
 setwd(dir.cases)
@@ -40,10 +40,17 @@ high <- 40
 low <- 10
 
 # Estimate CVs or not
-estCVs <- FALSE
-# sd for timevarying natural mortality per species
-natmsd <- c(0.01, 0.01, 0.01)
+estCVs <- TRUE
 
+# A list the length of number of spp where each entry is the amount to
+# add or subtract from the double normal currently programmed as asymptotic
+dome <- list(c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0))
+# amount of random noise in selectivity for each spp - pertains to parameter 1
+tvs <- c(0.1)
+
+# Sequence true natural morality values for each species by 10 - 190%
+truem <- c(0.2, 0.2, 0.5)
+mrange <- lapply(truem, function(x) x * seq(.1, 1.90, by = 0.1))
 ###############################################################################
 ###############################################################################
 #### Step
@@ -74,13 +81,21 @@ sink(paste0("E", case, "-", species, ".txt"))
     if (all(testfornatm)) {
         cat("par_name; NULL \n", "par_int; NULL \n", "par_phase; NULL \n", sep = "")
       } else{
-        cat("par_name; c(\"", 
-            paste0(name[!testfornatm], collapse = "\", \""), "\")\n", 
-            "par_int; c(\"", 
-            paste0(int[!testfornatm], collapse = "\", \""), "\")\n",
-            "par_phase; c(\"", 
-            paste0(phase[!testfornatm], collapse = "\", \""), "\")\n", 
+        cat("par_name; c(\"",
+            paste0(name[!testfornatm], collapse = "\", \""), "\")\n", sep = "")
+        if (all(is.na(int))) {
+            cat("par_int; c(",
+            paste0(int[!testfornatm], collapse = ", "), ")\n",
+            "par_phase; c(",
+            paste0(phase[!testfornatm], collapse = ", "), ")\n",
             sep = "")
+        } else {
+            cat("par_int; c(\"",
+            paste0(int[!testfornatm], collapse = "\", \""), "\")\n",
+            "par_phase; c(\"",
+            paste0(phase[!testfornatm], collapse = "\", \""), "\")\n",
+            sep = "")
+        }
       }
       cat("forecast_num; 0\nrun_change_e_full; TRUE\n", sep = "")
   sink()
@@ -96,15 +111,15 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
   fleets <- "NULL"
   cparval <- "NULL"
   if (all(fish, survey)) {
-      years <- paste0("list(c(", paste(years.fish, collapse = ","), 
+      years <- paste0("list(c(", paste(years.fish, collapse = ","),
                       "), c(", paste(years.survey, collapse = ","), "))")
-      Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","), 
+      Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","),
                       "), c(", paste(Nsamp.survey, collapse = ","), "))")
       fleets  <- "c(1, 2)"
       cparval <- "c(2, 1)"
   } else {
     if (fish) {
-      years <- paste0("list(c(", paste(years.fish, collapse = ","), "))")      
+      years <- paste0("list(c(", paste(years.fish, collapse = ","), "))")
       Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","), "))")
       fleets  <- "c(1)"
       cparval <- "c(2)"
@@ -124,7 +139,7 @@ writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
 }
 
 # D sample mlacomp data
-writeD <- function(fleets, years, Nsamp, species, case, 
+writeD <- function(fleets, years, Nsamp, species, case,
                    mean_outfile = "NULL") {
   if (is.null(fleets)) {
     a.fleet <- "NULL"
@@ -139,7 +154,7 @@ writeD <- function(fleets, years, Nsamp, species, case,
 }
 
 # Change selectivity to be dome or time-varying in OM
-writeS <- function(vals, species, case, 
+writeS <- function(vals, species, case,
                    type = c("random", "deviates")) {
   type <- match.arg(type, several.ok = FALSE)
   parnames <- paste0("SizeSel_1P_", 1:6, "_Fishery")
@@ -148,7 +163,7 @@ writeS <- function(vals, species, case,
   mid <- "dev; rnorm(n = 100, mean = 0, sd = "
   end <- ")"
   let <- toupper(rev(letters)[1:6])
-  
+
   lapply(seq_along(parnames), function(x) {
     if(type == "deviates") {
       info <- c(beg, paste(sec, parnames[x]),
@@ -165,8 +180,8 @@ writeM <- function(deviates, species, case) {
   beg <- paste("function_type; change_tv")
   sec <- "param;"
   mid <- "dev; "
-  
-  info <- c(beg, paste(sec, "NatM_p_1_Fem_GP_1"), 
+
+  info <- c(beg, paste(sec, "NatM_p_1_Fem_GP_1"),
             paste0(mid, paste0(deviates)))
   writeLines(info, paste0("M", case, "-", species, ".txt"))
 }
@@ -174,13 +189,13 @@ writeM <- function(deviates, species, case) {
   # End of functions for creating case files
 
 ###############################################################################
-## Step 
+## Step
 ## Sequence along all species listed in my.spp
 ###############################################################################
 for (spp in seq_along(my.spp)) {
 
 ###############################################################################
-## Step 
+## Step
 ## Standard case files
 ## These case files do not change per scenario
 ## Retro and index
@@ -188,12 +203,12 @@ for (spp in seq_along(my.spp)) {
 writeLines("retro_yr; 0", paste0("R0-", my.spp[spp], ".txt"))
 
 # Years of survey index of abundance
-writeLines(c("fleets; 2", paste0("years; list(c(", 
+writeLines(c("fleets; 2", paste0("years; list(c(",
              paste(all.surv, collapse = ","), "))"), "sds_obs; list(0.2)"),
              paste0("index0-", my.spp[spp], ".txt"))
 
 ###############################################################################
-## Step 
+## Step
 ## Fishing patterns: F
 ###############################################################################
 #TODO: Find FMSY for each species
@@ -205,19 +220,19 @@ years.burnin <- start.fishery - start - 1
 years.rdown  <- length(start:end) - (years.burnin + years.rup)
 
 # Constant F for 75 years
-writeF(start = start, end = end, 
-       fvals = c(rep(0, years.burnin), rep(fmsy[spp], years.rup + years.rdown)), 
+writeF(start = start, end = end,
+       fvals = c(rep(0, years.burnin), rep(fmsy[spp], years.rup + years.rdown)),
        species = my.spp[spp], case = 0)
 # Burn in of 0 for 25 years, up to 0.9*Fmsy (right limb) for 40 years,
 # down to 0.9*Fmsy (left limb value) for 35years
 writeF(start = start, end = end,
-       fvals = c(rep(0, years.burnin), 
+       fvals = c(rep(0, years.burnin),
                  seq(0, fmsy.u90[spp], length.out = years.rup),
-                 seq(fmsy.u90[spp], fmsy[spp], length.out = years.rdown)), 
+                 seq(fmsy.u90[spp], fmsy[spp], length.out = years.rdown)),
        species = my.spp[spp], case = 1)
 # Burn in of 0 for 25 years, up to 0.9*Fmsy (left limb) for 75 years,
 writeF(start = start, end = end,
-       fvals = c(rep(0, years.burnin), 
+       fvals = c(rep(0, years.burnin),
                  seq(0, fmsy.u90[spp], length.out = years.rup + years.rdown)),
        species = my.spp[spp], case = 1)
 
@@ -243,8 +258,16 @@ counter <- 0
 # All parameters are estimated
   writeE(NULL, "NA", "NA", my.spp[spp], counter + 1)
 # All parameters are externally estimated
-  writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)), 
+  writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)),
          growthphase, my.spp[spp], counter + 2)
+
+# Misspecify M
+  for(i in seq_along(mrange)) {
+    writeE(c("NatM_p_1_Fem"), mrange[[spp][i], -1, my.spp[spp], 100 + i)
+    writeE(c("NatM_p_1_Fem", allgrowth),
+           c(mrange[[spp][i], rep("change_e_vbgf", length(allgrowth))),
+           c(-1, growthphase), my.spp[spp], 200 + i)
+  }
 
 ###############################################################################
 ###############################################################################
@@ -262,40 +285,41 @@ less <- sapply(c("surv", "fish"), function(x) {
                })
 counter <- 0
 # Length data for all years of fishery and survey
-writeL(Nsamp.fish = rep(high, length(all.fish)), 
-       Nsamp.survey = rep(high, length(all.surv)), 
-       years.fish = all.fish, years.survey = all.surv, 
+writeL(Nsamp.fish = rep(high, length(all.fish)),
+       Nsamp.survey = rep(high, length(all.surv)),
+       years.fish = all.fish, years.survey = all.surv,
        type = "lcomp", case = counter, spp = my.spp[spp])
 # Length data from just a fishery for all years
-writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = NULL, 
-       years.fish = all.fish, years.survey = NULL, 
+writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = NULL,
+       years.fish = all.fish, years.survey = NULL,
        type = "lcomp", case = counter + 1, spp = my.spp[spp])
 # Length data for reduced years from survey and all fishery years
-writeL(Nsamp.fish = rep(high, length(all.fish)), 
+writeL(Nsamp.fish = rep(high, length(all.fish)),
        Nsamp.survey = rep(high, length(less$surv)),
        years.fish = all.fish, years.survey = less$surv,
        type = "lcomp", case = counter + 2, spp = my.spp[spp])
 
 counter <- 0
 # Age data for all years of fishery and survey
-writeL(Nsamp.fish = rep(high, length(all.fish)), 
-       Nsamp.survey = rep(high, length(all.surv)), 
-       years.fish = all.fish, years.survey = all.surv, 
+writeL(Nsamp.fish = rep(high, length(all.fish)),
+       Nsamp.survey = rep(high, length(all.surv)),
+       years.fish = all.fish, years.survey = all.surv,
        type = "agecomp", case = counter, spp = my.spp[spp])
 # Age data from just a fishery for all years
-writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = NULL, 
-       years.fish = all.fish, years.survey = NULL, 
+writeL(Nsamp.fish = rep(high, length(all.fish)), Nsamp.survey = NULL,
+       years.fish = all.fish, years.survey = NULL,
        type = "agecomp", case = counter + 1, spp = my.spp[spp])
 # Age data for reduced years from survey and all fishery years
-writeL(Nsamp.fish = rep(high, length(all.fish)), 
+writeL(Nsamp.fish = rep(high, length(all.fish)),
        Nsamp.survey = rep(high, length(less$surv)),
        years.fish = all.fish, years.survey = less$surv,
        type = "agecomp", case = counter + 2, spp = my.spp[spp])
 # No age data
-writeL(Nsamp.fish = NULL, 
+writeL(Nsamp.fish = NULL,
        Nsamp.survey = NULL,
        years.fish = NULL, years.survey = NULL,
        type = "agecomp", case = counter + 3, spp = my.spp[spp])
+
 ###############################################################################
 ###############################################################################
 #### Step
@@ -309,17 +333,21 @@ years.txt <- lapply(list(as = all.surv, af = all.fish, ls = less$surv, lf = less
 counter <- 0
 
 # No mla comp data
-writeD(fleets = NULL, years = "NULL", Nsamp = "NULL", 
+writeD(fleets = NULL, years = "NULL", Nsamp = "NULL",
        my.spp[spp], case = counter)
 # Create mla comp data for fishery and then for survey
 # for the number of random years set in nmlayears
-for(q in c("vbgf_keep", "vbgf_remove")) {
-  writeD(fleets = 1, 
-         years = paste("list(sample(", years.txt$af, ", ", nmlayears, ", replace = FALSE))"), 
-         Nsamp = "list(50)", my.spp[spp], case = counter + 1, mean_outfile = q)
-  writeD(fleets = 1, 
-         years = paste("list(sample(", years.txt$as, ", ", nmlayears, ", replace = FALSE))"), 
-       Nsamp = "list(50)", my.spp[spp], case = counter + 2, mean_outfile = q)
+for(q in c("vbgf_remove")) {
+  writeD(fleets = 1,
+        years = paste("list(sample(", years.txt$ls, ", ", nmlayears, ", replace = FALSE))"),
+       Nsamp = "list(50)", my.spp[spp], case = counter + 1, mean_outfile = q)
+  counter <- counter + 1
+  writeD(fleets = 2,
+        years = paste("list(sample(", years.txt$as, ", ", nmlayears, ", replace = FALSE))"),
+       Nsamp = "list(50)", my.spp[spp], case = counter + 19, mean_outfile = q)
+  writeD(fleets = 2,
+        years = paste("list(sample(", years.txt$ls, ", ", nmlayears, ", replace = FALSE))"),
+       Nsamp = "list(50)", my.spp[spp], case = counter + 20, mean_outfile = q)
   counter <- counter + 2
 }
 
@@ -331,21 +359,9 @@ for(q in c("vbgf_keep", "vbgf_remove")) {
 ###############################################################################
 writeS(vals = rep(0, 6), my.spp[spp], case = 0, type = "deviates")
 # TODO: make the change to dome-shaped selectivity spp specific
-writeS(vals = c(0.01, rep(0, 5)), my.spp[spp], case = 2, type = "random")
-writeS(vals = c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0),
+writeS(vals = c(tvs[spp], rep(0, 5)), my.spp[spp], case = 2, type = "random")
+writeS(vals = dome[[spp]],
        my.spp[spp], case = 1, type = "deviates")
-
-###############################################################################
-###############################################################################
-#### Step
-#### Time varying natural mortality
-###############################################################################
-###############################################################################
-# Constant natural mortality
-writeM(deviates = "rep(0, 100)", my.spp[spp], case = 0)
-# Random deviations in natural mortality with a cv of 
-natval <- paste0("rnorm(", length(start:end), ", 0, ", natmsd[spp], ")")
-writeM(deviates = natval[spp], my.spp[spp], case = 1)
 
 ###############################################################################
 ###############################################################################
