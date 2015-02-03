@@ -59,15 +59,6 @@ mrange <- lapply(truem, function(x) x * seq(.1, 1.90, by = 0.1))
 #### Functions to create casefiles
 ###############################################################################
 ###############################################################################
-# F == Fishing mortality
-writeF <- function(start, end, fvals, species, case) {
-  sink(paste0("F", case, "-", species, ".txt"))
-  cat("years; c(", paste(start:end, collapse = ", "), ")\n",
-      "years_alter; c(", paste(start:end, collapse = ", "), ")\n",
-      "fvals; c(", paste(fvals, collapse = ", "), ")\n", sep = "")
-  sink()
-}
-
 # E change_e, change parameter estimation
 writeE <- function(name, int, phase, species, case) {
 sink(paste0("E", case, "-", species, ".txt"))
@@ -212,35 +203,6 @@ writeLines("retro_yr; 0", paste0("R0-", my.spp[spp], ".txt"))
 writeLines(c("fleets; 2", paste0("years; list(c(",
              paste(all.surv, collapse = ","), "))"), "sds_obs; list(0.2)"),
              paste0("index0-", my.spp[spp], ".txt"))
-
-###############################################################################
-## Step
-## Fishing patterns: F
-###############################################################################
-#TODO: Find FMSY for each species
-fmsy <- c(0.07, 0.07, 0.175)
-fmsy.u90 <- c(0.175, 0.175, 0.175)
-# Calculate the burnin period
-years.burnin <- start.fishery - start - 1
-# Determine the number of years left for the rampdown in two-way trip
-years.rdown  <- length(start:end) - (years.burnin + years.rup)
-
-# Constant F for 75 years
-writeF(start = start, end = end,
-       fvals = c(rep(0, years.burnin), rep(fmsy[spp], years.rup + years.rdown)),
-       species = my.spp[spp], case = 0)
-# Burn in of 0 for 25 years, up to 0.9*Fmsy (right limb) for 40 years,
-# down to 0.9*Fmsy (left limb value) for 35years
-writeF(start = start, end = end,
-       fvals = c(rep(0, years.burnin),
-                 seq(0, fmsy.u90[spp], length.out = years.rup),
-                 seq(fmsy.u90[spp], fmsy[spp], length.out = years.rdown)),
-       species = my.spp[spp], case = 1)
-# Burn in of 0 for 25 years, up to 0.9*Fmsy (left limb) for 75 years,
-writeF(start = start, end = end,
-       fvals = c(rep(0, years.burnin),
-                 seq(0, fmsy.u90[spp], length.out = years.rup + years.rdown)),
-       species = my.spp[spp], case = 1)
 
 ###############################################################################
 ###############################################################################
