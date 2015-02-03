@@ -32,6 +32,8 @@ all.fish <- c(seq(start.fishery, start.fishery + 20, by = 10),
 reducer <- 2
 # Number of years randomly picked for mlacomps
 nmlayears <- 2
+# Number of years randomly picked for calcomps
+ncalyears <- 2
 
 # lcomp and age comp sample sizes
 high <- 40
@@ -342,12 +344,11 @@ writeD(fleets = NULL, years = "NULL", Nsamp = "NULL",
 # Create mla comp data for fishery and then for survey
 q <- c("vbgf_remove")
   writeD(fleets = 1,
-        years = paste0("list(sample(", years.txt$af, ", ", nmlayears, ", replace = FALSE))"),
+        years = paste0("list(sample(", years.txt$lf, ", ", nmlayears, ", replace = FALSE))"),
        Nsamp = "list(50)", my.spp[spp], case = 10, mean_outfile = q)
   writeD(fleets = 2,
-        years = paste0("list(sample(", years.txt$as, ", ", nmlayears, ", replace = FALSE))"),
+        years = paste0("list(sample(", years.txt$ls, ", ", nmlayears, ", replace = FALSE))"),
        Nsamp = "list(50)", my.spp[spp], case = 20, mean_outfile = q)
-  counter <- counter + 2
 
 ###############################################################################
 ###############################################################################
@@ -356,18 +357,18 @@ q <- c("vbgf_remove")
 ###############################################################################
 ###############################################################################
 
-# No mla comp data
+# No cal comp data
 writeD(fleets = NULL, years = "NULL", Nsamp = "NULL", type = "calcomp",
        my.spp[spp], case = 0)
-# Create mla comp data for fishery and then for survey
-# for the number of random years set in nmlayears
+# Create cal comp data for fishery and then for survey
+# for the number of random years set in ncalyears
   writeD(fleets = 1, type = "calcomp",
-        years = paste0("list(sample(", years.txt$af, ", ", nmlayears, ", replace = FALSE))"),
-       Nsamp = "list(50)", my.spp[spp], case = 10, mean_outfile = q)
+        years = paste0("list(sample(", years.txt$lf, ", ", ncalyears, ", replace = FALSE))"),
+       Nsamp = "list(10)", my.spp[spp], case = 10, mean_outfile = q)
   counter <- counter + 1
   writeD(fleets = 2, type = "calcomp",
-        years = paste0("list(sample(", years.txt$as, ", ", nmlayears, ", replace = FALSE))"),
-       Nsamp = "list(50)", my.spp[spp], case = 20, mean_outfile = q)
+        years = paste0("list(sample(", years.txt$ls, ", ", ncalyears, ", replace = FALSE))"),
+       Nsamp = "list(10)", my.spp[spp], case = 20, mean_outfile = q)
 
 ###############################################################################
 ###############################################################################
