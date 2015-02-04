@@ -77,6 +77,16 @@ dir.sub <- file.path(dir.main, "test")
 dir.cases <- file.path(dir.main, "casefiles")
 dir.results <- file.path(dir.main, "results")
 
+#TODO copy case files
+files2copy <- dir(file.path(dir.models, "cases"), full.names = TRUE)
+done <- sapply(files2copy, function(x) {
+  file.copy(from = x, to = gsub(file.path(dir.models, "cases"), dir.cases, x),
+            overwrite = TRUE)
+})
+if (any(!done)) {
+  warning("casefiles not copied from remote repository")
+}
+
 ###############################################################################
 ## Step 03
 ## Model locations
@@ -113,10 +123,12 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
 setwd(dir.sub)
+
+
 if (testingmode) {
   devtools::load_all("c:/ss/ss3sim")
   # # # Run a single iteration of a test scenario
-  test <- "A10-C0-D10-L10-E2-F1-I0-R0-cos"
+  test <- "A30-C20-D20-E0-F1-I0-L30-R0-cos"
   unlink(test, recursive = TRUE)
   run_ss3sim(iterations = 1, scenarios = test,
              case_folder = dir.cases, case_files = my.casefiles,
@@ -138,7 +150,7 @@ for(s in seq_along(my.spp)){
 	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
 	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
 	#run scenarios that include the given species
-  use.scen <- c(internal, external)
+  use.scen <- unique(c(internal, external))
   use.scen <- use.scen[sapply(my.spp[s], grepl, use.scen)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles,
