@@ -121,22 +121,10 @@ d <- file.path(system.file("extdata", package = "ss3sim"), "models")
 # M == time-varying natural mortality
 #    S = c(toupper(rev(letters)[1:6])), M = "M")
 
-  internal <- c(expand_scenarios(cases = list(
-    A = c(0, 10, 30:31), C = 0, D = 0, L = c(10, 30, 31),
-    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
-                expand_scenarios(cases = list(
-    A = c(10, 30, 31), C = 0, D = 10, L = c(10, 30, 31),
-    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
-                expand_scenarios(cases = list(
-    A = c(30:31), C = 0, D = 20, L = c(30, 31),
-    E = 0:1, F = 1, I = 0, R = 0), species = my.spp))
-
-  external <- c(expand_scenarios(cases = list(
-    A = c(10, 30, 31), C = c(0, 10), D = 10, L = c(10, 30, 31),
-    E = 0:1, F = 1, I = 0, R = 0), species = my.spp),
-                expand_scenarios(cases = list(
-    A = 30:31, C = c(0, 20), D = 20, L = 30:31,
-    E = 0:1, F = 1, I = 0, R = 0), species = my.spp))
+# Import scenario list from excel file
+scenariosfile <- file.path(dir.main, "lib", "scenarios.csv")
+scenarios <- read.table(scenariosfile, sep = ",", header = TRUE)
+torun <- unlist(lapply(scenarios$complete, paste0, my.spp))
 
 #set working directory
 dir.create(dir.sub, showWarnings = FALSE)
@@ -168,8 +156,7 @@ for(s in seq_along(my.spp)){
 	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
 	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
 	#run scenarios that include the given species
-  use.scen <- unique(c(internal, external))
-  use.scen <- use.scen[sapply(my.spp[s], grepl, use.scen)]
+  use.scen <- use.scen[sapply(my.spp[s], grepl, torun)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles,
                om_dir = use.om, em_dir = use.em,
