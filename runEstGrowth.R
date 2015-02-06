@@ -32,6 +32,8 @@ my.totnum <- 1:25
 # Logical whether or not to run ss3sim bias adjustment to gain information
 # about recruitment from years with more information
 my.bias <- FALSE
+my.bias.num <- 5
+
 # Register the number of cores you want to use
 my.corenum <- 1
 
@@ -40,6 +42,9 @@ my.corenum <- 1
 # ss3sim.install <- "github"
 ss3sim.install <- "github"
 ss3sim.branch <- "master"
+
+# Logical whether in testing mode or not
+testingmode <- TRUE
 
 ###############################################################################
 ## Step 02
@@ -128,19 +133,19 @@ setwd(dir.sub)
 if (testingmode) {
   devtools::load_all("c:/ss/ss3sim")
   # # # Run a single iteration of a test scenario
-  test <- "A30-C20-D20-E0-F1-I0-L30-R0-cos"
+  test <- "A31-C20-D20-E2-F1-I0-L31-R0-cos"
   unlink(test, recursive = TRUE)
   run_ss3sim(iterations = 1, scenarios = test,
              case_folder = dir.cases, case_files = my.casefiles,
              om_dir = models[1],
              em_dir = models[2], bias_adjust = FALSE,
              ignore.stdout = TRUE, show.output.on.console = FALSE)
-  unlink(test, recursive = TRUE)
+  recdevs <- matrix(0, nrow = 100, ncol = 10000)
 }
+  unlink(test, recursive = TRUE)
 
 
-# Set up running in parallel
-
+# Set up running in parallel if specified
 registerDoParallel(cores = my.corenum)
 getDoParWorkers() # check
 
@@ -154,9 +159,11 @@ for(s in seq_along(my.spp)){
   use.scen <- use.scen[sapply(my.spp[s], grepl, use.scen)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles,
-               om_dir = use.om, em_dir = use.em, bias_adjust = my.bias,
+               om_dir = use.om, em_dir = use.em,
+               bias_adjust = my.bias, bias_nsim = my.bias.num,
                ignore.stdout = TRUE, show.output.on.console = FALSE,
-               parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE))
+               parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
+               user_recdevs = recdevs, user_recdevs_warn = FALSE)
   # Should also maybe set ss_mode = "optimized"
 }
 

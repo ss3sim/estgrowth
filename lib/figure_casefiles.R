@@ -33,13 +33,12 @@ alpha.levels <- c(0.1, 0.5)
 ## Set working directory and source the plotting functions
 ###############################################################################
 wd.start <- getwd()
-pathnames <- unlist(strsplit(wd.start, "/"))
-if (!"estgrowth" %in% pathnames) {
+pathnames <- tail(unlist(strsplit(wd.start, "/")), 1)
+if ("estgrowth" != pathnames) {
   stop("check your path, estgrowth directory was not found")
 }
-wd.shouldbe <- paste(pathnames[1:grep("estgrowth", pathnames)], collapse = "/")
 
-source("../lib/plot_functions.R")
+source("lib/plot_functions.R")
 add.label <- function(label, ...) {
   legend("topleft", legend = " ", title = label, bty = 'n', ...)
 }
@@ -94,7 +93,7 @@ emYears <- 1:99     # The EM is only fed 99 years of data
 ## cols <- paste0("grey", c(75, 40, 10)); cols <- c("black", rep(cols, 2))
 cols <- rep("black", 7)
 
-d <- file.path("..", "casefiles")
+d <- file.path("casefiles")
 ## Import the F trajectories for cod
 F1 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
                  "F0-cos.txt")), value = TRUE),";")[[1]][2]))
@@ -108,13 +107,12 @@ fudge <- 0.0000 # to fudge the lines vertically a bit
 ## originally used nice color gradients but reviewer didn't like it so changed
 ## to dashed lines. CCM 11/7
 ltys <- c(1, 2)
-ltsy <- c(1, rep(ltys, 2))
 
-make.file(file.type, "../figures/Figure1", width=width1, height=3, res=res.png)
+make.file(file.type, "figures/Figure1", width=width1, height=3, res=res.png)
   par(mfrow = c(1, 1))
   par(mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 1.5, 0.5),
       col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
-  plot(0, 0, xlim = range(axisYears), ylim = c(0,1.5), type = "n",
+  plot(0, 0, xlim = range(axisYears), ylim = c(0, 1.6), type = "n",
        xlab = "Year", yaxt = 'n', ylab = NA, las = 1)
   for (li in 1:2) {
     if (li == 1) {
@@ -125,14 +123,13 @@ make.file(file.type, "../figures/Figure1", width=width1, height=3, res=res.png)
     }
     lab <- c("Constant", "Contrast")
     lines(emYears, y, lty=ltys[li], lwd=2, col = "black")
-    text(x = 18 * li, y = 0.7 * li, label = lab[li], col = "black")
+    text(x = 19 * li, y = 0.6 * li, label = lab[li], col = "black")
   }
-  #legend("topleft", legend=Fnames, lty=ltys, bty='n', lwd=2)
   axis(2, at = c(0,1, 1.5), las = 1,
        labels = c(0, expression(italic(F)[MSY]),
                      expression(1.5*italic(F)[MSY])))
   mtext(Fishing~Mortality~(italic(F))~Trends, side = 3, line = 0)
-  add.label("(a)")
+  #add.label("(a)")
   box(col = box.col)
 my.dev.off()
 ## End Figure 1
@@ -144,7 +141,7 @@ my.dev.off()
 #### Figure 2
 ###############################################################################
 ###############################################################################
-make.file(file.type, "../figures/Figure2", width=width1, height=3, res=res.png)
+make.file(file.type, "figures/Figure2", width=width1, height=3, res=res.png)
   par(mfrow = c(1, 1))
   par(mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 1.5, 0.5),
       col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
