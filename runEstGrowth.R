@@ -70,10 +70,19 @@ if (!is.null(ss3sim.install)){
 
 library(doParallel); library(foreach); library(r4ss); library(ss3sim);
 
+# Update models from github repository on local machine
 if (file.exists(dir.models)) {
   setwd(dir.models)
   system("git fetch")
-  system("git rebase origin/master")
+  status <- system("git status", intern = TRUE)
+    if (status[1] != "# On branch master") {
+      checkout <- system("git checkout master", intern = TRUE)
+    } if (checkout[1] == "Switched to branch 'master'") {
+      system("git rebase origin/master")
+    } else {
+      stop(paste("More than likely your working directory",
+        dir.models, "is not clean and you cannot switch to master."))
+    }
 } else {
   stop(paste("The ss3sim directory", dir.models, "does not exist on this",
              "computer, please clone the remote repository."))
