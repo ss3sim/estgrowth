@@ -91,7 +91,8 @@ dir.sub <- file.path(dir.main, "test")
 dir.cases <- file.path(dir.main, "casefiles")
 dir.results <- file.path(dir.main, "results")
 
-#TODO copy case files
+# Copy case files from github growth_models repository to the local folder
+# for casefiles.
 files2copy <- dir(file.path(dir.models, "cases"), full.names = TRUE)
 done <- sapply(files2copy, function(x) {
   file.copy(from = x, to = gsub(file.path(dir.models, "cases"), dir.cases, x),
@@ -108,13 +109,16 @@ if (any(!done)) {
 setwd(dir.main)
 source(file.path(dir.main, "lib", "createcasefiles.r"))
 
-#Specify where the model files are
+# Specify where the model files are
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
   my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
                        E = "E", F = "F",
                        I = "index", L = "lcomp", R = "R") #,
+# Below are cases that we are not currently using
+# S == selectivity case files (dome)
+# M == time-varying natural mortality
 #    S = c(toupper(rev(letters)[1:6])), M = "M")
 
   internal <- c(expand_scenarios(cases = list(
