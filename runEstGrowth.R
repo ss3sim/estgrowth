@@ -144,7 +144,7 @@ setwd(dir.sub)
 
 
 if (testingmode) {
-  devtools::load_all("c:/ss/ss3sim")
+  devtools::load_all(dir.ss3sim)
   # # # Run a single iteration of a test scenario
   test <- "A31-C20-D20-E2-F1-I0-L31-R0-cos"
   unlink(test, recursive = TRUE)
@@ -155,7 +155,7 @@ if (testingmode) {
              ignore.stdout = TRUE, show.output.on.console = FALSE)
   recdevs <- matrix(0, nrow = 100, ncol = 10000)
 }
-  unlink(test, recursive = TRUE)
+  if (exists("test")) unlink(test, recursive = TRUE)
 
 
 # Set up running in parallel if specified
