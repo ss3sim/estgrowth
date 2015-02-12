@@ -25,6 +25,7 @@ if(!"ggplot2" %in% rownames(installed.packages())) {
 library(ggplot2)
 
 wd.curr <- getwd()
+setwd(wd.curr)
 setwd(dir.results)
 resultfiles <- dir(dir.dropbox, pattern = ".csv", full.names = TRUE)
 scalars <- do.call("rbind", lapply(grep("scalar", resultfiles, value = TRUE), 
@@ -61,14 +62,15 @@ ts$A <- factor(ts$A, levels = c("A0", "A2", "A3", "A4", "A5", "A1"))
 axis.val <- TRUE
 axis.rel <- TRUE
 my.horiz <- "E"
-my.horiz2 <- "X"
+my.horiz2 <- "D"
 my.vert <- "A"
-my.vert2 <- "S"
+my.vert2 <- "C"
 my.x <- "L"
-data.plot <- subset(results_re, E != "fix" & A %in% c("A0", "A1", "A2", "A5") & 
-                    L %in% c("L0", "L1", "L4") & X %in% c("X0", "X1"))
-ts <- subset(ts, E != "fix" & A %in% c("A0", "A1", "A2", "A5") & 
-             L %in% c("L0", "L1", "L4") & X %in% c("X0", "X1"))
+data.plot <- subset(results_re, A %in% c("A10", "A30", "A31") & 
+                    L %in% c("L10", "L30", "L31") & D %in% c("D10", "D30") & C %in% c("C10","C20"))
+data.plot<-results_re
+ts <- subset(ts, A %in% c("A10", "A30", "A31") & 
+             L %in% c("L10", "L30", "L31") & D %in% c("D10", "D30") & C %in% c("C10","C20"))
 
 termSSB <- with(subset(ts, year == max(year)), 
                 ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
@@ -153,20 +155,20 @@ ggsave("termssb.png", dpi = 300)
 dev.off()
 
 
-scalar_long <- reshape2::melt(subset(data.plot, X == "X0" & E == "int",
-  select = c("scenario", "E", "A", "L", "S", "X",
+scalar_long <- reshape2::melt(subset(data.plot, E == "E2",
+  select = c("scenario", "E", "A", "L", "D", "C",
   "replicate", "CV_old_Fem_GP_1_re", "CV_young_Fem_GP_1_re", 
   "L_at_Amin_Fem_GP_1_re", "L_at_Amax_Fem_GP_1_re", "VonBert_K_Fem_GP_1_re")), 
-  id.vars = c("scenario", "A", "L", "S", "X", "E", "replicate"))
+  id.vars = c("scenario", "A", "L", "D", "C", "E", "replicate"))
 scalar_long <- plyr::rename(scalar_long, c("value" = "relative_error"))
 levels(scalar_long$variable) <- c("CV_old", "CV_young", "L_min", "L_max", "K")
-ggplot(subset(scalar_long), aes(L, relative_error)) +
+ggplot(subset(scalar_long), aes(D,"relative_error")) +
 geom_boxplot(size = 0.2, outlier.size = 1) + 
 geom_hline(yintercept = 0, col = "red") + 
 geom_hline(aes(yintercept = 0), lty = 2) +
-facet_grid(variable ~ A + S) + ylim(-1, 1) + theme_bw() + 
+facet_grid(variable ~ A + D) + ylim(-1, 1) + theme_bw() + 
 xlab("Length comps for fishery and survey vs. just fishery")
-ggsave("compareE1.png", dpi = 300)
+ggsave("compareE2.png", dpi = 300)
 dev.off()
 
 ###############################################################################

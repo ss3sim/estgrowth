@@ -18,6 +18,15 @@
 ## Step 01
 ## Variable inputs: objects in Step 01 may need alteration prior to running
 ###############################################################################
+
+#For Christine's machine
+main.path <- "c:/users/christine stawitz/documents/github"
+dir.main <- file.path(main.path,"estgrowth")
+dir.models <- file.path(main.path,"growth_models")
+dir.ss3sim <- file.path(main.path,"ss3sim")
+dir.dropbox <- "c:/users/christine stawitz/documents/dropbox/ExtGrowthResults"
+
+#For Kelli's machine
 ## Set the working directory
 dir.main <- "c:/ss/estgrowth"
 #The following directory needs to be cloned prior to running.
@@ -28,7 +37,7 @@ dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 # Which species do you want to use?
 my.spp <- c("cos")#, "fll")
 # Number of ss3sim iterations
-my.totnum <- 1:25
+my.totnum <- 1:10
 # Logical whether or not to run ss3sim bias adjustment to gain information
 # about recruitment from years with more information
 my.bias <- FALSE
@@ -134,7 +143,7 @@ setwd(dir.sub)
 if (testingmode) {
   devtools::load_all(dir.ss3sim)
   # # # Run a single iteration of a test scenario
-  test <- "A31-C20-D20-E2-F1-I0-L31-R0-cos"
+  test <- "A31-C20-D20-E2-F1-I0-L31-R0-cod"
   unlink(test, recursive = TRUE)
   run_ss3sim(iterations = 1, scenarios = test,
              case_folder = dir.cases, case_files = my.casefiles,
@@ -149,22 +158,30 @@ if (testingmode) {
 # Set up running in parallel if specified
 registerDoParallel(cores = my.corenum)
 getDoParWorkers() # check
-
+setwd("C:/Users/Christine Stawitz/Documents/GitHub/estgrowth/bias_fixedattrue")
+unlink(torun)
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
   #finds the appropriate folder for each species
 	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
 	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
 	#run scenarios that include the given species
-  use.scen <- use.scen[sapply(my.spp[s], grepl, torun)]
-	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
+  #use.scen <- use.scen[sapply(my.spp[s], grepl, torun)]
+	run_ss3sim(iterations = 1:100, scenarios = "A30-C10-D0-L30-E0-F0-I0-R0-cos",
                case_folder = dir.cases, case_files = my.casefiles,
                om_dir = use.om, em_dir = use.em,
-               bias_adjust = my.bias, bias_nsim = my.bias.num,
+               bias_adjust = TRUE, bias_nsim = 10,
                ignore.stdout = TRUE, show.output.on.console = FALSE,
                parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
                user_recdevs = recdevs, user_recdevs_warn = FALSE)
   # Should also maybe set ss_mode = "optimized"
+}
+
+test <- list()
+for(iter in 1:10) {
+  test[[iter]] <- SS_output(dir = paste0(iter, "/em"),
+                            repfile = "Report.sso", compfile = "CompReport.sso",
+                            covarfile = "covar.sso", forecast = FALSE, verbose = TRUE)
 }
 
 ###############################################################################
@@ -178,7 +195,7 @@ ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
 file.copy(dir(pattern = "r.csv", full.names = TRUE),
           file.path(dir.dropbox, "scalars.csv"),
           overwrite = TRUE, copy.mode = TRUE)
-file.copy(dir(pattern = "s.csv", full.names = TRUE),
+file.copy(dir(pattern = "scalar", full.names = TRUE),
           file.path(dir.dropbox, "ts.csv"),
           overwrite = TRUE, copy.mode = TRUE)
 

@@ -44,7 +44,7 @@ ncalyears <- 2
 # Currently not using the lower sample size as Ono et al. (2014)
 # showed sample size really did not matter
 # lcomp and age comp sample sizes
-high <- 40
+high <- 500
 low <- 10
 
 # Estimate CVs or not
@@ -348,12 +348,12 @@ writeD(fleets = NULL, years = "NULL", Nsamp = "NULL",
 # mla comp for fishery
 writeD(fleets = 1,
        years = paste0("list(sample(", years.txt$lf, ", ", nmlayears, ", replace = FALSE))"),
-       Nsamp = "list(50)", my.spp[spp], case = 10, mean_outfile = q)
+       Nsamp = "list(500)", my.spp[spp], case = 10, mean_outfile = q)
 
 # mla comp for survey
 writeD(fleets = 2,
        years = paste0("list(sample(", years.txt$ls, ", ", nmlayears, ",replace = FALSE))"),
-       Nsamp = "list(50)", my.spp[spp], case = 20, mean_outfile = q)
+       Nsamp = "list(500)", my.spp[spp], case = 20, mean_outfile = q)
 
 ###############################################################################
 ###############################################################################
@@ -369,12 +369,12 @@ writeD(fleets = NULL, years = "NULL", Nsamp = "NULL", type = "calcomp",
 # cal comp data for fishery
 writeD(fleets = 1, type = "calcomp",
        years = paste0("list(sample(", years.txt$lf, ", ", ncalyears, ", replace = FALSE))"),
-       Nsamp = "list(10)", my.spp[spp], case = 10, mean_outfile = q)
+       Nsamp = "list(100)", my.spp[spp], case = 10, mean_outfile = q)
 
 # cal comp for survey
 writeD(fleets = 2, type = "calcomp",
        years = paste0("list(sample(", years.txt$ls, ", ", ncalyears, ", replace = FALSE))"),
-       Nsamp = "list(10)", my.spp[spp], case = 20, mean_outfile = q)
+       Nsamp = "list(100)", my.spp[spp], case = 20, mean_outfile = q)
 
 ###############################################################################
 ###############################################################################
