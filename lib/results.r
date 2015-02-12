@@ -178,7 +178,7 @@ dev.off()
 ###############################################################################
 ts$SpawnBio_re <- with(ts, (SpawnBio_om - SpawnBio_em) / SpawnBio_om)
 ggplot(ts) +
-geom_boxplot(aes(year, SpawnBio_re, group = replicate), size = 0.2, outlier.size = 1) +
+geom_boxplot(aes(year, SpawnBio_re, group = year)) +
 geom_hline(yintercept = 0, col = "red") +
 ylab("Relative error in spawning stock biomass") +
 xlab("year") +
@@ -188,7 +188,7 @@ ggsave("ts_SSB_re.png", dpi = 300)
 
 ggplot(ts) +
 geom_line(aes(year, SpawnBio_em, group = replicate), size = 0.2, outlier.size = 1) +
-geom_line(aes(year, SpawnBio_om), col = "red", lwd = 2) +
+geom_line(aes(year, SpawnBio_om, group = replicate), col = "red", lwd = 2) +
 xlab("year") +
 xlab("Spawning stock biomass") +
 annotate("text", x = 75, y = max(ts$SpawnBio_om),
