@@ -99,6 +99,8 @@ F1 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
                  "F0-cos.txt")), value = TRUE),";")[[1]][2]))
 F2 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
                  "F1-cos.txt")), value = TRUE),";")[[1]][2]))
+F3 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
+                 "F2-cos.txt")), value = TRUE),";")[[1]][2]))
 # Get the true Fmsy
 Fmsy <- tail(F1, 1)
 F1 <- F1/Fmsy; F2 <- F2/Fmsy; F3 <- F3/Fmsy
@@ -141,25 +143,88 @@ my.dev.off()
 #### Figure 2
 ###############################################################################
 ###############################################################################
-make.file(file.type, "figures/Figure2", width=width1, height=3, res=res.png)
-  par(mfrow = c(1, 1))
-  par(mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 1.5, 0.5),
-      col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
-  plot(0, 0, xlim = range(axisYears), ylim = c(0,1.5), type = "n",
-       xlab = "Year", yaxt = 'n', ylab = NA, las = 1)
-  y <- 1
-  points(all.fish, rep(y, length(all.fish)), pch = 1, col = "black")
-    text(x = 10, y = y, label = "Fishery agecomp", col = "black")
-  y <- y - 0.1
-  points(all.surv, rep(y, length(all.surv)), pch = 1, col = "black")
-    text(x = 10, y = y, label = "Survey agecomp", col = "black")
+## Import the data cases
+cal <- age <- sapply(c(10, 20), function(t) {
+  tname <- paste0("calcomp", t, "-cos.txt")
+  treturn <- setNames(lapply(readLines(file.path(d, tname)),
+    function(x) {
+      temp <- strsplit(x, ";")[[1]][2]
+      eval(parse(text = temp))
+    }), c("fleets", "years", "Nsamp"))
+  treturn
+})
 
-  #legend("topleft", legend=Fnames, lty=ltys, bty='n', lwd=2)
-  axis(2, at = c(0,1, 1.5), las = 1,
-       labels = c(0, expression(italic(F)[MSY]),
-                     expression(1.5*italic(F)[MSY])))
-  mtext(Fishing~Mortality~(italic(F))~Trends, side = 3, line = 0)
-  add.label("(a)")
+age <- sapply(c(10, 30, 31), function(t) {
+  tname <- paste0("agecomp", t, "-cos.txt")
+  treturn <- setNames(lapply(readLines(file.path(d, tname)),
+    function(x) {
+      temp <- strsplit(x, ";")[[1]][2]
+      eval(parse(text = temp))
+    }), c("fleets", "Nsamp", "years", "cpar"))
+  treturn
+})
+
+len <- sapply(c(10, 30, 31), function(t) {
+  tname <- paste0("lcomp", t, "-cos.txt")
+  treturn <- setNames(lapply(readLines(file.path(d, tname)),
+    function(x) {
+      temp <- strsplit(x, ";")[[1]][2]
+      eval(parse(text = temp))
+    }), c("fleets", "Nsamp", "years", "cpar"))
+  treturn
+})
+
+index <- setNames(sapply(readLines(file.path(d, "index0-cos.txt")),
+  function(x) {
+    temp <- strsplit(x, ";")[[1]][2]
+    eval(parse(text = temp))
+  }), c("fleets", "years", "sd"))
+
+make.file(file.type, "figures/Figure2", width=width2, height=5, res=res.png)
+  par(mfrow = c(1, 1), oma = c(1, 1, 1, 0.5), xpd = TRUE,
+      mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 2.5, 0.5),
+      col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
+  plot(0, 0, xlim = c(15, 300), ylim = c(0,0.55), type = "n",
+       xlab = "", yaxt = "n", ylab = NA, las = 1, xaxt = "n")
+  axis(1, at = c(25, 50, 75, 100, 125, 150, 175, 200, 250, 275, 300),
+       label = c(25, 50, 75, 100, 25, 50, 75, 100, 50, 75, 100))
+  y <- 0.43
+
+    points(age[3, 2]$years[[2]] + 100,
+      rep(y - 0.01, length(age[3, 2]$years[[2]])), pch = 1, col = "black")
+
+  for (ind in 2:3) {
+    points(unlist(len[3, ind]$years),
+         c(rep(y - ifelse(ind == 2, 0, .22), sapply(len[3, ind]$years, length)[1]),
+           rep(y - ifelse(ind == 2, 0.03, 0.25), sapply(len[3, ind]$years, length)[2])),
+    pch = unlist(mapply(rep, c(17, 19), sapply(len[3, ind]$years, length))),
+    col = "black")
+
+    points(age[3, ind]$years[[2]][c(ifelse(ind == 2, 1, 4), 7)] + 200,
+      rep(y + ifelse(ind == 2, 0.07, -0.01), 2),
+      pch = ifelse(ind == 2, 24, 21), col = "black", bg = "gray")
+
+   points(unlist(len[3, 1]$years) + ifelse(ind == 2, 0, 100),
+         rep(y + ifelse(ind == 2, -0.4, 0.05), sapply(len[3, 3]$years, length)[1]),
+         pch = ifelse(ind == 2, 17, 2), col = "black")
+  }
+
+
+  axis(2, at = c(0.05, 0.2, .45), las = 3, tck = 0,
+       labels = c("Data poor", "", "Data rich"))
+  text(50, y + 0.17, "Length")
+  text(165, y + 0.17, "Age")
+  text(280, y + 0.17, "Conditional\nage at length")
+  mtext(side = 1, "Year", outer = TRUE)
+  legend("bottomright", pch = c(17, 2, 24, 19, 1, 21), bty = "n", ncol = 2,
+         legend = c("Fishery Length",  "Fishery Age",
+                    "Fishery cond.", "Survey Length",
+                    "Survey Age", "Survey cond."),
+         pt.bg = rep(c("black", "black", "gray"), 2))
+  text(c(rep(25, 3), rep(125, 3), rep(250, 5)),
+       c(y + c(0.07, -0.18, -0.36, 0.07, 0, -0.06, 0.07, 0.04, -0.01, -0.04, -0.09)),
+       c("(A)", "(B)", "(C)", "(A.a)", "(A.b)", "(A.c)",
+         "(A.a.1)", "(A.a.2)", "(A.b.1)", "(A.b.2)", "(A.c.1)"))
   box(col = box.col)
 my.dev.off()
 
