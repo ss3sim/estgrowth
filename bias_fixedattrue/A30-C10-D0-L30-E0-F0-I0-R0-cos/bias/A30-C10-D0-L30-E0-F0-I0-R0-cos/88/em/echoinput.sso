@@ -1,0 +1,560 @@
+SS-V3.24O-safe-win64;_04/10/2013;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_11.1
+Wed Feb 11 18:36:21 2015
+
+ss3.dat  datfilename
+em.ctl  ctlfilename
+0  readparfile
+1  rundetail
+1  reportdetail
+0  docheckup
+4  Do_ParmTrace
+2  Do_CumReport
+0  Do_all_priors
+1  SoftBound
+3  N_nudata
+10  Turn_off_phase
+0  MCeval burn_intvl
+1  MCeval thin_intvl
+0  jitter fraction for initial parm values
+1  STD_Yr_min
+100  STD_Yr_max
+0  N extra STD years to read
+0.0001  final_conv
+0  retro_yr
+1  Smry_Age
+1  depletion_basis
+1  depletion_level
+4  SPR_reporting
+1  F_reporting
+0  F_report_basis
+For Kobe plot, set depletion_basis=2; depletion_level=1.0; F_reporting=your choose; F_report_basis=2
+  finish reading starter.ss
+
+1 start year 
+100 end year 
+1 N seasons 
+ 12 months/seas (fractions OK) 
+ 1 processed season duration 
+1 spawn_seas 
+1 Nfleet 
+2 Nsurvey 
+1 N_areas 
+Fishery
+Survey
+CPUE
+ 0.5 0.5 0.5 surveytime(fishery+surveys) 
+ 1 1 1 fleet_area(fishery+surveys) 
+ 1 catchunits 
+ 0.01 catch_se 
+1 N genders 
+25 nages is maxage 
+ 0 obs_equ_catch 
+100 N_ReadCatch 
+ catch as read 
+ 0 1 1
+ 0 2 1
+ 0 3 1
+ 0 4 1
+ 0 5 1
+ 0 6 1
+ 0 7 1
+ 0 8 1
+ 0 9 1
+ 0 10 1
+ 0 11 1
+ 0 12 1
+ 0 13 1
+ 0 14 1
+ 0 15 1
+ 0 16 1
+ 0 17 1
+ 0 18 1
+ 0 19 1
+ 0 20 1
+ 0 21 1
+ 0 22 1
+ 0 23 1
+ 0 24 1
+ 0 25 1
+ 4.44646e+008 26 1
+ 3.97608e+008 27 1
+ 3.57583e+008 28 1
+ 3.24161e+008 29 1
+ 2.96656e+008 30 1
+ 2.7424e+008 31 1
+ 2.56057e+008 32 1
+ 2.41314e+008 33 1
+ 2.29322e+008 34 1
+ 2.19511e+008 35 1
+ 2.11426e+008 36 1
+ 2.0471e+008 37 1
+ 1.99088e+008 38 1
+ 1.94347e+008 39 1
+ 1.90324e+008 40 1
+ 1.86891e+008 41 1
+ 1.83948e+008 42 1
+ 1.81416e+008 43 1
+ 1.7923e+008 44 1
+ 1.77337e+008 45 1
+ 1.75694e+008 46 1
+ 1.74266e+008 47 1
+ 1.73022e+008 48 1
+ 1.71937e+008 49 1
+ 1.7099e+008 50 1
+ 1.70161e+008 51 1
+ 1.69436e+008 52 1
+ 1.68801e+008 53 1
+ 1.68243e+008 54 1
+ 1.67755e+008 55 1
+ 1.67325e+008 56 1
+ 1.66948e+008 57 1
+ 1.66617e+008 58 1
+ 1.66326e+008 59 1
+ 1.6607e+008 60 1
+ 1.65844e+008 61 1
+ 1.65646e+008 62 1
+ 1.65471e+008 63 1
+ 1.65317e+008 64 1
+ 1.65182e+008 65 1
+ 1.65063e+008 66 1
+ 1.64958e+008 67 1
+ 1.64865e+008 68 1
+ 1.64784e+008 69 1
+ 1.64712e+008 70 1
+ 1.64649e+008 71 1
+ 1.64593e+008 72 1
+ 1.64544e+008 73 1
+ 1.645e+008 74 1
+ 1.64462e+008 75 1
+ 1.64429e+008 76 1
+ 1.64399e+008 77 1
+ 1.64373e+008 78 1
+ 1.6435e+008 79 1
+ 1.64329e+008 80 1
+ 1.64311e+008 81 1
+ 1.64296e+008 82 1
+ 1.64282e+008 83 1
+ 1.64269e+008 84 1
+ 1.64258e+008 85 1
+ 1.64249e+008 86 1
+ 1.6424e+008 87 1
+ 1.64233e+008 88 1
+ 1.64227e+008 89 1
+ 1.64221e+008 90 1
+ 1.64216e+008 91 1
+ 1.64211e+008 92 1
+ 1.64207e+008 93 1
+ 1.64204e+008 94 1
+ 1.64201e+008 95 1
+ 1.64198e+008 96 1
+ 1.64195e+008 97 1
+ 1.64193e+008 98 1
+ 1.64192e+008 99 1
+ 1.6419e+008 100 1
+ processed catch 
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 4.44646e+008
+ 3.97608e+008
+ 3.57583e+008
+ 3.24161e+008
+ 2.96656e+008
+ 2.7424e+008
+ 2.56057e+008
+ 2.41314e+008
+ 2.29322e+008
+ 2.19511e+008
+ 2.11426e+008
+ 2.0471e+008
+ 1.99088e+008
+ 1.94347e+008
+ 1.90324e+008
+ 1.86891e+008
+ 1.83948e+008
+ 1.81416e+008
+ 1.7923e+008
+ 1.77337e+008
+ 1.75694e+008
+ 1.74266e+008
+ 1.73022e+008
+ 1.71937e+008
+ 1.7099e+008
+ 1.70161e+008
+ 1.69436e+008
+ 1.68801e+008
+ 1.68243e+008
+ 1.67755e+008
+ 1.67325e+008
+ 1.66948e+008
+ 1.66617e+008
+ 1.66326e+008
+ 1.6607e+008
+ 1.65844e+008
+ 1.65646e+008
+ 1.65471e+008
+ 1.65317e+008
+ 1.65182e+008
+ 1.65063e+008
+ 1.64958e+008
+ 1.64865e+008
+ 1.64784e+008
+ 1.64712e+008
+ 1.64649e+008
+ 1.64593e+008
+ 1.64544e+008
+ 1.645e+008
+ 1.64462e+008
+ 1.64429e+008
+ 1.64399e+008
+ 1.64373e+008
+ 1.6435e+008
+ 1.64329e+008
+ 1.64311e+008
+ 1.64296e+008
+ 1.64282e+008
+ 1.64269e+008
+ 1.64258e+008
+ 1.64249e+008
+ 1.6424e+008
+ 1.64233e+008
+ 1.64227e+008
+ 1.64221e+008
+ 1.64216e+008
+ 1.64211e+008
+ 1.64207e+008
+ 1.64204e+008
+ 1.64201e+008
+ 1.64198e+008
+ 1.64195e+008
+ 1.64193e+008
+ 1.64192e+008
+ 1.6419e+008
+ 0
+13 nobs_survey 
+Units:  0=numbers; 1=biomass; 2=F
+Errtype:  -1=normal; 0=lognormal; >0=T
+Fleet Units Err_Type
+ 1 1 0
+ 2 1 0
+ 3 1 0
+ indexdata 
+ 76 1 2 1.30694e+009 0.2
+ 78 1 2 1.52904e+009 0.2
+ 80 1 2 1.23559e+009 0.2
+ 82 1 2 1.51294e+009 0.2
+ 84 1 2 1.04408e+009 0.2
+ 86 1 2 1.73302e+009 0.2
+ 88 1 2 9.39784e+008 0.2
+ 90 1 2 1.13012e+009 0.2
+ 92 1 2 1.09738e+009 0.2
+ 94 1 2 1.46684e+009 0.2
+ 96 1 2 9.421e+008 0.2
+ 98 1 2 1.33307e+009 0.2
+ 100 1 2 1.33409e+009 0.2
+ processed survey data 
+1 Fishery 
+2 Survey  1.30694e+009 1.52904e+009 1.23559e+009 1.51294e+009 1.04408e+009 1.73302e+009 9.39784e+008 1.13012e+009 1.09738e+009 1.46684e+009 9.421e+008 1.33307e+009 1.33409e+009
+3 CPUE 
+Successful read of index data; N= 13
+Number of survey superperiods by fleet:  0 0 0
+ note order of discard read is now: N fleets with disc, then if Ndisc_fleets>0 read:  fleet, disc_units, disc_error(for 1,Ndisc_fleets), then read obs 
+0 N fleets with discard 
+0 N discard obs 
+Successful read of discard data, N by fleet = 0
+N superperiods by fleet =  0 0 0
+0 nobs_mnwt 
+1 degrees of freedom for bodywt T-distribution 
+Successful read of mean-body-wt data, N= 0
+2 LenBin_option 
+ 1 10 200 input for setup of pop length bins 
+-0.001 min tail for comps 
+1e-005 value added to comps 
+0 CombGender_lengths 
+45 nlen_bin_for_data 
+ len_bins_dat 
+ 20 23 26 29 32 35 38 41 44 47 50 53 56 59 62 65 68 71 74 77 80 83 86 89 92 95 98 101 104 107 110 113 116 119 122 125 128 131 134 137 140 143 146 149 152
+
+Processed Population length bin info 
+
+Processed Data length bin info 
+
+Processed Population to Data length bin conversion 
+28 N length comp obs 
+ first lencomp obs 
+ 26 1 1 0 0 125 4.06647e-177 2.1449e-013 4.36027e-006 0.00153348 0.00220915 0.0036085 0.0025983 0.00193603 0.0287286 0.0370474 0.0305165 0.0456273 0.0452304 0.0450817 0.0428338 0.0240771 0.0612029 0.0751198 0.0435444 0.0419189 0.0379802 0.0154661 0.0294273 0.0177174 0.0256161 0.0266243 0.0178854 0.00964812 0.0267195 0.0250511 0.0433421 0.0357113 0.0437869 0.0164571 0.0272236 0.00813854 0.00198451 0.0114204 0.0114353 0.00280415 0.00605758 0.000102139 0.0235404 0.00116614 0.00187535
+ last obs
+ 100 1 2 0 0 500 3.80514e-040 0.000230387 0.0157873 0.0512352 0.0538056 0.0242732 0.0065401 0.0216024 0.0383023 0.063008 0.0441805 0.0456138 0.061624 0.0248059 0.0496332 0.043592 0.0262275 0.0398749 0.0340637 0.0399389 0.0198063 0.0252968 0.0186145 0.0197974 0.0263255 0.0210424 0.0172933 0.0185456 0.0149496 0.0165592 0.0232335 0.0181781 0.00996473 0.010382 0.00405162 0.0098642 0.0204897 0.0151448 0.00171706 0.00188657 0.00187942 0.000603682 7.47979e-006 4.21995e-007 2.71066e-005
+Lendata Nobs by fleet  15 13 0
+Lendata superperiods by fleet  0 0 0
+Overall_Compositions
+Fleet len_bins  20 23 26 29 32 35 38 41 44 47 50 53 56 59 62 65 68 71 74 77 80 83 86 89 92 95 98 101 104 107 110 113 116 119 122 125 128 131 134 137 140 143 146 149 152
+1 freq 1.01846e-005 1.28271e-005 0.00333586 0.00806751 0.0192636 0.00920276 0.00521649 0.0200349 0.0502263 0.0605051 0.0500817 0.0383974 0.0333081 0.0383313 0.0391424 0.0460325 0.0464289 0.0344692 0.0417777 0.0373173 0.0394569 0.0347931 0.0293765 0.0343261 0.0276442 0.0294142 0.0244 0.0244807 0.027103 0.0183953 0.0207512 0.0207988 0.0166231 0.0135416 0.0153798 0.00865724 0.0052572 0.00860644 0.00479147 0.00322866 0.0020184 0.0028246 0.00396466 0.000950051 0.00205464
+1 cuml 1.01846e-005 2.30117e-005 0.00335888 0.0114264 0.03069 0.0398928 0.0451093 0.0651441 0.11537 0.175876 0.225957 0.264355 0.297663 0.335994 0.375136 0.421169 0.467598 0.502067 0.543845 0.581162 0.620619 0.655412 0.684789 0.719115 0.746759 0.776173 0.800573 0.825054 0.852157 0.870552 0.891303 0.912102 0.928725 0.942267 0.957647 0.966304 0.971561 0.980168 0.984959 0.988188 0.990206 0.993031 0.996995 0.997945 1
+1 female 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222
+1 male 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222
+2 freq 2.13173e-005 0.00186335 0.0157929 0.0476091 0.0475814 0.0185965 0.0114775 0.023628 0.0440115 0.0629923 0.0540164 0.0372755 0.0358345 0.0321948 0.043928 0.036698 0.0335074 0.0399086 0.032289 0.0315472 0.0328356 0.0294617 0.0260942 0.0287982 0.0290752 0.0239717 0.0214743 0.025345 0.0187282 0.0215362 0.0159948 0.013607 0.0110748 0.0110932 0.00718695 0.0073861 0.00836748 0.00512158 0.00308299 0.00363889 0.00218389 0.00129032 0.000811927 0.000382464 0.000684045
+2 cuml 2.13173e-005 0.00188466 0.0176775 0.0652867 0.112868 0.131465 0.142942 0.16657 0.210582 0.273574 0.32759 0.364866 0.4007 0.432895 0.476823 0.513521 0.547029 0.586937 0.619226 0.650773 0.683609 0.713071 0.739165 0.767963 0.797038 0.82101 0.842484 0.867829 0.886557 0.908094 0.924088 0.937695 0.94877 0.959863 0.96705 0.974436 0.982804 0.987925 0.991008 0.994647 0.996831 0.998122 0.998933 0.999316 1
+2 female 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222
+2 male 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222 0.0222222
+Successful processing of length data
+
+15 N age bins 
+ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 agebins 
+1 N age error defs 
+set agekey: 0 to create key from parameters
+84 N ageobs
+1 Lbin method for defined size ranges 
+-1 merge males&females through this bin number 
+ first agecomp obs 
+ 26 1 1 0 0 1 -1 -1 125 0.00972268 0.132046 0.147932 0.16398 0.112349 0.0601875 0.0401703 0.0651778 0.061914 0.0117004 0.0183325 0.0128041 0.0425038 0.0168979 0.104281
+ last obs
+ 100 1 1 0 0 1 38 38 3 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+Agedata Nobs by fleet  71 13 0
+Agedata superperiods by fleet  0 0 0
+process age comps 
+Fleet age_bins  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 freq  0.627157 0.218412 0.0375116 0.0304295 0.0243793 0.01374 0.0123998 0.0104153 0.00670056 0.0044514 0.00353867 0.00255436 0.00186324 0.00124299 0.00520432
+1 cuml  0.627157 0.845569 0.883081 0.91351 0.937889 0.951629 0.964029 0.974444 0.981145 0.985596 0.989135 0.991689 0.993553 0.994796 1
+2 freq  0.132911 0.232239 0.178013 0.116836 0.0939084 0.0629685 0.0546287 0.0340824 0.0262464 0.0197484 0.0133838 0.00858799 0.00713048 0.00464803 0.0146678
+2 cuml  0.132911 0.36515 0.543163 0.659999 0.753907 0.816876 0.871505 0.905587 0.931834 0.951582 0.964966 0.973554 0.980684 0.985332 1
+3 freq  0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667 0.0666667
+3 cuml  0.0666667 0.133333 0.2 0.266667 0.333333 0.4 0.466667 0.533333 0.6 0.666667 0.733333 0.8 0.866667 0.933333 1
+
+Successful processing of age data 
+0 N mean size-at-age obs 
+
+meansize data Nobs by fleet  0 0 0
+meansize superperiods by fleet  0 0 0
+Successful read of size-at-age data; N =  0 0 0
+0 N_envvar 
+0 N_envdata 
+0 N sizefreq methods to read 
+ finished processing sizefreq data 
+0 Do_TagData(0/1) 
+ Tag Releases 
+TG area year seas tindex gender age N_released 
+
+0 Do_Morphcomp(0/1) 
+ data read successful
+
+1 Do_Benchmark 
+2 Do_MSY 
+0.4 SPR_target 
+0.4 BTGT_target 
+ 0 0 0 0 0 0 Benchmark years as read:  beg-end bio; beg-end selex; beg-end relF
+ 100 100 100 100 100 100 Benchmark years as processed:  beg-end bio; beg-end selex; beg-end relF
+1  1=use range of years for relF; 2 = set same as forecast relF below
+0 Do_Forecast 
+No forecast selected, so rest of forecast file will not be read and can be omitted
+ do not include relative F by season and fleet, uses endyr instead 
+ done reading forecast 
+
+
+ Begin reading control file 
+1 N growth patterns 
+1  N platoons (1, 3 or 5)
+  do not read sd_ratio or submorphdist
+ do not need to read any recr distribution info
+ recr distribution as processed 
+ 1
+ only 1 area, so no read of do_migration or migr_firstage 
+0 N_Block_Designs
+0.5 fracfemale
+0 natM_type
+1 growth model 
+ 1 999 growth specifications
+0  SD_add_to_LAA
+0  CV_depvar
+1  Maturity_Option
+2  First_Mature_Age
+1  Fecundity option
+0  Hermaphro_Option 
+1  MGparm_def
+1  MG_adjust_method
+ Biology parameter setup
+1  0.01 1.8 0.2 0.1 -1 0.8 -3 0 0 0 0 0 0 0 NatM_p_1_Fem_GP_1
+2  10 80 20 30.8 -1 0.2 -1 0 0 0 0 0 0 0 L_at_Amin_Fem_GP_1
+3  25 250 132 120.1 -1 0.2 -1 0 0 0 0 0 0 0 L_at_Amax_Fem_GP_1
+4  0.01 2 0.2 0.25 -1 0.8 -1 0 0 0 0 0 0 0 VonBert_K_Fem_GP_1
+5  0.01 0.5 0.1 0.1 -1 0.8 -1 0 0 0 0 0 0 0 CV_young_Fem_GP_1
+6  0.01 0.5 0.1 0.1 -1 0.8 -1 0 0 0 0 0 0 0 CV_old_Fem_GP_1
+7  0 3 6.8e-006 6.8e-006 -1 0 -1 0 0 0 0 0 0 0 Wtlen_1_Fem
+8  2.5 3.5 3.101 3.101 -1 0.2 -3 0 0 0 0 0 0 0 Wtlen_2_Fem
+9  10 50 38.18 0 -1 0 -3 0 0 0 0 0 0 0 Mat50%_Fem
+10  -2 2 -0.276 0 -1 0 -3 0 0 0 0 0 0 0 Mat_slope_Fem
+11  -3 3 1 0 -1 0 -3 0 0 0 0 0 0 0 Eggs/kg_inter_Fem
+12  -3 4 0 0 -1 0 -3 0 0 0 0 0 0 0 Eggs/kg_slope_wt_Fem
+13  -4 4 0 0 -1 0 -4 0 0 0 0 0 0 0 RecrDist_GP_1
+14  -4 4 0 0 -1 0 -4 0 0 0 0 0 0 0 RecrDist_Area_1
+15  -4 4 0 0 -1 0 -4 0 0 0 0 0 0 0 RecrDist_Seas_1
+16  -4 4 1 0 -1 0 -4 0 0 0 0 0 0 0 CohortGrowDev
+Now read blocks and other adjustments to MGparms 
+ no mgparm env links, so don't read customMGenvsetup
+Process and create labels for the MGparm adjustments
+ no mgparm blocks, so don't read customblocksetup_MG
+ 0 0 0 0 0 0 0 0 0 0 MGparm_seas_effects
+ don't read MGparm_dev_PH
+3 #_SR_function: 1=null; 2=Ricker; 3=std_B-H; 4=SCAA; 5=Hockey; 6=B-H_flattop; 7=Survival_3Parm 
+ SR parms 
+ 10 25 18.6996 10.3 -1 10 1
+ 0.2 1 0.65 0.7 -1 0.05 -4
+ 0 2 0.4 0.8 -1 0.8 -5
+ -5 5 0 0 -1 1 -3
+ -5 5 0 0 -1 1 -4
+ 0 0 0 0 -1 0 -99
+0 SR_env_link 
+0 SR_env_target_RD 
+1 do_recdev
+1 recdev_start
+100 recdev_end
+3 recdev_PH
+1 recdev_adv
+#_start of advanced SR options
+0 #_recdev_early_start (0=none; neg value makes relative to recdev_start)
+4 #_recdev_early_phase
+0 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
+1 #_lambda for Fcast_recr_like occurring before endyr+1
+0.6271 #_last_early_yr_nobias_adj_in_MPD
+40.4067 #_first_yr_fullbias_adj_in_MPD
+99.3012 #_last_yr_fullbias_adj_in_MPD
+99.7616 #_first_recent_yr_nobias_adj_in_MPD
+0.86529 #_max_bias_adj_in_MPD
+0 # period of cycle in recruitment 
+-5 #min rec_dev
+5 #max rec_dev
+0 #_read_recdevs
+#_end of advanced SR options
+0.3 F ballpark is annual F (=Z-M) for specified year
+-2001 F_ballpark_yr (<0 to ignore)  
+3 F_Method 
+4 max_harvest_rate 
+4 N iterations for tuning hybrid F 
+ detailed F_setups 
+
+ initial equil F parameter setup
+ 0 2 0 0.01 0 99 -1
+ Q setup 
+ 0 0 0 2
+ 0 0 0 2
+ 0 0 0 2
+Note that Q parameters are in units of ln(q)
+ # No time-varying Q parms, so no q_parm_detail input needed 
+ Catchability parameters
+ -3 3 0 0 -1 99 -5
+ -3 3 0 0 -1 99 5
+ -3 3 0 0 -1 99 5
+ processed Q parms 
+ -3 3 0 0 -1 99 -5
+ -3 3 0 0 -1 99 5
+ -3 3 0 0 -1 99 5
+ selex types 
+ 24 0 0 0
+ 24 0 0 0
+ 15 0 0 1
+ 10 0 0 0
+ 10 0 0 0
+ 10 0 0 0
+ selex base parameters 
+1 ##  20 250 50.8 50.8 1 0.05 2 0 0 0 0 0.5 0 0 ## SizeSel_1P_1_Fishery
+2 ##  -5 3 -3 -3 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_1P_2_Fishery
+3 ##  -4 25 5.1 5.1 1 0.05 3 0 0 0 0 0.5 0 0 ## SizeSel_1P_3_Fishery
+4 ##  -2 16 15 15 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_1P_4_Fishery
+5 ##  -15 5 -999 -999 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_1P_5_Fishery
+6 ##  -5 5 -999 -999 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_1P_6_Fishery
+7 ##  20 199 41.8 41.8 1 0.05 2 0 0 0 0 0.5 0 0 ## SizeSel_2P_1_Survey
+8 ##  -5 3 -4 -4 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_2P_2_Survey
+9 ##  -4 25 5.2 5.2 1 0.05 3 0 0 0 0 0.5 0 0 ## SizeSel_2P_3_Survey
+10 ##  -2 15 14 14 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_2P_4_Survey
+11 ##  -100 100 -99 -99 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_2P_5_Survey
+12 ##  -100 100 99 99 1 0.05 -99 0 0 0 0 0.5 0 0 ## SizeSel_2P_6_Survey
+ no envlinks; so don't read customenvsetup
+ no blocks; so don't read customblocksetup
+ No selparm devs selected, so don't read selparm_dev_PH
+ No selparm adjustments, so don't read selparm_adjust_method
+0 TG_custom (need to read even if no tag data )
+0 Do_Var_adjust 
+4 max_lambda_phase 
+1 sd_offset (adds log(s)) 
+0 N lambda changes 
+0 # read specs for more stddev reporting 
+ # placeholder vector with selex type, len/age, year, N selex bins, Growth pattern, N growth ages
+After processing
+999  If you see 999, we got to the end of the control file successfully! 
+
+***********************************
+N parameters: 138
+Parameters plus derived quant: 578
+Adjust the phases 
+Active parameters: 107
+Turn_off_phase 10
+ max_phase 5
+Active parameters plus derived quantities:  548
+end of parameter section
+ do variance adjustment for surveys 
+ survey stderr has been set-up 
+ discard stderr has been set-up 
+ mean bodywt stderr has been set-up 
+ length_comp offset:  6283.05 22469.8 0
+ agecomp offset  4133.46 14401.8 0
+ setup stderr for mean size-at-age: 
+Create reverse pointers to survey observations
+Create reverse pointers to discard observations
+Create reverse pointers to survey observations
+Create reverse pointers to discard observations
+Create reverse pointers to survey observations
+Create reverse pointers to discard observations
+ set parms to init values in CTL file 
+ MGparms OK 
+ SRR_parms OK 
+ rec_devs OK 
+ Q_parms OK 
+ initF_parms OK 
+ selex_parms OK 
+ now check bounds and do jitter if requested 
+ MG_parms OK 
+ SRR_parms OK 
+ rec_devs OK 
+ Q_parms OK 
+ initF_parms OK 
+ selex_parms OK 
+
+**************************************
+ ready to do biological and selectivity calculations once 
+ initial bio parameters:  0.2 20 132 0.2 0.1 0.1 6.8e-006 3.101 38.18 -0.276 1 0 0 0 0 1
+  growth factors that cannot be time-varying: 
+seasonal K:  1 1
+seasonal wtlen adjuster 
+ 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1
+CV_at_age_min(for each morph and gender)  0.1
+CV_at_age_max(for each morph and gender)  0.1
+Adjusted size at maxage: 131.239
+ did natmort 
+ 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2
+ did wtlen and maturity
+ made the age_age' key 
