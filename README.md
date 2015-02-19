@@ -27,29 +27,31 @@ multiple life-history types.
      * Mean length-at-age
  * Natural mortality (*M*):
      * Fixed at true
-     * Estimated
+     * Fixed above and below the truth for a few scenarios
  * Fishing pattern:
      * Two-way trip
-     * Constant @ *F~MSY~* - or perhaps something a bit more like 1.10 * *F~MSY~* to
-     try and create a truncated age-structure
+     * Constant @ *F_MSY*
+       * True *F_MSY*
+       * 1.10 * *F_MSY* to create a truncated age-structure
+       * 0.80 * *F_MSY* for life histories with higher *M* b/c true *F_MSY* leads to convergence issues
  * Selectivity (OM) parameterized as a double normal:
      * asymptotic
-     * dome
 
 ### Metrics
  * *K*
- * *L~min~*
- * *L~max~*
- * *CV~young~*
- * *CV~old~*
+ * *L_min*
+ * *L_max*
+ * *CV_young*
+ * *CV_old*
  * *M*
- * *SSB~terminal~*
- * *F~terminal~*
- * ?Forecast
+ * *SSB_terminal*
+ * *F_terminal*
 
 
 ### Todo:
-* Change bounds of col model
-* Change A1 to a different number so that A and L cases align
-* Run models with flatfish
-* Create rockfish models
+* Standardize model
+* Run scenarios
+* Choose which scenarios to introduce miss-specification in *M*
+* Create pltos
+* Finish manuscript
+* Submit to Fisheries
