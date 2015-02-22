@@ -60,7 +60,7 @@ estCVs <- TRUE
 # Not currently using, but available, list with a vector of 7 parameter values to
 # add to selectivity, each species needs a vector. Amount is how much to
 # add or subtract from the double normal currently programmed as asymptotic
-dome <- list(c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0))
+# dome <- list(c(51.5 - 50.8, -4 - -3, 5.2 - 5.1, 8 - 15, 0, 0))
 # amount of random noise in selectivity for each spp - pertains to parameter 1
 tvs <- rep(0.1, length = length(my.spp))
 
@@ -383,9 +383,9 @@ writeD(fleets = 2, type = "calcomp",
 #### TODO: make the change to dome-shaped selectivity spp specific
 ###############################################################################
 ###############################################################################
-writeS(vals = rep(0, 6), my.spp[spp], case = 0, type = "deviates")
-writeS(vals = c(tvs[spp], rep(0, 5)), my.spp[spp], case = 2, type = "random")
-writeS(vals = dome[[spp]], my.spp[spp], case = 1, type = "deviates")
+# writeS(vals = rep(0, 6), my.spp[spp], case = 0, type = "deviates")
+# writeS(vals = c(tvs[spp], rep(0, 5)), my.spp[spp], case = 2, type = "random")
+# writeS(vals = dome[[spp]], my.spp[spp], case = 1, type = "deviates")
 
 ###############################################################################
 ###############################################################################
