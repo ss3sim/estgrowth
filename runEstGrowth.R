@@ -122,10 +122,13 @@ if (testingmode) {
     run_ss3sim(iterations = 1, scenarios = test[ind],
              case_folder = dir.cases, case_files = my.casefiles,
              om_dir = my.om, em_dir = my.em, bias_adjust = FALSE,
-             ignore.stdout = TRUE, show.output.on.console = FALSE)
+             ignore.stdout = TRUE, show.output.on.console = FALSE,
+             user_recdevs = recdevs)
   }
 
   recdevs <- matrix(0, nrow = 100, ncol = 10000)
+} else {
+  recdevs <- NULL
 }
   if (exists("test")) {
     removeme <- file.path(dir.sub, test)
@@ -150,7 +153,7 @@ for(s in seq_along(my.spp)){
                bias_adjust = TRUE, bias_nsim = my.bias.num,
                ignore.stdout = TRUE, show.output.on.console = FALSE,
                parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
-               user_recdevs = recdevs, user_recdevs_warn = FALSE)
+    user_recdevs = recdevs, user_recdevs_warn = FALSE)
   # Should also maybe set ss_mode = "optimized"
 }
 
