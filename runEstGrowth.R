@@ -127,7 +127,10 @@ if (testingmode) {
 
   recdevs <- matrix(0, nrow = 100, ncol = 10000)
 }
-  if (exists("test")) unlink(test, recursive = TRUE)
+  if (exists("test")) {
+    removeme <- file.path(dir.sub, test)
+    ignore <- sapply(removeme, unlink, recursive = TRUE)
+  }
 
 
 # Set up running in parallel if specified
