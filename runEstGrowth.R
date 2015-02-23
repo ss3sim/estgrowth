@@ -22,17 +22,15 @@
 #For Christine's machine
 main.path <- "c:/users/christine stawitz/documents/github"
 dir.main <- file.path(main.path,"estgrowth")
-dir.models <- file.path(main.path,"growth_models")
-dir.ss3sim <- file.path(main.path,"ss3sim")
 dir.dropbox <- "c:/users/christine stawitz/documents/dropbox/ExtGrowthResults"
 
 #For Kelli's machine
 ## Set the working directory
-dir.main <- "c:/ss/estgrowth"
-#The following directory needs to be cloned prior to running.
-dir.models <- "c:/ss/growth_models"
-dir.ss3sim <- "c:/ss/ss3sim"
-dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
+if (Sys.info()["user"] == "kelli") {
+  dir.main <- "c:/ss/estgrowth"
+  dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
+}
+
 
 # Which species do you want to use?
 my.spp <- c("cos")#, "fll")
@@ -46,11 +44,6 @@ my.bias.num <- 5
 # Register the number of cores you want to use
 my.corenum <- 1
 
-## How to install the package
-# Can be "github", "local", "NULL"
-# ss3sim.install <- "github"
-ss3sim.install <- "github"
-ss3sim.branch <- "master"
 
 # Logical whether in testing mode or not
 testingmode <- TRUE
@@ -59,57 +52,24 @@ testingmode <- TRUE
 ## Step 02
 ## Load packages
 ###############################################################################
-# perform checks to make sure computer is set up prior to running model
-if (!is.null(ss3sim.install)){
-	if(ss3sim.install == "github"){
-    if (as.logical(system("ping www.github.com"))) {
-      stop(paste("A valid internet connection does not exist, please change",
-                 "ss3sim.install to 'local'"))
-    }
-		devtools::install_github("ss3sim/ss3sim", ref = ss3sim.branch)
-	}
-	if (ss3sim.install == "local"){
-    if (!file.exists(dir.ss3sim)) {
-      stop(paste("The ss3sim directory", dir.ss3sim, "does not exist on this",
-                 "computer, please clone the remote repository."))
-    }
-		devtools::install(dir.ss3sim)
-	}
-}
+library(devtools)
+install_github("ss3sim/ss3sim", ref = "master")
+install_github("ss3sim/ss3models", ref = "master")
+install_github("r4ss/r4ss", ref = "master")
 
-library(doParallel); library(foreach); library(r4ss); library(ss3sim);
+library(doParallel); library(foreach); library(r4ss);
+library(ss3models); library(ss3sim);
 
-# Update models from github repository on local machine
-if (file.exists(dir.models)) {
-  setwd(dir.models)
-  system("git fetch")
-  status <- system("git status", intern = TRUE)
-    if (status[1] != "# On branch master") {
-      checkout <- system("git checkout master", intern = TRUE)
-    } if (checkout[1] == "Switched to branch 'master'") {
-      system("git rebase origin/master")
-    } else {
-      stop(paste("More than likely your working directory",
-        dir.models, "is not clean and you cannot switch to master."))
-    }
-} else {
-  stop(paste("The ss3sim directory", dir.models, "does not exist on this",
-             "computer, please clone the remote repository."))
-}
+dir.models <- system.file("models", package = "ss3models")
+
 dir.sub <- file.path(dir.main, "test")
-dir.cases <- file.path(dir.main, "casefiles")
+dir.cases <- file.path(dir.main, "cases")
 dir.results <- file.path(dir.main, "results")
 
 # Copy case files from github growth_models repository to the local folder
 # for casefiles.
-files2copy <- dir(file.path(dir.models, "cases"), full.names = TRUE)
-done <- sapply(files2copy, function(x) {
-  file.copy(from = x, to = gsub(file.path(dir.models, "cases"), dir.cases, x),
-            overwrite = TRUE)
-})
-if (any(!done)) {
-  warning("casefiles not copied from remote repository")
-}
+setwd(dir.main)
+file.copy(system.file("cases", package = "ss3models"), ".", recursive = TRUE)
 
 ###############################################################################
 ## Step 03
@@ -127,13 +87,13 @@ for (ind in keep) {
   truem[which(ind == keep)] <- pars[grep("NatM", pars$Label), "INIT"]
 }
 
-setwd(dir.main)
 source(file.path(dir.main, "lib", "createcasefiles.r"))
 
 # Specify where the model files are
-d <- file.path(system.file("extdata", package = "ss3sim"), "models")
-  spp.grid <- expand.grid(my.spp, c("om", "em"))
-  models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
+models <- sapply(c("om", "em"), function (x) {
+  file.path(system.file("models", package = "ss3models"),
+  dir(system.file("models", package = "ss3models"))[keep], x)
+})
 my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
                      E = "E", F = "F",
                      I = "index", L = "lcomp") #,
