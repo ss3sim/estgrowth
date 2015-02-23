@@ -148,11 +148,11 @@ for(s in seq_along(my.spp)){
 	#run scenarios that include the given species
   use.scen <- torun[sapply(my.spp[s], grepl, torun)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
-               case_folder = dir.cases, case_files = my.casefiles,
-               om_dir = use.om, em_dir = use.em,
-               ignore.stdout = TRUE, show.output.on.console = FALSE,
-               parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
+    case_folder = dir.cases, case_files = my.casefiles,
+    om_dir = use.om, em_dir = use.em,
     bias_adjust = ifelse(my.bias.num > 0, TRUE, FALSE), bias_nsim = my.bias.num,
+    ignore.stdout = TRUE, show.output.on.console = FALSE,
+    parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
     user_recdevs = recdevs, user_recdevs_warn = FALSE)
   # Should also maybe set ss_mode = "optimized"
 }
