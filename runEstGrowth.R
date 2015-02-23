@@ -35,16 +35,15 @@ if (Sys.info()["user"] == "kelli") {
 # Which species do you want to use?
 my.spp <- c("cod", "mackerel", "yellow")
 my.spp <- my.spp[order(my.spp)]
-# Number of ss3sim iterations
-my.totnum <- 1:10
+
+my.totnum <- 1:100
 # Logical whether or not to run ss3sim bias adjustment to gain information
 # about recruitment from years with more information
 my.bias <- FALSE
-my.bias.num <- 5
+my.bias.num <- 10
 
 # Register the number of cores you want to use
 my.corenum <- 1
-
 
 # Logical whether in testing mode or not
 testingmode <- TRUE
@@ -124,6 +123,8 @@ if (testingmode) {
              case_folder = dir.cases, case_files = my.casefiles,
              om_dir = my.om, em_dir = my.em, bias_adjust = FALSE,
              ignore.stdout = TRUE, show.output.on.console = FALSE)
+  }
+
   recdevs <- matrix(0, nrow = 100, ncol = 10000)
 }
   if (exists("test")) unlink(test, recursive = TRUE)
@@ -139,11 +140,11 @@ for(s in seq_along(my.spp)){
 	use.om <- models[s, "om"]
 	use.em <- models[s, "em"]
 	#run scenarios that include the given species
-  #use.scen <- use.scen[sapply(my.spp[s], grepl, torun)]
-	run_ss3sim(iterations = 1:100, scenarios = "A30-C10-D0-L30-E0-F0-I0-R0-cos",
+  use.scen <- torun[sapply(my.spp[s], grepl, torun)]
+	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
                case_folder = dir.cases, case_files = my.casefiles,
                om_dir = use.om, em_dir = use.em,
-               bias_adjust = TRUE, bias_nsim = 10,
+               bias_adjust = TRUE, bias_nsim = my.bias.num,
                ignore.stdout = TRUE, show.output.on.console = FALSE,
                parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
                user_recdevs = recdevs, user_recdevs_warn = FALSE)
