@@ -33,7 +33,7 @@ if (Sys.info()["user"] == "kelli") {
 
 
 # Which species do you want to use?
-my.spp <- c("cod", "mackerel", "yellow")
+my.spp <- c("cod", "flatfish", "yellow")
 my.spp <- my.spp[order(my.spp)]
 
 my.totnum <- 1:100
