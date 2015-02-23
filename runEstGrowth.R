@@ -36,17 +36,16 @@ if (Sys.info()["user"] == "kelli") {
 my.spp <- c("cod", "flatfish", "yellow")
 my.spp <- my.spp[order(my.spp)]
 
-my.totnum <- 1:100
+my.totnum <- 1:50
 # Logical whether or not to run ss3sim bias adjustment to gain information
 # about recruitment from years with more information
-my.bias <- FALSE
-my.bias.num <- 10
+my.bias.num <- 0
 
 # Register the number of cores you want to use
 my.corenum <- 1
 
 # Logical whether in testing mode or not
-testingmode <- TRUE
+testingmode <- FALSE
 
 ###############################################################################
 ## Step 02
