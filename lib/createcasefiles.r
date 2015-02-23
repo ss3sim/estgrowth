@@ -67,7 +67,10 @@ tvs <- rep(0.1, length = length(my.spp))
 # Sequence true natural morality values for each species by 10 - 190%
 # These values will be used to change the EM values of fixed natural mortality
 # to add misspecification in the EM.
-truem <- c(0.2, 0.2, 0.5)
+if (!exists("truem")) {
+  stop(paste("True values of natural mortality are needed for each species",
+    "before you can run this script."))
+}
 mrange <- lapply(truem, function(x) x * seq(.1, 1.90, by = 0.1))
 
 
