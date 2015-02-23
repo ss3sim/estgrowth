@@ -33,7 +33,8 @@ if (Sys.info()["user"] == "kelli") {
 
 
 # Which species do you want to use?
-my.spp <- c("cos")#, "fll")
+my.spp <- c("cod", "mackerel", "yellow")
+my.spp <- my.spp[order(my.spp)]
 # Number of ss3sim iterations
 my.totnum <- 1:10
 # Logical whether or not to run ss3sim bias adjustment to gain information
@@ -115,12 +116,14 @@ setwd(dir.sub)
 if (testingmode) {
   devtools::load_all(dir.ss3sim)
   # # # Run a single iteration of a test scenario
-  test <- "A31-C20-D20-E2-F1-I0-L31-R0-cod"
+  test <- paste("A31-C0-D0-E1-F0-I0-L31", my.spp, sep = "-")
   unlink(test, recursive = TRUE)
-  run_ss3sim(iterations = 1, scenarios = test,
+  for (ind in seq_along(my.spp)) {
+    my.om <- models[ind, "om"]
+    my.em <- models[ind, "em"]
+    run_ss3sim(iterations = 1, scenarios = test[ind],
              case_folder = dir.cases, case_files = my.casefiles,
-             om_dir = models[1],
-             em_dir = models[2], bias_adjust = FALSE,
+             om_dir = my.om, em_dir = my.em, bias_adjust = FALSE,
              ignore.stdout = TRUE, show.output.on.console = FALSE)
   recdevs <- matrix(0, nrow = 100, ncol = 10000)
 }
@@ -135,8 +138,8 @@ unlink(torun)
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
   #finds the appropriate folder for each species
-	use.om <- models[grep(paste(my.spp[s], "om", sep = "-"), models)]
-	use.em <- models[grep(paste(my.spp[s], "em", sep = "-"), models)]
+	use.om <- models[s, "om"]
+	use.em <- models[s, "em"]
 	#run scenarios that include the given species
   #use.scen <- use.scen[sapply(my.spp[s], grepl, torun)]
 	run_ss3sim(iterations = 1:100, scenarios = "A30-C10-D0-L30-E0-F0-I0-R0-cos",
