@@ -115,6 +115,18 @@ if (any(!done)) {
 ## Step 03
 ## Model locations
 ###############################################################################
+# file below need true values of M for each species
+truem <- vector(length = length(my.spp))
+mfiles <- file.path(system.file("models", package = "ss3models"),
+    dir(system.file("models", package = "ss3models")), "om", "ss3.ctl")
+keep <- which(apply(unlist(sapply(paste0(my.spp, "/"), grepl, mfiles)),
+  1, sum) > 0)
+for (ind in keep) {
+  om <- mfiles[ind]
+  pars <- SS_parlines(om)
+  truem[which(ind == keep)] <- pars[grep("NatM", pars$Label), "INIT"]
+}
+
 setwd(dir.main)
 source(file.path(dir.main, "lib", "createcasefiles.r"))
 
