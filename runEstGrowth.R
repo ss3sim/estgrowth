@@ -134,9 +134,9 @@ source(file.path(dir.main, "lib", "createcasefiles.r"))
 d <- file.path(system.file("extdata", package = "ss3sim"), "models")
   spp.grid <- expand.grid(my.spp, c("om", "em"))
   models <- file.path(dir.models, apply(spp.grid, 1, paste, collapse = "-"))
-  my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
-                       E = "E", F = "F",
-                       I = "index", L = "lcomp", R = "R") #,
+my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
+                     E = "E", F = "F",
+                     I = "index", L = "lcomp") #,
 # Below are cases that we are not currently using
 # S == selectivity case files (dome)
 # M == time-varying natural mortality
