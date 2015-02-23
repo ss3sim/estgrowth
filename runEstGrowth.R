@@ -114,7 +114,6 @@ setwd(dir.sub)
 
 
 if (testingmode) {
-  devtools::load_all(dir.ss3sim)
   # # # Run a single iteration of a test scenario
   test <- paste("A31-C0-D0-E1-F0-I0-L31", my.spp, sep = "-")
   unlink(test, recursive = TRUE)
@@ -133,8 +132,7 @@ if (testingmode) {
 # Set up running in parallel if specified
 registerDoParallel(cores = my.corenum)
 getDoParWorkers() # check
-setwd("C:/Users/Christine Stawitz/Documents/GitHub/estgrowth/bias_fixedattrue")
-unlink(torun)
+
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
   #finds the appropriate folder for each species
@@ -150,13 +148,6 @@ for(s in seq_along(my.spp)){
                parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
                user_recdevs = recdevs, user_recdevs_warn = FALSE)
   # Should also maybe set ss_mode = "optimized"
-}
-
-test <- list()
-for(iter in 1:10) {
-  test[[iter]] <- SS_output(dir = paste0(iter, "/em"),
-                            repfile = "Report.sso", compfile = "CompReport.sso",
-                            covarfile = "covar.sso", forecast = FALSE, verbose = TRUE)
 }
 
 ###############################################################################
