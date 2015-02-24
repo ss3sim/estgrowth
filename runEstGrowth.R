@@ -6,8 +6,7 @@
 ####Lastupdate :
 ####Purpose    :
 ####Packages   :
-####Inputs     : This script assumes you have cloned ss3sim/growth_models to
-####             your local machine.
+####Inputs     :
 ####Outputs    :
 ####Remarks    : Character width = 80
 #-----------------------------------------------------------------------------#
