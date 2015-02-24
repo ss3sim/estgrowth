@@ -41,7 +41,7 @@ my.totnum <- 1:50
 my.bias.num <- 0
 
 # Register the number of cores you want to use
-my.corenum <- 1
+my.corenum <- 3
 
 # Logical whether in testing mode or not
 testingmode <- FALSE
