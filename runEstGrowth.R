@@ -29,6 +29,10 @@ if (Sys.info()["user"] == "kelli") {
   dir.main <- "c:/ss/estgrowth"
   dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 }
+if (Sys.info()["user"] == "kfjohns") {
+  dir.main <- "h:/estgrowth"
+  dir.dropbox <- "h:/estgrowth"
+}
 
 
 # Which species do you want to use?
