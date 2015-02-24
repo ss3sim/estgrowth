@@ -1,4 +1,0 @@
-fleets; NULL
-years; NULL
-Nsamp; NULL
-mean_outfile; NULL
