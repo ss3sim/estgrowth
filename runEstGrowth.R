@@ -52,9 +52,9 @@ testingmode <- FALSE
 ## Load packages
 ###############################################################################
 library(devtools)
+install_github("r4ss/r4ss", ref = "master")
 install_github("ss3sim/ss3sim", ref = "master")
 install_github("ss3sim/ss3models", ref = "master")
-install_github("r4ss/r4ss", ref = "master")
 
 library(doParallel); library(foreach); library(r4ss);
 library(ss3models); library(ss3sim);
