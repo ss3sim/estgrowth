@@ -124,10 +124,6 @@ if (testingmode) {
              ignore.stdout = TRUE, show.output.on.console = FALSE,
              user_recdevs = recdevs)
   }
-
-  recdevs <- matrix(0, nrow = 100, ncol = 10000)
-} else {
-  recdevs <- NULL
 }
   if (exists("test")) {
     removeme <- file.path(dir.sub, test)
@@ -151,8 +147,7 @@ for(s in seq_along(my.spp)){
     om_dir = use.om, em_dir = use.em,
     bias_adjust = ifelse(my.bias.num > 0, TRUE, FALSE), bias_nsim = my.bias.num,
     ignore.stdout = TRUE, show.output.on.console = FALSE,
-    parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE),
-    user_recdevs = recdevs, user_recdevs_warn = FALSE)
+    parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE))
   # Should also maybe set ss_mode = "optimized"
 }
 
