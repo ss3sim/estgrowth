@@ -167,3 +167,5 @@ file.copy(dir(pattern = "scalar", full.names = TRUE),
           overwrite = TRUE, copy.mode = TRUE)
 
 source(file.path(dir.main, "lib", "results.r"))
+
+setwd(dir.main)
