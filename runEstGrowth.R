@@ -124,8 +124,7 @@ if (testingmode) {
     run_ss3sim(iterations = 1, scenarios = test[ind],
              case_folder = dir.cases, case_files = my.casefiles,
              om_dir = my.om, em_dir = my.em, bias_adjust = FALSE,
-             ignore.stdout = TRUE, show.output.on.console = FALSE,
-             user_recdevs = recdevs)
+             ignore.stdout = TRUE, show.output.on.console = FALSE)
   }
 }
   if (exists("test")) {
