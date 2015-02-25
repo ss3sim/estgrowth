@@ -157,7 +157,8 @@ for(s in seq_along(my.spp)){
 ## Step
 ## Get results
 ###############################################################################
-get_results_all(overwrite_files = FALSE)
+get_results_all(overwrite_files = FALSE,
+  parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE))
 scalars <- read.csv(dir(pattern = "r.csv", full.names = TRUE))
 ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
 
