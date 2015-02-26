@@ -60,9 +60,9 @@ ts <- change_levels(data = ts, group = "A",
 axis.val <- TRUE
 axis.rel <- TRUE
 my.horiz <- "E"
-my.horiz2 <- "D"
+my.horiz2 <- "C"
 my.vert <- "A"
-my.vert2 <- "C"
+my.vert2 <- "species"
 my.x <- "L"
 
 #subset for max_grad
