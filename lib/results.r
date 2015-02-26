@@ -40,14 +40,16 @@ results_re <- calculate_re(scalars, FALSE)
 #### Name cases
 ###############################################################################
 ###############################################################################
-# Change E0:5 to the following short names
-levels(results_re$E) <- c("fix", "int", "ext")
-levels(ts$E) <- c("fix", "int", "ext")
 
-# Change how A is plotted, with A1 being last because it is the case with
-# no age data
-results_re$A <- factor(results_re$A, levels = c("A10", "A30", "A31", "A0"))
-ts$A <- factor(ts$A, levels = c("A10", "A30", "A31", "A0"))
+results_re <- change_levels(data = results_re, group = "E",
+  old = c("E0", "E1", "E2"), new = c("fix", "int", "ext"))
+ts <- change_levels(data = ts, group = "E",
+  old = c("E0", "E1", "E2"), new = c("fix", "int", "ext"))
+
+results_re <- change_levels(data = results_re, group = "A",
+  old = c("A0", "A10", "A30"), new = c("noage", "fishage", "bothage"))
+ts <- change_levels(data = ts, group = "A",
+  old = c("A0", "A10", "A30"), new = c("noage", "fishage", "bothage"))
 
 ###############################################################################
 ###############################################################################
