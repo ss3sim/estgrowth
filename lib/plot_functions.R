@@ -157,4 +157,10 @@ plot.ts.points <- function(data=ts, y,horiz="species", vert=".", vert2=NULL,
     return(invisible(g))
 }
 
+change_levels <- function(data, group, old, new) {
+  true <- levels(data[, group])
+  true.which <- sapply(old, function(x) grep(paste0(x, "$"), true))
+  if (is.list(true.which)) stop("Not all levels found in data")
+  levels(data[, group])[as.integer(true.which)] <- new
+  invisible(return(data))
 }
