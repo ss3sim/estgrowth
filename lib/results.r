@@ -164,22 +164,6 @@ ggsave("termssb.png", dpi = 300)
 dev.off()
 
 
-scalar_long <- reshape2::melt(subset(data.plot, E == "fix",
-  select = c("scenario", "E", "A", "L", "D", "C",
-  "replicate", "CV_old_Fem_GP_1_re", "CV_young_Fem_GP_1_re",
-  "L_at_Amin_Fem_GP_1_re", "L_at_Amax_Fem_GP_1_re", "VonBert_K_Fem_GP_1_re")),
-  id.vars = c("scenario", "A", "L", "D", "C", "E", "replicate"))
-scalar_long <- plyr::rename(scalar_long, c("value" = "relative_error"))
-levels(scalar_long$variable) <- c("CV_old", "CV_young", "L_min", "L_max", "K")
-ggplot(scalar_long, aes(E, "relative_error")) +
-geom_boxplot(size = 0.2, outlier.size = 1) +
-geom_hline(yintercept = 0, col = "red") +
-geom_hline(aes(yintercept = 0), lty = 2) +
-#facet_grid(variable ~ A + D) + ylim(-1, 1) + theme_bw() +
-xlab("Length comps for fishery and survey vs. just fishery")
-ggsave("compareE2.png", dpi = 300)
-dev.off()
-
 
 ###############################################################################
 ###############################################################################
