@@ -157,30 +157,4 @@ plot.ts.points <- function(data=ts, y,horiz="species", vert=".", vert2=NULL,
     return(invisible(g))
 }
 
-# a function Sean wrote for the package but it is not exported
-get_args <- function(file) {
-  x <- read.csv(file, stringsAsFactors = FALSE, col.names =
-    c("arg", "val"), header = FALSE, strip.white = TRUE, sep = ";",
-    comment.char = "#")
-  y <- as.list(x$val)
-  names(y) <- x$arg
-
-# if all numeric then eval(parse(text =
-# if has [a-zA-Z]( then eval(parse(text =
-# if has : then eval(parse(text =
-# else use as character
-is_f <- function(x) {
-  if(!is.character(x)) stop("x must be a character")
-  fn <- grepl("[a-zA-Z0-9]\\(", x) # is a function
-  nu <- !grepl("[a-zA-Z]", x) # is not character (is numeric)
-  ifelse(fn | nu, TRUE, FALSE)
-}
-
-  lapply(y, function(z) {
-    if(is_f(as.character(z))) {
-      eval(parse(text = z)) # turn into correct class
-    } else {
-      as.character(z)
-    }}
-    )
 }
