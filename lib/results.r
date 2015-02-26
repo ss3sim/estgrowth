@@ -27,10 +27,12 @@ library(ggplot2)
 wd.curr <- getwd()
 setwd(wd.curr)
 setwd(dir.results)
-resultfiles <- dir(dir.dropbox, pattern = ".csv", full.names = TRUE)
-scalars <- do.call("rbind", lapply(grep("scalar", resultfiles, value = TRUE),
-                   read.csv))
-ts <- do.call("rbind", lapply(grep("ts", resultfiles, value = TRUE), read.csv))
+resultfiles <- list.files(dir.dropbox, pattern = ".csv",
+  full.names = TRUE, recursive = TRUE)
+scalars <- do.call("rbind",
+  lapply(grep("scalar", resultfiles, value = TRUE), read.csv))
+ts <- do.call("rbind",
+  lapply(grep("ts", resultfiles, value = TRUE), read.csv))
 # Calculate the relative error for scalars
 results_re <- calculate_re(scalars, FALSE)
 
@@ -162,8 +164,6 @@ xlab("Length comps for fishery and survey vs. just fishery") +
 ylab("relative error: terminal SSB")
 ggsave("termssb.png", dpi = 300)
 dev.off()
-
-
 
 ###############################################################################
 ###############################################################################
