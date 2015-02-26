@@ -64,13 +64,17 @@ my.horiz2 <- "D"
 my.vert <- "A"
 my.vert2 <- "C"
 my.x <- "L"
-data.plot <- subset(results_re, A %in% c("A0", "A10", "A30", "A31") &
-                    L %in% c("L10", "L30", "L31") &
-                    C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20"))
-data.plot<-results_re
-ts <- subset(ts, A %in% c("A10", "A30", "A31") &
-             L %in% c("L10", "L30", "L31") &
-             C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20"))
+
+#subset for max_grad
+maxgrad <- aggregate(max_grad ~ L + A + E + C, data = results_re,
+  function(x) c(median(x), sum(x > 0.01)))
+data.plot <- subset(results_re[results_re$max_grad < 0.01, ],
+  C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
+  E %in% c("ext", "int"))
+identifer <- with(data.plot, paste0(scenario, replicate))
+ts <- subset(ts[with(ts, paste0(scenario, replicate)) %in% identifer, ],
+  C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20") &
+  E %in% c"ext", "int"))
 
 termSSB <- with(subset(ts, year == max(year)),
                 ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
@@ -126,6 +130,11 @@ xlab("Length comps for fishery and survey vs. just fishery") +
 ylab("relative error: Vonb K")
 ggsave("vonbk.png", dpi = 300)
 dev.off()
+
+
+data.plot <- subset(results_re[results_re$max_grad < 0.01, ],
+  C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
+  E %in% c("fix", "ext", "int"))
 
 plot_scalar_boxplot(data.plot, x = my.x, y = "depletion_re",
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
