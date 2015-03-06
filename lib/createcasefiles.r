@@ -285,7 +285,7 @@ counter <- 0
     writeE(c("NatM_p_1_Fem"), mrange[[spp]][i], -1, my.spp[spp], 100 + i)
     writeE(c("NatM_p_1_Fem", allgrowth),
            c(mrange[[spp]][i], rep("change_e_vbgf", length(allgrowth))),
-           c(-1, growthphase), my.spp[spp], 200 + i)
+           c(-1, growthphase), my.spp[spp], 10 + i)
   }
 
 
