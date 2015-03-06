@@ -128,7 +128,7 @@ if (testingmode) {
              ignore.stdout = TRUE, show.output.on.console = FALSE)
   }
 }
-  if (exists("test")) {
+  if (length(ls(pattern = "test$", envir=.GlobalEnv)) > 0) {
     removeme <- file.path(dir.sub, test)
     ignore <- sapply(removeme, unlink, recursive = TRUE)
   }
