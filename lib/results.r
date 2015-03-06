@@ -67,20 +67,18 @@ my.vert <- "A"
 my.vert2 <- "species"
 my.x <- "L"
 
+ssbterm_re <- with(ts, ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
+ts <- cbind(ts, ssbterm_re)
+
 #subset for max_grad
-maxgrad <- aggregate(max_grad ~ L + A + E + C, data = results_re,
+maxgrad <- aggregate(max_grad ~ L + A + E + C + species, data = results_re,
   function(x) c(median(x), sum(x > 0.01)))
-data.plot <- subset(results_re[results_re$max_grad < 0.01, ],
+data.plot <- subset(results_re, max_grad < 0.01 &
   C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
   E %in% c("ext", "int"))
-identifer <- with(data.plot, paste0(scenario, replicate))
-ts <- subset(ts[with(ts, paste0(scenario, replicate)) %in% identifer, ],
+ts <- subset(ts[ts$ID %in% data.plot$ID, ],
   C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c"ext", "int"))
-
-termSSB <- with(subset(ts, year == max(year)),
-                ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
-termSSB <- cbind(termSSB, subset(ts, year == max(year)))
+  E %in% c("ext", "int"))
 
 ###############################################################################
 ###############################################################################
@@ -156,13 +154,60 @@ ylab("relative error: SSB at MSY")
 ggsave("ssbmsy.png", dpi = 300)
 dev.off()
 
-plot_scalar_boxplot(termSSB, x = my.x, y = "termSSB",
+plot_scalar_boxplot(ts[ts$year == max(ts$year), ], x = my.x, y = "ssbterm_re",
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
                     horiz2 = my.horiz2,
                     rel = axis.rel, axes.free = axis.val) +
 xlab("Length comps for fishery and survey vs. just fishery") +
 ylab("relative error: terminal SSB")
 ggsave("termssb.png", dpi = 300)
+dev.off()
+
+###############################################################################
+###############################################################################
+#### Step
+#### Correlation plot with RE in terminal SSB
+###############################################################################
+###############################################################################
+growth <- c("L_at_Amin_Fem_GP_1_re", "L_at_Amax_Fem_GP_1_re",
+            "VonBert_K_Fem_GP_1_re", "CV_young_Fem_GP_1_re",
+            "CV_old_Fem_GP_1_re", "SR_LN_R0_re",
+            "SizeSel_1P_1_Fishery_re", "SizeSel_1P_3_Fishery_re",
+            "SizeSel_2P_1_Survey_re", "SizeSel_2P_3_Survey_re")
+xnames <- c("Length at min age", "Length at max age",
+            expression(italic(K)), "CV_young",
+             "CV_old", expression(italic(R0)),
+            "Fishery selectivity 1","Fishery selectivity 3",
+            "Survey selectivity 1", "Survey selectivity 3")
+png("parcorrelations.png", height = 7, width = 7, units = "in", res = 200)
+par(mfrow = (c(3, 4)), mar = c(4, 0, 1, 0), oma = c(2, 2, 2, 2))
+for(ind in seq_along(growth)) {
+  x <- data.plot[data.plot$A != "noage" & data.plot$L == "L30", growth[ind]]
+  y <- ts[ts$year == max(ts$year) & ts$A != "noage" & ts$L == "L30", "ssbterm_re"]
+  mycol <- apply(data.plot[data.plot$A != "noage" & data.plot$L == "L30", ], 1, function(x) {
+    ifelse(x["C"] == "C0", x["D"], x["C"])
+  })
+  mycol <- as.factor(mycol)
+  levels(mycol) <- c("blue", "red", "green", "darkgreen")
+  mod <- lm(y ~ mycol / x + 0)
+  plot(x, y, col = mycol, ylim = c(-1, 1),
+    yaxt = ifelse(ind %in% c(1, 5, 9), "s", "n"),
+    xlab = xnames[ind])
+  cof <- coef(mod)
+    save <- rep(NA, 4)
+    for(i in 1:4){
+      abline(a = cof[i], b = cof[4 + i], col = mod$xlevels$mycol[i])
+      if (summary(mod)$coefficients[4 + i, 4] < 0.05) {
+        save[i] <- round(cof[4 + i], 3)
+      }
+    }
+    mtext(side = 3, text = paste(save, collapse = ", "),
+      adj = 0, line = -1.5, cex = 0.5)
+}
+mtext(side = 3, paste("Relative error in terminal SSB vs. ..."), outer = TRUE)
+plot(0,0, type = "n", axes = FALSE, bty = "n", xlab = "")
+  legend("topright", legend = c("survey cal", "lengths & ages", "fishery mla", "survey mla"),
+    col = c("blue", "red", "green", "darkgreen"), pch = 1, bty = "n")
 dev.off()
 
 ###############################################################################
