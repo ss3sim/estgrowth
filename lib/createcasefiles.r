@@ -71,7 +71,11 @@ if (!exists("truem")) {
   stop(paste("True values of natural mortality are needed for each species",
     "before you can run this script."))
 }
-mrange <- lapply(truem, function(x) x * seq(.1, 1.90, by = 0.1))
+mrange <- lapply(truem, function(x) {
+  temp <- x * seq(.5, 1.50, by = 0.1)
+  temp[-which(temp == x)]
+})
+
 
 
 ###############################################################################
@@ -278,14 +282,14 @@ counter <- 0
   writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)),
          growthphase, my.spp[spp], counter + 2)
   writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K"),
-    rep("change_e_vbgf", 3), growthphase, my.spp[spp], counter + 3)
+    rep("change_e_vbgf", 3), rep(-1, 3), my.spp[spp], counter + 3)
 
 # Misspecify M
   for(i in seq_along(mrange)) {
     writeE(c("NatM_p_1_Fem"), mrange[[spp]][i], -1, my.spp[spp], 100 + i)
     writeE(c("NatM_p_1_Fem", allgrowth),
            c(mrange[[spp]][i], rep("change_e_vbgf", length(allgrowth))),
-           c(-1, growthphase), my.spp[spp], 10 + i)
+           c(-1, growthphase), my.spp[spp], 9 + i)
   }
 
 
