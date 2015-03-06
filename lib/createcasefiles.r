@@ -277,6 +277,8 @@ counter <- 0
 # All parameters are externally estimated
   writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)),
          growthphase, my.spp[spp], counter + 2)
+  writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K"),
+    rep("change_e_vbgf", 3), growthphase, my.spp[spp], counter + 3)
 
 # Misspecify M
   for(i in seq_along(mrange)) {
