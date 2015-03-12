@@ -75,10 +75,10 @@ maxgrad <- aggregate(max_grad ~ L + A + E + C + species, data = results_re,
   function(x) c(median(x), sum(x > 0.01)))
 data.plot <- subset(results_re, max_grad < 0.01 &
   C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c("ext", "int"))
+  E %in% c("fix", "ext", "int"))
 ts <- subset(ts[ts$ID %in% data.plot$ID, ],
   C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c("ext", "int"))
+  E %in% c("fix", "ext", "int"))
 
 ###############################################################################
 ###############################################################################
@@ -217,23 +217,24 @@ dev.off()
 ###############################################################################
 ###############################################################################
 ts$SpawnBio_re <- with(ts, (SpawnBio_om - SpawnBio_em) / SpawnBio_om)
-ggplot(ts) +
+ggplot(ts[ts$E == "int", ]) +
 geom_boxplot(aes(year, SpawnBio_re, group = year)) +
 geom_hline(yintercept = 0, col = "red") +
 ylab("Relative error in spawning stock biomass") +
 xlab("year") +
 annotate("text", x = 75, y = 0.4,
-  label = "100 Deterministic Runs with bias adj.\nData = Length / Age / CAL; Pars = Fixed Growth")
+  label = "w/ bias adj & int est.")
 ggsave("ts_SSB_re.png", dpi = 300)
 
-ggplot(ts) +
+ggplot(ts[ts$E == "int", ]) +
 geom_line(aes(year, SpawnBio_em, group = replicate), size = 0.2, outlier.size = 1) +
-geom_line(aes(year, SpawnBio_om, group = replicate), col = "red", lwd = 2) +
+geom_line(aes(year, SpawnBio_om, group = replicate), col = "red", lwd = 0.5) +
 xlab("year") +
 xlab("Spawning stock biomass") +
 annotate("text", x = 75, y = max(ts$SpawnBio_om),
-  label = "100 Deterministic Runs with bias adj.\nData = Length / Age / CAL; Pars = Fixed Growth")
+  label = "w/ bias adj & int est.")
 ggsave("ts_SSB.png", dpi = 300)
+dev.off()
 
 ###############################################################################
 ###############################################################################
