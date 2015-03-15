@@ -79,23 +79,14 @@ file.copy(system.file("cases", package = "ss3models"), ".", recursive = TRUE)
 ###############################################################################
 # file below need true values of M for each species
 truem <- vector(length = length(my.spp))
-mfiles <- file.path(system.file("models", package = "ss3models"),
-    dir(system.file("models", package = "ss3models")), "om", "ss3.ctl")
-keep <- which(apply(unlist(sapply(paste0(my.spp, "/"), grepl, mfiles)),
-  1, sum) > 0)
-for (ind in keep) {
-  om <- mfiles[ind]
+for (ind in seq_along(my.spp)) {
+  om <- file.path(ss3model(my.spp[ind], "om"), "ss3.ctl")
   pars <- SS_parlines(om)
-  truem[which(ind == keep)] <- pars[grep("NatM", pars$Label), "INIT"]
+  truem[ind] <- pars[grep("NatM", pars$Label), "INIT"]
 }
 
 source(file.path(dir.main, "lib", "createcasefiles.r"))
 
-# Specify where the model files are
-models <- sapply(c("om", "em"), function (x) {
-  file.path(system.file("models", package = "ss3models"),
-  dir(system.file("models", package = "ss3models"))[keep], x)
-})
 my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
                      E = "E", F = "F",
                      I = "index", L = "lcomp") #,
@@ -120,12 +111,12 @@ if (testingmode) {
   test <- paste("A31-C0-D0-E1-F0-I0-L31", my.spp, sep = "-")
   unlink(test, recursive = TRUE)
   for (ind in seq_along(my.spp)) {
-    my.om <- models[ind, "om"]
-    my.em <- models[ind, "em"]
-    run_ss3sim(iterations = 1, scenarios = test[ind],
-             case_folder = dir.cases, case_files = my.casefiles,
-             om_dir = my.om, em_dir = my.em, bias_adjust = FALSE,
-             ignore.stdout = TRUE, show.output.on.console = FALSE)
+    use.om <- ss3model(my.spp[ind], "om")
+    use.em <- ss3model(my.spp[ind], "em")
+    run_ss3sim(iterations = 50, scenarios = test[ind],
+      case_folder = dir.cases, case_files = my.casefiles,
+      om_dir = use.om, em_dir = use.em, bias_adjust = FALSE,
+      ignore.stdout = TRUE, show.output.on.console = FALSE)
   }
 }
   if (length(ls(pattern = "test$", envir=.GlobalEnv)) > 0) {
@@ -141,8 +132,8 @@ getDoParWorkers() # check
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
   #finds the appropriate folder for each species
-	use.om <- models[s, "om"]
-	use.em <- models[s, "em"]
+    use.om <- ss3model(my.spp[s], "om")
+    use.em <- ss3model(my.spp[s], "em")
 	#run scenarios that include the given species
   use.scen <- torun[sapply(my.spp[s], grepl, torun)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
