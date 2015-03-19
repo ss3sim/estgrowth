@@ -38,7 +38,7 @@ if ("estgrowth" != pathnames) {
   stop("check your path, estgrowth directory was not found")
 }
 
-source("lib/plot_functions.R")
+source(file.path("lib", "plot_functions.R"))
 add.label <- function(label, ...) {
   legend("topleft", legend = " ", title = label, bty = 'n', ...)
 }
@@ -52,29 +52,7 @@ library(ss3sim)
 library(reshape2)
 library(cumplyr)
 library(plyr)
-
-###############################################################################
-## Step 04
-## Read in the data, may take a few minutes it is large
-###############################################################################
-# ts      <- read.csv("../../Result Files/ts_ICESJMS-2013-347.csv")
-# scalars <- read.csv("../../Result Files/scalar_ICESJMS-2013-347.csv")
-# terminal <- subset(ts, year == 99)
-
-###############################################################################
-## Step 05
-## Create a table of scenarios ran
-###############################################################################
-# counts.long <- ddply(subset(scalars,
-#                             !(F.num %in% c("F11", "F31"))),
-#                      .(M.num, E.num, F.num, species), summarize,
-#                      length(F.num))
-# counts.wide <- cast(counts.long, M.num + E.num + F.num ~ species,
-#                     value = "..1")
-# counts.wide[is.na(counts.wide)] <- 0
-# write.table(counts.wide, "../resultfiles/counts_by_scenario.csv",
-#             sep = ",", row.names = FALSE)
-
+library(RCurl)
 
 ###############################################################################
 ###############################################################################
@@ -89,18 +67,29 @@ library(plyr)
 ###############################################################################
 ###############################################################################
 axisYears <- 1:100  # As referenced in paper rather than 'real' years
-emYears <- 1:99     # The EM is only fed 99 years of data
+emYears <- 1:100
 ## cols <- paste0("grey", c(75, 40, 10)); cols <- c("black", rep(cols, 2))
 cols <- rep("black", 7)
 
-d <- file.path("casefiles")
-## Import the F trajectories for cod
-F1 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
-                 "F0-cos.txt")), value = TRUE),";")[[1]][2]))
-F2 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
-                 "F1-cos.txt")), value = TRUE),";")[[1]][2]))
-F3 <- eval(parse(text = strsplit(grep("fvals", readLines(file.path(d,
-                 "F2-cos.txt")), value = TRUE),";")[[1]][2]))
+d <- file.path("cases")
+my.spp <- c("hake", "flatfish", "yellow")
+
+par(mfrow = c(1, 3), oma = c(4, 4, 4, 4), mar = c(0, 0, 0, 0))
+for (spp in seq_along(my.spp)) {
+plot(0, ylim = c(0, 0.6), xlim = range(axisYears), las = 1,
+  xlab = ifelse(spp %in% 2, "year", ""), type = "n", ylab = "", yaxt = "n")
+if (spp %in% c(1)) axis(2, las = 1)
+if (spp %in% 3) axis(1, las = 1)
+lines(axisYears,
+ss3sim:::get_args(file.path(d, paste0("F0-", my.spp[spp], ".txt")))$fvals,
+lty = 1)
+lines(axisYears,
+ss3sim:::get_args(file.path(d, paste0("F1-", my.spp[spp], ".txt")))$fvals,
+lty = 2)
+}
+
+fmsy <- getURL("https://raw.githubusercontent.com/ss3sim/ss3models/master/extra/fmsytable.csv")
+
 # Get the true Fmsy
 Fmsy <- tail(F1, 1)
 F1 <- F1/Fmsy; F2 <- F2/Fmsy; F3 <- F3/Fmsy
