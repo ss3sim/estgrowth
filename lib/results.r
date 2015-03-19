@@ -23,6 +23,8 @@ if(!"ggplot2" %in% rownames(installed.packages())) {
     install.packages("ggplot2")
 }
 library(ggplot2)
+library(ss3sim)
+source(file.path("..", "lib", "plot_functions.R"))
 
 wd.curr <- getwd()
 setwd(wd.curr)
@@ -64,7 +66,7 @@ axis.rel <- TRUE
 my.horiz <- "E"
 my.horiz2 <- "C"
 my.vert <- "A"
-my.vert2 <- "species"
+my.vert2 <- "F"
 my.x <- "L"
 
 ssbterm_re <- with(ts, ((SpawnBio_om - SpawnBio_em) / SpawnBio_om))
@@ -75,10 +77,10 @@ maxgrad <- aggregate(max_grad ~ L + A + E + C + species, data = results_re,
   function(x) c(median(x), sum(x > 0.01)))
 data.plot <- subset(results_re, max_grad < 0.01 &
   C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c("fix", "ext", "int"))
+  E %in% c("ext", "int", "E3"))
 ts <- subset(ts[ts$ID %in% data.plot$ID, ],
   C %in% c("C0", "C10","C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c("fix", "ext", "int"))
+  E %in% c("ext", "int", "E3"))
 
 ###############################################################################
 ###############################################################################
@@ -130,11 +132,6 @@ xlab("Length comps for fishery and survey vs. just fishery") +
 ylab("relative error: Vonb K")
 ggsave("vonbk.png", dpi = 300)
 dev.off()
-
-
-data.plot <- subset(results_re[results_re$max_grad < 0.01, ],
-  C %in% c("C0", "C20") & D %in% c("D0", "D10", "D20") &
-  E %in% c("fix", "ext", "int"))
 
 plot_scalar_boxplot(data.plot, x = my.x, y = "depletion_re",
                     vert = my.vert, horiz = my.horiz, vert2 = my.vert2,
