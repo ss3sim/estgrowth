@@ -49,10 +49,10 @@ add.label <- function(label, ...) {
 ###############################################################################
 ## devtools::install_github("ss3sim", username="seananderson")
 library(ss3sim)
+library(ss3models)
 library(reshape2)
 library(cumplyr)
 library(plyr)
-library(RCurl)
 
 ###############################################################################
 ###############################################################################
@@ -66,156 +66,136 @@ library(RCurl)
 #### FIGURE 1: F patterns over time
 ###############################################################################
 ###############################################################################
-axisYears <- 1:100  # As referenced in paper rather than 'real' years
-emYears <- 1:100
+axisYears <- 1:100
 ## cols <- paste0("grey", c(75, 40, 10)); cols <- c("black", rep(cols, 2))
 cols <- rep("black", 7)
 
 d <- file.path("cases")
 my.spp <- c("hake", "flatfish", "yellow")
 
-par(mfrow = c(1, 3), oma = c(4, 4, 4, 4), mar = c(0, 0, 0, 0))
+# Get the true Fmsy
+fmsy <- download.file("https://raw.githubusercontent.com/ss3sim/ss3models/master/extra/fmsytable.csv",
+  "fmsy.csv", method = "curl")
+fmsy <- read.csv("fmsy.csv", header = TRUE)
+done <- file.remove("fmsy.csv")
+
+make.file(file.type, "figures/Figure1", width = width1, height = 3,
+  res = res.png)
+par(mfcol = c(3, 2), oma = c(4, 4, 4, 4), mar = c(0, 0, 0, 0),
+  mgp = c(1.25, 0.25, 0), col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
+
+# Fishing patterns
 for (spp in seq_along(my.spp)) {
-plot(0, ylim = c(0, 0.6), xlim = range(axisYears), las = 1,
-  xlab = ifelse(spp %in% 2, "year", ""), type = "n", ylab = "", yaxt = "n")
-if (spp %in% c(1)) axis(2, las = 1)
-if (spp %in% 3) axis(1, las = 1)
-lines(axisYears,
-ss3sim:::get_args(file.path(d, paste0("F0-", my.spp[spp], ".txt")))$fvals,
-lty = 1)
-lines(axisYears,
-ss3sim:::get_args(file.path(d, paste0("F1-", my.spp[spp], ".txt")))$fvals,
-lty = 2)
+  plot(0, ylim = c(0, 1.75), xlim = range(axisYears), las = 1, xaxt = "n",
+    xlab = "", type = "n", ylab = "", yaxt = "n")
+  add.label(my.spp[spp])
+  axis(2, at = c(0,1, 1.5), las = 1,
+    labels = c(0, expression(italic(F)[MSY]), expression(1.5*italic(F)[MSY])))
+  if (spp == 3) axis(1)
+  lines(axisYears,
+    ss3sim:::get_args(file.path(d, paste0("F0-", my.spp[spp], ".txt")))$fvals /
+    fmsy[fmsy$species == my.spp[spp], "fmsy"],
+    lty = 1, lwd = 1.5)
+  lines(axisYears,
+    ss3sim:::get_args(file.path(d, paste0("F1-", my.spp[spp], ".txt")))$fvals /
+    fmsy[fmsy$species == my.spp[spp], "fmsy"],
+    lty = 2, lwd = 1.5)
+  if (spp == 1) {
+    legend("top", lty = c(1, 2), c("constant", "contrast"), bty = "n")
+    mtext(Fishing~Mortality~(italic(F)), side = 3, line = 0)
+  }
 }
 
-fmsy <- getURL("https://raw.githubusercontent.com/ss3sim/ss3models/master/extra/fmsytable.csv")
+# Biology
+# for (spp in seq_along(my.spp)) {
+#   scen <- paste0("D100-F1-", my.spp[spp])
+#   unlink(scen, recursive = TRUE)
+#   done <- file.copy(system.file("cases", "index100-cod.txt", package = "ss3models"),
+#             gsub("cod", my.spp[spp], system.file("cases", "index100-cod.txt", package = "ss3models")))
+#   done <- file.copy(system.file("cases", "lcomp100-cod.txt", package = "ss3models"),
+#             gsub("cod", my.spp[spp], system.file("cases", "lcomp100-cod.txt", package = "ss3models")))
+#   done <- file.copy(system.file("cases", "agecomp100-cod.txt", package = "ss3models"),
+#             gsub("cod", my.spp[spp], system.file("cases", "agecomp100-cod.txt", package = "ss3models")))
 
-# Get the true Fmsy
-Fmsy <- tail(F1, 1)
-F1 <- F1/Fmsy; F2 <- F2/Fmsy; F3 <- F3/Fmsy
+#   run_ss3sim(1, scen, system.file("cases", package = "ss3models"),
+#     ss3model(my.spp[spp], "om"), ss3model(my.spp[spp], "em"),
+#     show.output.on.console = FALSE)
+#   setwd(file.path(scen, "1", "om"))
+#   res <- list()
+#   res[[10]] <- r4ss::SS_output(getwd(), covar = FALSE, printstats = FALSE,
+#     verbose = FALSE)
+#   L <- unique(sapply(strsplit(grep("E[1][1-9]",
+#     dir(file.path("..", "..", "..", "cases")), value = TRUE), "-"), "[", 1))
 
-fudge <- 0.0000 # to fudge the lines vertically a bit
-## originally used nice color gradients but reviewer didn't like it so changed
-## to dashed lines. CCM 11/7
-ltys <- c(1, 2)
+#   plot(0, xaxt = "n", yaxt = "n", xlab = "", ylab = "",
+#     xlim = range(axisYears), ylim = c(0, 1.1), type = "n")
+#   lines(axisYears, res[[10]]$sprseries$spr[axisYears], lwd = 2)
+#   if (spp == 1) {
+#     axis(2, las = 1)
+#     mtext(Spawner~Per~Recruit~(italic(SPR)), side = 2, line = 2.5)
+#   }
+#   for (l in seq_along(L)) {
+#     par <- readLines("ss3.par")
+#     par[grep(" MGparm[1]:", par, fixed = TRUE) + 1] <- ss3sim:::get_args(
+#       file.path("..", "..", "..", "cases", paste0(L[l], "-",
+#       my.spp[spp], ".txt")))$natM_val[1]
+#     writeLines(par, "ss3.par")
+#     system("ss3 -nohess", show.output.on.console = FALSE)
 
-make.file(file.type, "figures/Figure1", width=width1, height=3, res=res.png)
-  par(mfrow = c(1, 1))
-  par(mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 1.5, 0.5),
-      col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
-  plot(0, 0, xlim = range(axisYears), ylim = c(0, 1.6), type = "n",
-       xlab = "Year", yaxt = 'n', ylab = NA, las = 1)
-  for (li in 1:2) {
-    if (li == 1) {
-      y <- F1[emYears]
-    }
-    if (li == 2) {
-      y <- F2[emYears]
-    }
-    lab <- c("Constant", "Contrast")
-    lines(emYears, y, lty=ltys[li], lwd=2, col = "black")
-    text(x = 19 * li, y = 0.6 * li, label = lab[li], col = "black")
+#     res[[l]] <- r4ss::SS_output(getwd(), covar = FALSE, printstats = FALSE,
+#       verbose = FALSE)
+#     lines(axisYears, res[[l]]$sprseries$spr[axisYears])
+#     if (l == 1) abline(h = res[[l]]$sprtarg, lty = 2)
+#   }
+#   setwd(file.path("..", "..", ".."))
+# }
+
+# Data
+  vals <- ss3sim:::get_args(file.path(d, paste0("agecomp30-", my.spp[spp], ".txt")))$years
+  plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "",
+     xaxt = "n")
+  add.label("fishery")
+  axis(2, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
+  mtext("Data", side = 3)
+  legend("to", pch = c(1, 19, 2), legend = c("age-composition", "length-composition", "survey index"),
+    bty = "n")
+
+  points(x = vals[[2]], y = rep(0.50, length(vals[[2]])), pch = 19)
+
+  points(x = vals[[1]], y = rep(1.25, length(vals[[1]])))
+  points(x = vals[[1]], y = rep(1.50, length(vals[[1]])), pch = 19)
+
+  points(x = vals[[1]], y = rep(2.25, length(vals[[1]])))
+  points(x = vals[[1]], y = rep(2.50, length(vals[[1]])), pch = 19)
+
+  points(x = vals[[1]], y = rep(3.25, length(vals[[1]])))
+  points(x = vals[[1]], y = rep(3.50, length(vals[[1]])), pch = 19)
+
+  points(x = vals[[1]], y = rep(4.25, length(vals[[1]])))
+  points(x = vals[[1]], y = rep(4.50, length(vals[[1]])), pch = 19)
+
+  plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "",
+     xaxt = "n")
+  add.label("survey")
+  points(x = vals[[2]], y = rep(0.50, length(vals[[2]])), pch = 19)
+
+  points(x = vals[[2]], y = rep(2.50, length(vals[[2]])), pch = 19)
+
+  points(x = vals[[2]], y = rep(3.25, length(vals[[2]])))
+
+  points(x = vals[[2]], y = rep(4.25, length(vals[[2]])))
+  points(x = vals[[2]], y = rep(4.50, length(vals[[2]])), pch = 19)
+
+  plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "")
+  add.label("index")
+  for(ind in 1:5) {
+    points(ss3sim:::get_args(file.path(d, paste0("index0-", my.spp[spp], ".txt")))$years[[1]],
+      y = rep(seq(0.5, 4.5, by = 1)[ind], 13), pch = 2)
   }
-  axis(2, at = c(0,1, 1.5), las = 1,
-       labels = c(0, expression(italic(F)[MSY]),
-                     expression(1.5*italic(F)[MSY])))
-  mtext(Fishing~Mortality~(italic(F))~Trends, side = 3, line = 0)
-  #add.label("(a)")
-  box(col = box.col)
 my.dev.off()
 ## End Figure 1
 ## ------------------------------------------------------------
 
-###############################################################################
-###############################################################################
-#### Step
-#### Figure 2
-###############################################################################
-###############################################################################
-## Import the data cases
-cal <- age <- sapply(c(10, 20), function(t) {
-  tname <- paste0("calcomp", t, "-cos.txt")
-  treturn <- setNames(lapply(readLines(file.path(d, tname)),
-    function(x) {
-      temp <- strsplit(x, ";")[[1]][2]
-      eval(parse(text = temp))
-    }), c("fleets", "years", "Nsamp"))
-  treturn
-})
-
-age <- sapply(c(10, 30, 31), function(t) {
-  tname <- paste0("agecomp", t, "-cos.txt")
-  treturn <- setNames(lapply(readLines(file.path(d, tname)),
-    function(x) {
-      temp <- strsplit(x, ";")[[1]][2]
-      eval(parse(text = temp))
-    }), c("fleets", "Nsamp", "years", "cpar"))
-  treturn
-})
-
-len <- sapply(c(10, 30, 31), function(t) {
-  tname <- paste0("lcomp", t, "-cos.txt")
-  treturn <- setNames(lapply(readLines(file.path(d, tname)),
-    function(x) {
-      temp <- strsplit(x, ";")[[1]][2]
-      eval(parse(text = temp))
-    }), c("fleets", "Nsamp", "years", "cpar"))
-  treturn
-})
-
-index <- setNames(sapply(readLines(file.path(d, "index0-cos.txt")),
-  function(x) {
-    temp <- strsplit(x, ";")[[1]][2]
-    eval(parse(text = temp))
-  }), c("fleets", "years", "sd"))
-
-make.file(file.type, "figures/Figure2", width=width2, height=5, res=res.png)
-  par(mfrow = c(1, 1), oma = c(1, 1, 1, 0.5), xpd = TRUE,
-      mgp = c(1.25, 0.25, 0), mar = c(2.65, 3.15, 2.5, 0.5),
-      col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
-  plot(0, 0, xlim = c(15, 300), ylim = c(0,0.55), type = "n",
-       xlab = "", yaxt = "n", ylab = NA, las = 1, xaxt = "n")
-  axis(1, at = c(25, 50, 75, 100, 125, 150, 175, 200, 250, 275, 300),
-       label = c(25, 50, 75, 100, 25, 50, 75, 100, 50, 75, 100))
-  y <- 0.43
-
-    points(age[3, 2]$years[[2]] + 100,
-      rep(y - 0.01, length(age[3, 2]$years[[2]])), pch = 1, col = "black")
-
-  for (ind in 2:3) {
-    points(unlist(len[3, ind]$years),
-         c(rep(y - ifelse(ind == 2, 0, .22), sapply(len[3, ind]$years, length)[1]),
-           rep(y - ifelse(ind == 2, 0.03, 0.25), sapply(len[3, ind]$years, length)[2])),
-    pch = unlist(mapply(rep, c(17, 19), sapply(len[3, ind]$years, length))),
-    col = "black")
-
-    points(age[3, ind]$years[[2]][c(ifelse(ind == 2, 1, 4), 7)] + 200,
-      rep(y + ifelse(ind == 2, 0.07, -0.01), 2),
-      pch = ifelse(ind == 2, 24, 21), col = "black", bg = "gray")
-
-   points(unlist(len[3, 1]$years) + ifelse(ind == 2, 0, 100),
-         rep(y + ifelse(ind == 2, -0.4, 0.05), sapply(len[3, 3]$years, length)[1]),
-         pch = ifelse(ind == 2, 17, 2), col = "black")
-  }
-
-
-  axis(2, at = c(0.05, 0.2, .45), las = 3, tck = 0,
-       labels = c("Data poor", "", "Data rich"))
-  text(50, y + 0.17, "Length")
-  text(165, y + 0.17, "Age")
-  text(280, y + 0.17, "Conditional\nage at length")
-  mtext(side = 1, "Year", outer = TRUE)
-  legend("bottomright", pch = c(17, 2, 24, 19, 1, 21), bty = "n", ncol = 2,
-         legend = c("Fishery Length",  "Fishery Age",
-                    "Fishery cond.", "Survey Length",
-                    "Survey Age", "Survey cond."),
-         pt.bg = rep(c("black", "black", "gray"), 2))
-  text(c(rep(25, 3), rep(125, 3), rep(250, 5)),
-       c(y + c(0.07, -0.18, -0.36, 0.07, 0, -0.06, 0.07, 0.04, -0.01, -0.04, -0.09)),
-       c("(A)", "(B)", "(C)", "(A.a)", "(A.b)", "(A.c)",
-         "(A.a.1)", "(A.a.2)", "(A.b.1)", "(A.b.2)", "(A.c.1)"))
-  box(col = box.col)
-my.dev.off()
 
 ###############################################################################
 ###############################################################################
