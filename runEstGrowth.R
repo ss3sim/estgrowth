@@ -96,7 +96,10 @@ my.casefiles <- list(A = "agecomp", C = "calcomp", D = "mlacomp",
 #    S = c(toupper(rev(letters)[1:6])), M = "M")
 
 # Import scenario list from excel file
-setwd("lib"); system("make"); setwd("..")
+setwd("lib")
+done <- system("make")
+if (done == 127) stop("User must manually update lib\\scenario.csv")
+setwd("..")
 scenariosfile <- file.path(dir.main, "lib", "scenarios.csv")
 scenarios <- read.table(scenariosfile, sep = ",", header = TRUE)
 torun <- unlist(lapply(scenarios$complete, paste0, my.spp))
