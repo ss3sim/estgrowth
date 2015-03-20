@@ -82,7 +82,7 @@ done <- file.remove("fmsy.csv")
 make.file(file.type, "figures/Figure1", width = width1, height = 3,
   res = res.png)
 par(mfcol = c(3, 2), oma = c(4, 4, 4, 4), mar = c(0, 0, 0, 0),
-  mgp = c(1.25, 0.25, 0), col.axis = axis.col, cex.axis = 0.8, tck = -0.01)
+  mgp = c(1.25, 0.25, 0), col.axis = axis.col, cex.axis = 1.2, tck = -0.001)
 
 # Fishing patterns
 for (spp in seq_along(my.spp)) {
@@ -101,7 +101,7 @@ for (spp in seq_along(my.spp)) {
     fmsy[fmsy$species == my.spp[spp], "fmsy"],
     lty = 2, lwd = 1.5)
   if (spp == 1) {
-    legend("top", lty = c(1, 2), c("constant", "contrast"), bty = "n")
+    legend("topright", lty = c(1, 2), c("constant", "contrast"), bty = "n", horiz = TRUE)
     mtext(Fishing~Mortality~(italic(F)), side = 3, line = 0)
   }
 }
@@ -155,12 +155,12 @@ for (spp in seq_along(my.spp)) {
   plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "",
      xaxt = "n")
   add.label("fishery")
-  axis(2, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
+  axis(4, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
   mtext("Data", side = 3)
-  legend("to", pch = c(1, 19, 2), legend = c("age-composition", "length-composition", "survey index"),
-    bty = "n")
+  legend("topright", pch = c(1, 19, 2), legend = c("age-composition", "length-composition", "survey index"),
+    bty = "n", horiz = TRUE)
 
-  points(x = vals[[2]], y = rep(0.50, length(vals[[2]])), pch = 19)
+  points(x = vals[[1]], y = rep(0.50, length(vals[[1]])), pch = 19)
 
   points(x = vals[[1]], y = rep(1.25, length(vals[[1]])))
   points(x = vals[[1]], y = rep(1.50, length(vals[[1]])), pch = 19)
@@ -177,6 +177,7 @@ for (spp in seq_along(my.spp)) {
   plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "",
      xaxt = "n")
   add.label("survey")
+  axis(4, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
   points(x = vals[[2]], y = rep(0.50, length(vals[[2]])), pch = 19)
 
   points(x = vals[[2]], y = rep(2.50, length(vals[[2]])), pch = 19)
@@ -188,6 +189,7 @@ for (spp in seq_along(my.spp)) {
 
   plot(0, ylim = c(0, 5), xlim = range(axisYears), type = "n", yaxt = "n", xlab = "", ylab = "")
   add.label("index")
+  axis(4, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
   for(ind in 1:5) {
     points(ss3sim:::get_args(file.path(d, paste0("index0-", my.spp[spp], ".txt")))$years[[1]],
       y = rep(seq(0.5, 4.5, by = 1)[ind], 13), pch = 2)
