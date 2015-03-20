@@ -45,7 +45,7 @@ my.totnum <- 1:50
 my.bias.num <- 10
 
 # Register the number of cores you want to use
-my.corenum <- 3
+my.corenum <- ifelse(Sys.info()["user"] == "kfjohns", 10, 3)
 
 # Logical whether in testing mode or not
 testingmode <- FALSE
