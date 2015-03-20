@@ -155,11 +155,9 @@ scalars <- read.csv(dir(pattern = "r.csv", full.names = TRUE))
 ts <- read.csv(dir(pattern = "s.csv", full.names = TRUE))
 
 file.copy(dir(pattern = "r.csv", full.names = TRUE),
-          file.path(dir.dropbox, "scalars.csv"),
-          overwrite = TRUE, copy.mode = TRUE)
+  file.path(dir.dropbox, "scalars.csv"), overwrite = TRUE, copy.mode = TRUE)
 file.copy(dir(pattern = "scalar", full.names = TRUE),
-          file.path(dir.dropbox, "ts.csv"),
-          overwrite = TRUE, copy.mode = TRUE)
+  file.path(dir.dropbox, "ts.csv"), overwrite = TRUE, copy.mode = TRUE)
 
 source(file.path(dir.main, "lib", "results.r"))
 
