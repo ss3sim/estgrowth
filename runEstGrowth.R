@@ -30,8 +30,8 @@ if (Sys.info()["user"] == "kelli") {
   dir.dropbox <- "c:/users/kelli/dropbox/estgrowth"
 }
 if (Sys.info()["user"] == "kfjohns") {
-  dir.main <- "h:/estgrowth"
-  dir.dropbox <- "h:/estgrowth"
+  dir.main <- "t:/estgrowth"
+  dir.dropbox <- "t:/estgrowth"
 }
 
 
