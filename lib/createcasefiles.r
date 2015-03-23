@@ -221,18 +221,6 @@ writeS <- function(vals, species, case,
     writeLines(info, paste0(let[x], case, "-", species, ".txt"))
   }))
 }
-
-# Add time-varying random normal deviates to M
-writeM <- function(deviates, species, case) {
-  beg <- paste("function_type; change_tv")
-  sec <- "param;"
-  mid <- "dev; "
-
-  info <- c(beg, paste(sec, "NatM_p_1_Fem_GP_1"),
-            paste0(mid, paste0(deviates)))
-  writeLines(info, paste0("M", case, "-", species, ".txt"))
-}
-
   # End of functions for creating case files
 
 ###############################################################################
