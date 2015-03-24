@@ -122,7 +122,7 @@ for(counter in c(0, 100)) {
   if (counter == 0){
     # Misspecify M
       for(i in seq_along(mrange[[spp]])) {
-        writeE(c("NatM_p_1_Fem"), -1, my.spp[spp], 19 + i)
+        writeE(c("NatM_p_1_Fem"), mrange[[spp]][i], -1, my.spp[spp], 19 + i)
         writeE(c("NatM_p_1_Fem", allgrowth), c(mrange[[spp]][i], growthint),
           c(-1, growthphase), my.spp[spp], 9 + i)
       }}
