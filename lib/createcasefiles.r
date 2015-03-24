@@ -93,30 +93,44 @@ for (spp in seq_along(my.spp)) {
 #### change_e: case "E"
 ###############################################################################
 ###############################################################################
-allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
-
-growthint <- rep(NA, length(allgrowth))
-growthphase <- rep(-1, length(allgrowth))
-counter <- 0
-
-# All parameters are fixed at their true OM values
-  writeE(allgrowth, growthint, growthphase, my.spp[spp], counter)
-# All parameters are estimated
-  writeE(NULL, "NA", "NA", my.spp[spp], counter + 1)
-# All parameters are externally estimated
-  writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)),
-         growthphase, my.spp[spp], counter + 2)
-# CV's are internally estimated
-  writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K"),
-    rep("change_e_vbgf", 3), rep(-1, 3), my.spp[spp], counter + 3)
-
-# Misspecify M
-  for(i in seq_along(mrange[[spp]])) {
-    writeE(c("NatM_p_1_Fem"), mrange[[spp]][i], -1, my.spp[spp], 19 + i)
-    writeE(c("NatM_p_1_Fem", allgrowth),
-           c(mrange[[spp]][i], rep("change_e_vbgf", length(allgrowth))),
-           c(-1, growthphase), my.spp[spp], 9 + i)
+for(counter in c(0, 100)) {
+  allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
+  slxpars <- NULL
+  if (counter == 100) {
+    slxpars <- mapply(gsub, replacement = 1:4,
+      MoreArgs = list(pattern = "1", x = "SizeSel_2P_1_Survey"))
+    allgrowth <- c(allgrowth, slxpars)
   }
+  growthint <- rep(NA, length(allgrowth))
+  growthphase <- rep(-1, length(allgrowth))
+
+  # All parameters are fixed at their true OM values
+    writeE(allgrowth, growthint, growthphase, my.spp[spp], counter)
+  # All parameters are estimated
+    writeE(NULL, "NA", "NA", my.spp[spp], counter + 1)
+    if (counter == 100) {
+      writeE(slxpars, rep(NA, length(slxpars)), rep(-1, length(slxpars)),
+        my.spp[spp], counter + 1)
+    }
+  # All parameters are externally estimated
+    growthint[1:5] <- "change_e_vbgf"
+    writeE(allgrowth, growthint, growthphase, my.spp[spp], counter + 2)
+  # CV's are internally estimated
+
+    writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K", slxpars),
+      c(rep("change_e_vbgf", 3), rep(NA, length(slxpars))),
+      rep(-1, length(slxpars) + 3), my.spp[spp], counter + 3)
+  if (counter == 100){
+    # Misspecify M
+      for(i in seq_along(mrange[[spp]])) {
+        writeE(c("NatM_p_1_Fem", slxpars),
+          c(mrange[[spp]][i], rep(NA, length(slxpars))),
+          rep(-1, length(slxpars) + 1), my.spp[spp], 19 + i)
+        writeE(c("NatM_p_1_Fem", allgrowth), c(mrange[[spp]][i], growthint),
+          c(-1, growthphase), my.spp[spp], 9 + i)
+      }}
+}
+
 
 
 ###############################################################################
