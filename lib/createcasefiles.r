@@ -144,29 +144,6 @@ sink(paste0("E", case, "-", species, ".txt"))
   sink()
 }
 
-# Change selectivity to be dome or time-varying in OM
-writeS <- function(vals, species, case,
-                   type = c("random", "deviates")) {
-  type <- match.arg(type, several.ok = FALSE)
-  parnames <- paste0("SizeSel_1P_", 1:6, "_Fishery")
-  beg <- paste("function_type; change_tv")
-  sec <- "param;"
-  mid <- "dev; rnorm(n = 100, mean = 0, sd = "
-  end <- ")"
-  let <- toupper(rev(letters)[1:6])
-  done <- capture.output(
-  lapply(seq_along(parnames), function(x) {
-    if(type == "deviates") {
-      info <- c(beg, paste(sec, parnames[x]),
-                paste0("dev; rep(", vals[x], ", 100)"))
-    } else {
-      info <- c(beg, paste(sec, parnames[x]), paste0(mid, vals[x], end))
-    }
-    writeLines(info, paste0(let[x], case, "-", species, ".txt"))
-  }))
-}
-  # End of functions for creating case files
-
 ###############################################################################
 ## Step
 ## Sequence along all species listed in my.spp
