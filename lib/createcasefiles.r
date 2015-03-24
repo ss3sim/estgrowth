@@ -22,9 +22,6 @@
 wd.curr <- getwd()
 setwd(dir.cases)
 
-# Estimate CVs or not
-estCVs <- TRUE
-
 ###############################################################################
 ###############################################################################
 #### Step
@@ -96,12 +93,7 @@ for (spp in seq_along(my.spp)) {
 #### change_e: case "E"
 ###############################################################################
 ###############################################################################
-# Switch to the below code if we want to also estimate the CV parameters
-if (estCVs) {
-  allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
-} else {
-  allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K")
-}
+allgrowth <- c("L_at_Amin", "L_at_Amax", "VonBert_K", "CV_young", "CV_old")
 
 growthint <- rep(NA, length(allgrowth))
 growthphase <- rep(-1, length(allgrowth))
@@ -114,6 +106,7 @@ counter <- 0
 # All parameters are externally estimated
   writeE(allgrowth, rep("change_e_vbgf", length(allgrowth)),
          growthphase, my.spp[spp], counter + 2)
+# CV's are internally estimated
   writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K"),
     rep("change_e_vbgf", 3), rep(-1, 3), my.spp[spp], counter + 3)
 
