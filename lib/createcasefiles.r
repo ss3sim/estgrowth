@@ -144,62 +144,6 @@ sink(paste0("E", case, "-", species, ".txt"))
   sink()
 }
 
-# A & L sample age and length comp data
-writeL <- function(Nsamp.fish, Nsamp.survey, years.fish, years.survey,
-                   type, case, spp) {
-  fish <- ifelse(is.null(years.fish), FALSE, TRUE)
-  survey <- ifelse(is.null(years.survey), FALSE, TRUE)
-  years <- "NULL"
-  Nsamp <- "NULL"
-  fleets <- "NULL"
-  cparval <- "NULL"
-  if (all(fish, survey)) {
-      years <- paste0("list(c(", paste(years.fish, collapse = ","),
-                      "), c(", paste(years.survey, collapse = ","), "))")
-      Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","),
-                      "), c(", paste(Nsamp.survey, collapse = ","), "))")
-      fleets  <- "c(1, 2)"
-      cparval <- "c(2, 1)"
-  } else {
-    if (fish) {
-      years <- paste0("list(c(", paste(years.fish, collapse = ","), "))")
-      Nsamp <- paste0("list(c(", paste(Nsamp.fish, collapse = ","), "))")
-      fleets  <- "c(1)"
-      cparval <- "c(2)"
-    }
-    if (survey) {
-      years <- paste0("list(c(", paste(years.survey, collapse = ","), "))")
-      Nsamp <- paste0("list(c(", paste(Nsamp.survey, collapse = ","), "))")
-      fleets <- "c(2)"
-      cparval <- "c(1)"
-    }
-  }
-  l <- c(paste0("fleets; ", fleets),
-         paste("Nsamp;", Nsamp),
-         paste("years;", years),
-         paste("cpar;", cparval))
-  writeLines(l, paste0(type, case, "-", spp, ".txt"))
-}
-
-# D sample mlacomp data
-writeD <- function(fleets, years, Nsamp, species, case, type = "mlacomp",
-                   mean_outfile = "NULL") {
-  if (is.null(fleets)) {
-    a.fleet <- "NULL"
-  } else {
-    a.fleet <- paste0("c(", paste(fleets, collapse = ", "), ")")
-  }
-  a <- c(paste("fleets;", a.fleet),
-         paste("years;", years),
-         paste("Nsamp;", Nsamp),
-         paste("mean_outfile;", mean_outfile))
-  if (type == "calcomp") {
-    a <- c(paste("fleets;", a.fleet), paste("years;", years),
-           paste("Nsamp;", Nsamp))
-  }
-  writeLines(a, paste0(type, case, "-", species, ".txt"))
-}
-
 # Change selectivity to be dome or time-varying in OM
 writeS <- function(vals, species, case,
                    type = c("random", "deviates")) {
@@ -228,19 +172,6 @@ writeS <- function(vals, species, case,
 ## Sequence along all species listed in my.spp
 ###############################################################################
 for (spp in seq_along(my.spp)) {
-
-###############################################################################
-###############################################################################
-#### Step
-#### Standard case files
-#### These case files do not change per scenario
-#### Retro and index
-###############################################################################
-###############################################################################
-# Years of survey index of abundance
-writeLines(c("fleets; 2", paste0("years; list(c(",
-             paste(all.surv, collapse = ","), "))"), "sds_obs; list(0.2)"),
-             paste0("index0-", my.spp[spp], ".txt"))
 
 ###############################################################################
 ###############################################################################
