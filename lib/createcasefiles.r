@@ -116,16 +116,13 @@ for(counter in c(0, 100)) {
     growthint[1:5] <- "change_e_vbgf"
     writeE(allgrowth, growthint, growthphase, my.spp[spp], counter + 2)
   # CV's are internally estimated
-
     writeE(c("L_at_Amin", "L_at_Amax", "VonBert_K", slxpars),
       c(rep("change_e_vbgf", 3), rep(NA, length(slxpars))),
       rep(-1, length(slxpars) + 3), my.spp[spp], counter + 3)
-  if (counter == 100){
+  if (counter == 0){
     # Misspecify M
       for(i in seq_along(mrange[[spp]])) {
-        writeE(c("NatM_p_1_Fem", slxpars),
-          c(mrange[[spp]][i], rep(NA, length(slxpars))),
-          rep(-1, length(slxpars) + 1), my.spp[spp], 19 + i)
+        writeE(c("NatM_p_1_Fem"), -1, my.spp[spp], 19 + i)
         writeE(c("NatM_p_1_Fem", allgrowth), c(mrange[[spp]][i], growthint),
           c(-1, growthphase), my.spp[spp], 9 + i)
       }}
