@@ -237,9 +237,6 @@ for (spp in seq_along(my.spp)) {
 #### Retro and index
 ###############################################################################
 ###############################################################################
-# No retrospective runs
-writeLines("retro_yr; 0", paste0("R0-", my.spp[spp], ".txt"))
-
 # Years of survey index of abundance
 writeLines(c("fleets; 2", paste0("years; list(c(",
              paste(all.surv, collapse = ","), "))"), "sds_obs; list(0.2)"),
