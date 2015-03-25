@@ -42,7 +42,8 @@ f2 <- function(data, y, ylim, etraj = paste0("E", c(10:19)), fTraj = c("F1"),
   names(mvals)[6] <- ifelse("E10" %in% names(mvals), "E2", "E1")
   E.df <- data.frame(E = names(mvals), Mfixed = mvals)
   df <- subset(data, E %in% names(mvals) & F %in% fTraj & C == "C0" &
-    species %in% spp & D %in% ifelse("E10" %in% names(mvals), "D10", "D0"))
+    species %in% spp & D %in% ifelse("E10" %in% names(mvals), "D10", "D0") &
+    max_grad < 0.01)
   df <- merge(df, E.df)
   ## Convert to wide format
   df$MfixedFactor <- as.factor(df$Mfixed)
@@ -62,17 +63,18 @@ depletion <- tapply(ts$SpawnBio_em, list(ts$scenario, ts$replicate), function(x)
 })
 
 
-metric <- c("depletion_re")
+metric <- c("depletion_re", "L_at_Amin_Fem_GP_1_re", "L_at_Amax_Fem_GP_1_re",
+  "VonBert_K_Fem_GP_1_re", "CV_young_Fem_GP_1_re", "CV_old_Fem_GP_1_re")
+
 spp <- c("flatfish", "hake", "yellow")
+ylim <- c(-1, 8)
+
+pdf("figure_m.pdf")
 par(mfcol = c(2, length(spp)), mar = c(0, 0, 0, 0), oma = c(2, 3, 4, 3),
     tck = -0.015, mgp = c(0, 0.45, 0), cex.axis = 1, col.axis = "black")
-k <- 1
-
-
-png("figure_m.png")
 for(r in seq_along(metric)) {
   for(a in seq_along(spp)) {
-    f2(subset(scalars, L == "L30" & A == "A30"), metric[r], ylim = c(-1,8), spp = spp[a])
+    f2(subset(scalars, L == "L30" & A == "A30"), metric[r], ylim = ylim, spp = spp[a])
     mtext(side = 3, line = 0.25, spp[a])
     box(col= "black")
     if (a == 1) {
@@ -81,8 +83,8 @@ for(r in seq_along(metric)) {
     if (a == 3) {
       mtext(side = 4, "external", line = 0.25)
     }
-    mtext(side = 2, line = 1.5, paste("relative error:", gsub("_re", "", metric)),
-      outer = TRUE)
+    mtext(side = 2, line = 1.5, paste("relative error:",
+      gsub("_re|_Fem_GP_1_re", "", metric[r])), outer = TRUE)
     f2(subset(scalars, L == "L30" & A == "A30"), metric[r],
        ylim = c(-1,1), spp = spp[a], etraj = paste0("E", 20:29))
     axis(1)
