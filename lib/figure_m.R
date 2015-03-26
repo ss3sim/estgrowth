@@ -86,7 +86,7 @@ for(r in seq_along(metric)) {
     mtext(side = 2, line = 1.5, paste("relative error:",
       gsub("_re|_Fem_GP_1_re", "", metric[r])), outer = TRUE)
     f2(subset(scalars, L == "L30" & A == "A30"), metric[r],
-       ylim = c(-1,1), spp = spp[a], etraj = paste0("E", 20:29))
+       ylim = ylim, spp = spp[a], etraj = paste0("E", 20:29))
     axis(1)
     if (a == 1) {
       axis(2, las = 1)
