@@ -79,7 +79,7 @@ fmsy <- download.file("https://raw.githubusercontent.com/ss3sim/ss3models/master
 fmsy <- read.csv("fmsy.csv", header = TRUE)
 done <- file.remove("fmsy.csv")
 
-make.file(file.type, "figures/Figure1", width = width1, height = 3,
+make.file(file.type, "figures/Figure1", width = width1, height = width2,
   res = res.png)
 par(mfcol = c(3, 2), oma = c(4, 4, 4, 4), mar = c(0, 0, 0, 0),
   mgp = c(1.25, 0.25, 0), col.axis = axis.col, cex.axis = 1.2, tck = -0.001)
@@ -101,8 +101,8 @@ for (spp in seq_along(my.spp)) {
     fmsy[fmsy$species == my.spp[spp], "fmsy"],
     lty = 2, lwd = 1.5)
   if (spp == 1) {
-    legend("topright", lty = c(1, 2), c("constant", "contrast"), bty = "n", horiz = TRUE)
-    mtext(Fishing~Mortality~(italic(F)), side = 3, line = 0)
+    legend("topright", lty = c(1, 2), c("constant", "contrast"), bty = "n", cex = 0.6)
+    mtext(Fishing~Mortality~(italic(F)), side = 3, line = 0, cex = 0.5)
   }
 }
 
@@ -156,9 +156,9 @@ for (spp in seq_along(my.spp)) {
      xaxt = "n")
   add.label("fishery")
   axis(4, at = seq(0.5, 4.5, by = 1), labels = letters[1:5], las = 1)
-  mtext("Data", side = 3)
-  legend("topright", pch = c(1, 19, 2), legend = c("age-composition", "length-composition", "survey index"),
-    bty = "n", horiz = TRUE)
+  mtext("Data", side = 3, cex = 0.7)
+  legend("topright", pch = c(1, 19), legend = c("age", "length"),
+    bty = "n",cex = 0.6, horiz = TRUE)
 
   points(x = vals[[1]], y = rep(0.50, length(vals[[1]])), pch = 19)
 
