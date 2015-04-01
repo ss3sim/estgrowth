@@ -132,6 +132,16 @@ if (testingmode) {
 registerDoParallel(cores = my.corenum)
 getDoParWorkers() # check
 
+# Determine if some iterations have already been run
+# If so only run more iterations (to the maximum my.totrun)
+# of the F1 fishing scenario.
+done <- length(dir(dir(pattern = my.spp[1], full.names = TRUE)[1]))
+done <- sum(!grepl("bias|.csv", done))
+if(done > 0) {
+  my.totnum <- seq(done + 1, max(my.totnum), by = 1)
+  torun <- torun[grepl("F1", torun)]
+}
+
 #Use the following to run all combinations
 for(s in seq_along(my.spp)){
   #finds the appropriate folder for each species
