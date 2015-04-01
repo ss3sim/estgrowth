@@ -135,8 +135,8 @@ getDoParWorkers() # check
 # Determine if some iterations have already been run
 # If so only run more iterations (to the maximum my.totrun)
 # of the F1 fishing scenario.
-done <- length(dir(dir(pattern = my.spp[1], full.names = TRUE)[1]))
-done <- sum(!grepl("bias|.csv", done))
+done <- length(dir(dir(pattern = my.spp[1], full.names = TRUE)[1],
+  pattern = "[0-9]$"))
 if(done > 0) {
   my.totnum <- seq(done + 1, max(my.totnum), by = 1)
   torun <- torun[grepl("F1", torun)]
