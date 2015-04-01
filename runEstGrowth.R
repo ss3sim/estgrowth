@@ -151,8 +151,10 @@ for(s in seq_along(my.spp)){
   use.scen <- torun[sapply(my.spp[s], grepl, torun)]
 	run_ss3sim(iterations = my.totnum, scenarios = use.scen,
     case_folder = dir.cases, case_files = my.casefiles,
-    om_dir = use.om, em_dir = use.em,
-    bias_adjust = ifelse(my.bias.num > 0, TRUE, FALSE), bias_nsim = my.bias.num,
+    om_dir = use.om, em_dir = use.em, 
+    bias_already_run = ifelse(any(grepl("^1$", my.totnum)), FALSE, TRUE),
+    bias_adjust = ifelse(my.bias.num > 0 & any(grepl("^1$", my.totnum)), TRUE, FALSE), 
+    bias_nsim = my.bias.num,
     ignore.stdout = TRUE, show.output.on.console = FALSE,
     parallel = ifelse(getDoParWorkers() > 1, TRUE, FALSE))
   # Should also maybe set ss_mode = "optimized"
