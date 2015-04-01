@@ -39,7 +39,7 @@ if (Sys.info()["user"] == "kfjohns") {
 my.spp <- c("hake", "flatfish", "yellow")
 my.spp <- my.spp[order(my.spp)]
 
-my.totnum <- 1:50
+my.totnum <- 1:150
 # Logical whether or not to run ss3sim bias adjustment to gain information
 # about recruitment from years with more information
 my.bias.num <- 10
