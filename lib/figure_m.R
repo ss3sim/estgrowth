@@ -67,14 +67,15 @@ metric <- c("depletion_re", "L_at_Amin_Fem_GP_1_re", "L_at_Amax_Fem_GP_1_re",
   "VonBert_K_Fem_GP_1_re", "CV_young_Fem_GP_1_re", "CV_old_Fem_GP_1_re")
 
 spp <- c("flatfish", "hake", "yellow")
-ylim <- c(-1, 8)
+ylim <- c(-1, 10)
 
 pdf("figure_m.pdf")
 par(mfcol = c(2, length(spp)), mar = c(0, 0, 0, 0), oma = c(2, 3, 4, 3),
     tck = -0.015, mgp = c(0, 0.45, 0), cex.axis = 1, col.axis = "black")
 for(r in seq_along(metric)) {
   for(a in seq_along(spp)) {
-    f2(subset(scalars, L == "L30" & A == "A30"), metric[r], ylim = ylim, spp = spp[a])
+    f2(subset(scalars, L == "L30" & A == "A30"), 
+      metric[r], ylim = ylim, spp = spp[a], casefold = "../cases")
     mtext(side = 3, line = 0.25, spp[a])
     box(col= "black")
     if (a == 1) {
@@ -86,7 +87,8 @@ for(r in seq_along(metric)) {
     mtext(side = 2, line = 1.5, paste("relative error:",
       gsub("_re|_Fem_GP_1_re", "", metric[r])), outer = TRUE)
     f2(subset(scalars, L == "L30" & A == "A30"), metric[r],
-       ylim = ylim, spp = spp[a], etraj = paste0("E", 20:29))
+       ylim = ylim, spp = spp[a], etraj = paste0("E", 20:29),
+       casefold = "../cases")
     axis(1)
     if (a == 1) {
       axis(2, las = 1)
