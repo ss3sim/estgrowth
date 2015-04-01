@@ -43,7 +43,7 @@ f2 <- function(data, y, ylim, etraj = paste0("E", c(10:19)), fTraj = c("F1"),
   E.df <- data.frame(E = names(mvals), Mfixed = mvals)
   df <- subset(data, E %in% names(mvals) & F %in% fTraj & C == "C0" &
     species %in% spp & D %in% ifelse("E10" %in% names(mvals), "D10", "D0") &
-    max_grad < 0.01)
+    max_grad < 0.01 & params_on_bound_em %in% c(0, "NA"))
   df <- merge(df, E.df)
   ## Convert to wide format
   df$MfixedFactor <- as.factor(df$Mfixed)
